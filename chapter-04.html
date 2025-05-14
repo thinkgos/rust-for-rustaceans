@@ -1,0 +1,314 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第4章-错误处理 - Rust For Rustaceans 阅读和翻译</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust For Rustaceans 阅读和翻译</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/thinkgos/Rust-For-Rustaceans" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="第四章-错误处理"><a class="header" href="#第四章-错误处理">第四章 错误处理</a></h1>
+<p>除了最简单的程序外, 方法都有可能会调用失败. 在本章中, 我们将探讨表述、处理和传播这些失败的不同方法, 以及它们各自的优缺点. 我们将从不同的错误表述方式开始, 包括枚举和擦除, 然后研究一些需要特殊表述技术的错误情况. 接下来, 我们将探讨处理错误的各种方式, 以及错误处理机制在未来的发展趋势.</p>
+<p>值得注意的是, <code>Rust</code>中错误处理的最佳实践仍然是一个活跃的话题, 在撰写本文的时候, <code>Rust</code>生态系统还没有确定一种统一的处理方法.因此, 本章将重点讨论底层原理和技术手段, 而不是推荐特定的<code>crate</code>或<code>patterns</code>.</p>
+<h2 id="表述错误"><a class="header" href="#表述错误">表述错误</a></h2>
+<p>在编写可能失败的代码时, 最重要的问题是用户将如何与这些错误交互. 用户是否需要确切地知道发生了什么错误, 以及错误的细节, 还是只需要记录错误发生了, 然后继续执行? 要了解这一点, 我们需要研究错误的性质是否影响到调用者在收到错误后的行为. 这将决定我们该如何表述不同的错误类型.</p>
+<p>表述错误有两种主要的方式: 枚举和擦除. 也就是说, 你可以让你的错误类型枚举可能的错误情况, 以便调用者能够区分它们, 或者你也可以只向调用者提供一个单一的、不透明的错误. 让我们依次讨论这两种方式.</p>
+<h3 id="枚举"><a class="header" href="#枚举">枚举</a></h3>
+<p>在这个示例中, 我们将使用一个库函数, 将字节从某个输入流复制到某个输出流中, 很和<code>std::io::copy</code>的行为很相似. 用户会提供两个流, 一个用于读, 一个用于写, 然后你将字节从一个流复制到另一个流. 在这个过程中, 任何一个流都有可能错误, 这时复制必须停止, 并向用户返回错误. 在这种情况下, 用户很可能希户知道是输入流还是输出流出现了问题. 例如, 在一个web服务中, 如果在向客户端传输文件的过程中, 输入流发生了错误, 可能是因为磁盘被弹出, 而如果输出流发生错误, 那有可能是客户端断开了连接. 后者可能是服务器可以忽略的错误, 因为对新的连接仍然可以完成文件复制, 而前者可能需要关闭整个服务器.</p>
+<p>这例子中我们需要枚举错误. 用户需要能够区分不同的错误情况, 以便做出恰当的响应, 所以我们使用一个名为<code>CopyError</code>的枚举类型, 每个变体代表一个错误的根本原因, 就像清单5-1中那样.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum CopyError {
+    In(std::io::Error),
+    Out(std::io::Error)
+}
+
+// 清单 5-1: 枚举错误类型
+<span class="boring">}</span></code></pre></pre>
+<p>每个变量还包括实际遇到的错误, 以便向调用者提供尽可能多的出错信息.</p>
+<p>当你创建自定义错误类型时, 需要采取一些步骤, 使该错误类型能够很好地融入<code>Rust</code>的生态系统中. 首先, 你的错误类型应该实现<code>std::error::Error trait</code>, 它为调用者提供了内部错误类型的常用方法. 其中主要的方法是<code>Error::source</code>, 它提供了一种机制来查找错误的根本原因. 最常用于打印错误回溯信息, 显示错误从根源一路传播的过程. 对于我们的<code>CopyError</code>类型, <code>source</code>的实现非常简单: 我们在<code>self</code>上进行匹配并提取并返回内部的<code>std::io::Error</code>.</p>
+<p>其中, 你的类型应该同时实现<code>Display</code>和<code>Debug</code>, 以便调用者可以有意义地打印错误信息. 如果你实现了<code>Error trait</code>, 这是必须的. 一般来说, <code>Display</code>的实现应提供出错原因的简洁描述, 并能很容易地嵌入到更大的错误消息中. 显示的格式应使用小写字母, 并且末尾不加标点符号, 以便在更长的错误信息自然嵌入. <code>Debug</code>应该提供更详细的错误描述, 包括可能有助于追踪错误原因的附加信息, 如端口号、请求ID、文件路径等, 通常使用<code>#[derive(Debug)]</code>足以满足这些要求.</p>
+<blockquote>
+<p>NOTE: 在旧版本的<code>Rust</code>代码中, 你可能会看到对<code>Error::description</code>方法, 但该方法已被弃用, 改用 <code>Display</code>.</p>
+</blockquote>
+<p>第三, 如果可能的话, 你的类型应该同时实现<code>Send</code>和<code>Sync</code>, 这样用户才能在跨线程时共享错误. 如果你的错误类型不是线程安全的, 那么在多线程环境中无法使用你的<code>crate</code>. 实现<code>Send</code>和<code>Sync</code>的错误类型也更容易与常见的<code>std::io::Error</code>错误类型配合使用, 后者实现<code>Error</code>、<code>Send</code> 和 <code>Sync</code>. 当然, 并不是所有的错误类型都合理地实现<code>Send</code>和<code>Sync</code>, 比如它们可能依赖于特定的线程本地资源, 这种情况下不支持也是可以接受的. 毕竟你很可能不会跨越线程发送这些错误. 不过, 在错误中使用 <code>Rc&lt;String&gt;</code>和 <code>RefCell&lt;bool&gt;</code>类型之前, 还是要注意这一点.</p>
+<p>最后, 如果可能的话, 你的错误类型应该是<code>'static</code>生命周期的. 这样做最直接的好处是, 调用者更容易地在调用堆栈中传播你的错误, 而不会遇到生命周期的问题. 此外, 这还使得你的错误类型更容易与类型擦除的错误类型一起使用, 我们很快就会看到这一点</p>
+<h3 id="不透明的错误"><a class="header" href="#不透明的错误">不透明的错误</a></h3>
+<p>现在让我们考虑另一个例子: 一个图像解码库. 你将一堆字节传给这个库进行解码, 它就会为你提供各种图像处理方法. 如果解码失败, 用户需要知道如何解决问题, 因此必须了解其原因. 重要是引起的原因, 是图像标头中的大小字段无效, 还是压缩算法中解压块问题, 这很重要吗? 也许不重要, 即使应用程序知道确切的原因, 也无法从这两种情况下进行有意义地恢复. 在这样的情况下, 作为库的作者, 你可能更希望提供一种单一的、不透明的错误类型. 这也会使你的库更容易使用, 因为整个库中只使用一个错误类型. 这个错误类型应该实现<code>Send</code>、<code>Debug</code>、<code>Display</code>和<code>Error</code>(在合适的情况下也包括<code>source</code>方法), 除此之外, 调用者无需了解更多的细节. 你可以在库内部表述更细致的错误状态, 但没有必要将这些暴露给使用者. 这样做减少你的<code>API</code>的体积和复杂性.</p>
+<p>不透明的错误类型到底应该是什么, 主要取决于你. 它可以是一个具有所有私有字段的类型, 只对外公开有限的方法来显示和检查错误的方法, 也可能是一个类型擦除的错误类型, 如<code>Box&lt;dyn Error + Send + Sync + 'static&gt;</code>, 它只表明这是一个错误之外, 不会向使用者透露任何信息, 也通常不允许用户进行深入查看. 决定错误类型透明的程度, 主要取决于这个错误除了描述之外是否还有值得用户了解的内容. 如果使用<code>Box&lt;dyn Error&gt;</code>, 用户别无选择, 只能把你的错误向上传播. 如果该错误确实没有任何有价值的信息提供给用户(例如, 如果它只是一个动态的错误信息, 或者是来自你程序深处的某些完全无关错误之一), 这样做也许没什么问题. 但如果这个错误有一些有意义的细节, 例如行号或状态代码, 你可能会想通过一个具体但不透明的类型来暴露它.</p>
+<blockquote>
+<p>NOTE: 一般来说, 社区的共识是错误应该是罕见的, 因此不应该增加太多"正常路径"的成本. 因此, 错误通常被放置在一个指针类型的后面, 比如<code>Box</code>或<code>Arc</code>. 这样一来, 错误就不太可能增加所包含的整个<code>Result</code>类型的大小.</p>
+</blockquote>
+<p>使用类型消除的错误的一个好处是, 它可以让你轻松地将不同来源的错误合并, 而无需引入额外的错误类型. 也就是说, 基于类型的错误通常可以很好地组合, 并允许你表达一个开放式的错误集. 如果你编写了一个返回类型为<code>Box&lt;dyn Error + ...&gt;</code>的函数, 那么你可以在该函数内部使用<code>?</code>来处理不同的错误类型, 它们都会被转化为那个共同的错误类型.</p>
+<p><code>Box&lt;dyn Error + Send + Sync + 'static&gt;</code>上的<code>'static</code>约束值得多花一点时间来研究. 我在上一节中提到, 它可以让调用者传播错误, 而不用担心失败的方法的生存期约束, 但它有一个更大的目的: 提供访问向下转型. 向下转型是指将一种类型的项转换为一种更具体的类型的过程. 这是少数几个<code>Rust</code>在运行时能让你访问类型信息的情况之一; 它是动态语言经常提供的更通用的类型反射的一个有限案例. 在错误的上下文中, 当<code>dyn Error</code>原本是一个具体的底层错误类型时, 向下转换允许用户将该错误转为该类型. 例如, 如果用户收到的错误是<code>std::io::Error</code>的类型<code>std::io::ErrorKind::WouldBlock</code>, 用户可能想采取一个特定的操作, 但在其他情况下他们不会采取相同的操作. 如果用户得到一个<code>dyn Error</code>, 他们可以使用<code>Error::downcast_ref</code>来尝试将这个错误向下转换到<code>std::io::Error</code>. <code>downcast_ref</code>方法返回一个<code>Option</code>, 它告诉用户向下转换是否成功. 这里有一个关键的观察点: <code>downcast_ref</code>只有在参数是<code>'static</code> 时才起作用. 如果我们返回一个不透明的、非<code>'static</code> 的<code>Error</code>, 用户就无法按自己的意愿对错误进行检查.</p>
+<p>在生态系统中, 对于库的类型擦的错误(或者更广泛地说, 它的类型擦除类型)是否属于公共且稳定<code>API</code>的一部分, 这里存在一些争议. 也就是说, 如果你的库中的方法<code>foo</code>将<code>lib::MyError</code>作为<code>Box&lt;dyn Error&gt;</code>返回, 将<code>foo</code>改为返回不同的错误类型是否是一种破坏性的变更? 类型签名并没有改变, 但是用户可能写了一些代码, 认为他们可以使用向下转型来把这个错误转回<code>lib::MyError</code>. 我对此事的看法是, 你选择返回<code>Box&lt;dyn Error&gt;</code>(而不是 <code>lib::MyError</code>)是有原因的, 除非有明确的文档说明, 否则这并不能保证向下转换有特别之处.</p>
+<blockquote>
+<p>注意: 虽然<code>Box&lt;dyn Error + ...&gt;</code>是一个有吸引力的类型擦除的错误类型, 但它本身并没有实现<code>Error</code>, 这与直觉相反. 因此, 请考虑添加自己的<code>BoxError</code>类型, 以实现<code>Error</code>的库中来进行类型擦除。</p>
+</blockquote>
+<p>你可能想知道<code>Error::downcast_ref</code>是如何做到安全. 也就是说, 它如何知道提供的<code>dyn Error</code>参数是否确实属于给定的类型<code>T</code>? 标准库中甚至有一个名为<code>Any</code> 的<code>trait</code>, 它是为任何类型实现的, 也可以为<code>dyn Any</code>实现了<code>downcast_ref</code>, 这怎么能行? 答案在于编译器支持的类型<code>std::any::TypeId</code>, 它允许你为任何类型获得一个唯一的标识符.<code>Error trait</code> 有一个隐藏提供的方法, 叫做<code>type_id</code>, 它的默认实现是返回<code>TypeId::of::&lt;Self&gt;()</code>. 类似地, <code>Any</code>有一个对<code>T</code>的<code>impl Any</code>的通用实现, 在该实现中, 其<code>type_id</code>返回相同的内容. 在这些<code>impl</code>块的上下文中, <code>Self</code>的具体类型是已知的, 所以这个<code>type_id</code> 是真实类型的类型标识符. <code>downcast_ref</code>调用<code>self.type_id</code>, 它通过动态大小类型的<code>vtable</code>(见第3章)向下转到底层类型的实现, 并将其与提供的<code>downcast</code>类型的类型标识符进行比较. 如果它们匹配, 那么<code>dyn Error</code> 或<code>dyn Any</code>背后的类型就真的是<code>T</code>, 并且从一个类型的引用到另一个类型的引用是安全的.</p>
+<h3 id="特殊错误案例"><a class="header" href="#特殊错误案例">特殊错误案例</a></h3>
+<p>有些函数是易错的, 但一旦失败也不能返回任何有意义的错误. 从概念上讲, 这些函数的返回类型是<code>Result&lt;T, ()&gt;</code>. 在一些代码库中, 你可能会看到它被表述为 <code>Option&lt;T&gt;</code>. 虽然这两个函数的返回类型都是合法的选择, 但它们表达了不同的语义, 你通常应该避免将<code>Result&lt;T, ()&gt;</code>"简化"为<code>Option&lt;T&gt;</code>. <code>Err(())</code>表述一个操作失败了, 应该重试、报告或以其他特殊处理. 另一方面, <code>None</code>只表达了函数没有任何内容; 它通常不被认为是一个特殊情况或应该被处理的东西. 你可以在<code>Result</code>类型的<code>#[must_use]</code>注解中看到这一点--当你得到一个<code>Result</code>时, 语言认为处理这两种情况是很重要的, 而对于一个<code>Option</code>, 两种情况实际上都不需要处理.</p>
+<blockquote>
+<p>NOTE: 你还应该记住, <code>()</code>并没有实现 <code>Error</code> 特性. 这意味着它不能被类型化为<code>Box&lt;dyn Error&gt;</code>, 并且在使用时<code>?</code>可能会有点麻烦. 出于这个原因, 在这些情况下, 定义你自己的单元结构类型, 为其实现 <code>Error</code>, 并将其作为错误, 而不是<code>()</code>.</p>
+</blockquote>
+<p>有些函数, 比如那些启动持续运行的服务器循环的函数, 只返回错误; 除非发生错误, 否则它们永远运行. 其他函数永远不会出错, 但仍然需要返回<code>Result</code>, 例如, 为了匹配<code>trait</code>签名. 对于这样的函数, <code>Rust</code>提供了<code>never</code>类型, 用<code>!</code>的语法编写. <code>never</code>类型表述一个永远无法生成的值. 你不能自己构造一个这个类型的实例, 唯一的方法是进入一个无限循环或<code>panic</code>, 或者通过其他编译器知道永远不会返回的特殊操作. 对于<code>Result</code>, 当你有一个你知道<code>Ok</code>或<code>Err</code>永远不会被使用时, 你可以把它设置为<code>!</code>类型. 如果你写了一个返回<code>Result&lt;T, !&gt;</code>的函数, 你将永远无法返回<code>Err</code>, 因为唯一的返回方式是进入永远不会返回的代码. 因为编译器知道任何带有<code>!</code>的变体都不会被产生, 它还可以在此基础上优化你的代码, 比如不生成<code>Result&lt;T, !&gt;</code>上<code>unwrap</code>的<code>panic</code>代码. 而当你进行模式匹配时, 编译器知道任何包含<code>!</code>的变量甚至不需要被列出. 挺酷的!</p>
+<p>最后一个奇怪的错误情况是错误类型<code>std::thread::Result</code>. 这里是它的定义.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>type Result&lt;T&gt; = Result&lt;T, Box&lt;dyn Any + Send + 'static&gt;&gt;;
+<span class="boring">}</span></code></pre></pre>
+<p>错误类型是类型擦除的, 但它并没有像我们之前看到的那样被擦除为<code>dyn Error</code>. 取而代之的是<code>dyn Any</code>, 它只保证错误是某种类型, 仅此而已...这几乎没有什么保证. 出现这种奇怪的错误类型的原因是<code>std::thread::Result</code>的错误变量只有在<code>panic</code>时才会产生; 具体来说, 如果你试图加入一个已经<code>panic</code>的线程. 在这种情况下, 加入的线程除了忽略错误或使用<code>unwrap</code>使自己<code>panic</code>外, 还能做什么呢? 从本质上讲, 错误类型是"一个panic", 其值是传递给 <code>panic!</code> 的任何参数, 它确实可以是任何类型(尽管它通常是一个格式化的字符串).</p>
+<h2 id="传播错误"><a class="header" href="#传播错误">传播错误</a></h2>
+<p><code>Rust</code>的 <code>?</code> 操作符是<code>unwrap</code>或提前返回的简写, 用于轻松处理错误. 但它还有一些其他的技巧值得了解. 首先, <code>?</code>通过<code>From trait</code>执行类型转换. 在一个返回<code>Result&lt;T, E&gt;</code>的函数中, 你可以在任何<code>Result&lt;T, X&gt;</code>上使用<code>?</code> , 其中<code>E: From&lt;X&gt;</code>. 这就是通过<code>Box&lt;dyn Error&gt;</code>擦除错误的特点; 你可以在任何地方使用<code>?</code>而不用担心特定的错误类型, 而且通常会"正常工作".</p>
+<blockquote>
+<p><code>FROM</code> 和 <code>INTO</code></p>
+<p>标准库有许多转换特性, 但其中两个核心特性是<code>From</code>和<code>Into</code>. 你可能会觉得有两个很奇怪: 如果我们有<code>From</code>, 为什么还需要<code>Into</code>, 反之亦然? 有几个原因, 但让我们从历史原因开始: 在 <code>Rust</code>的早期, 由于第三章中讨论的一致性规则, 不可能只有一个. 或者, 更确切地说, 曾经的一致性规则是什么.</p>
+<p>假设你想在你的<code>crate</code>中定义的某个本地类型和标准库中的某个类型之间实现双向转换. 你可以很容易的写<code>impl&lt;T&gt; From&lt;Vec&lt;T&gt;&gt; for MyType&lt;T&gt;</code>和 <code>impl&lt;T&gt; Into&lt;Vec&lt;T&gt;&gt; for MyType&lt;T&gt;</code>, 但是如果你只有<code>From</code>或<code>Into</code>, 你必须写<code>impl&lt;T&gt; From&lt;MyType&lt;T&gt;&gt; for Vec&lt;T&gt;</code> 或 <code>impl&lt;T&gt; Into&lt;MyType&lt;T&gt;&gt; for Vec&lt;T&gt;</code>.然而, 编译器曾经拒绝了这些实现! 只有从<code>Rust</code>1.41.0开始, 当覆盖类型的例外被添加到一致性规则中时, 它们才合法.在那之前, 有必要同时拥有这两个特性. 由于很多 <code>Rust</code>代码是在<code>Rust</code>1.41.0 之前写的, 所以现在这两个特征都不能被删除.</p>
+<p>然而, 除了这一历史事实之外, 即使我们今天可以从头开始, 也有很好的人体工程学理由来拥有这两个特征. 在不同的情况下, 使用其中一个或另一个通常会容易得多. 例如, 如果你正在写一个方法, 该方法接收一个可以变成 <code>Foo</code> 的类型, 你是想写<code>fn(impl Into&lt;Foo&gt;)</code> 还是 <code>fn&lt;T&gt;(T) where Foo: From&lt;T&gt;</code>? 反过来说, 要把一个字符串变成一个语法标识符, 你是愿意写 <code>Ident::from("foo")</code> 还是 <code>&lt;_ as Into&lt;Ident&gt;&gt;::into("foo")</code>? 这两个特性都有其用途, 我们最好同时拥有它们.</p>
+<p>鉴于我们确实有这两种东西, 你可能想知道今天应该在代码中使用哪一个. 答案是非常简单的: 实现<code>From</code>, 并在约束使用<code>Into</code>. 原因是<code>Into</code>对任何实现了 <code>From</code>的<code>T</code>都有一个通用实现, 所以不管一个类型是明确地实现了<code>From</code>还是 <code>Into</code>, 它都实现了<code>Into</code>!</p>
+<p>当然, 正如简单的事情一样, 故事并没有就此结束. 因为当<code>Into</code>被用作绑定时, 编译器经常要"通过"通用实现, 所以推断一个类型是否实现了<code>Into</code>的推断比它是否实现了<code>From</code>更复杂. 而且在某些情况下, 编译器还没有聪明到可以解决这个难题. 由于这个原因, 在编写本文时, <code>?</code> 操作符使用<code>From</code>, 而不是<code>Into</code>. 大多数时候, 这并没有什么区别, 因为大多数类型都实现了<code>From</code>, 但这也意味着旧库中实现<code>Into</code>的错误类型可能无法与<code>?</code>运算, 随着编译器越来越聪明, <code>?</code>可能会被"升级"为了能使用<code>Into</code>, 到那时这个问题就会消失, 但这也是我们目前所面临的问题.</p>
+</blockquote>
+<p>第二个方面需要注意是, <code>?</code>这个操作符实际上只是一个称为<code>Try</code>的特性的语法糖. 在写这篇文章的时候, <code>Try</code>特性还没有稳定下来, 但是当你读到这篇文章的时候, 它或者类似的东西很可能已经被确定下来. 由于细节还没有全部弄清楚, 我将只给你一个<code>Try</code>工作原理的大纲, 而不是完整的方法特征.在其核心部分, <code>Try</code>定义了一个封装类型, 其状态要么是进一步计算是有用的(快乐路径), 要么是无用的. 你们中的一些人会正确地想到单体(<code>monads</code>), 尽管我们不会在这里探讨这种联系. 例如, 在<code>Result&lt;T, E&gt;</code>的情况下, 如果你有一个<code>Ok(t)</code>, 你可以通过解开<code>t</code>来继续在快乐的路径上运行. 另一方面, 如果你有一个<code>Err(e)</code>, 你想立即停止执行并产生错误值, 因为你没有<code>t</code>, 所以不可能进一步计算.</p>
+<p><code>Try</code> 的有趣之处, 它不仅适用于<code>Result</code>类型, 还适用于更多的类型. 例如, <code>Option&lt;T&gt;</code>遵循同样的模式--如果你有一个<code>Some(t)</code>, 你可以在快乐路径上继续下去, 而如果你有一个<code>None</code>, 就会产生<code>None</code>而不是继续. 这种模式延伸到了更复杂的类型, 比如<code>Poll&lt;Result&lt;T, E&gt;&gt;</code>, 它的快乐路径类型是 <code>Poll&lt;T&gt;</code>, 这使得<code>?</code>适用的情况远比你想象的多. 当<code>Try</code>稳定下来后, 我们可能会看到<code>?</code>开始与各种类型一起工作, 使我们的快乐路径代码更漂亮.</p>
+<p><code>?</code>操作符已经可以在易错函数、<code>doctests</code>和<code>fn main</code>中使用了. 不过, 为了充分发挥它的潜力, 我们还需要一种方法来对这种错误进行范围处理. 例如, 考虑清单5-2中的函数.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn do_the_thing() -&gt; Result&lt;(), Error&gt; {
+    let thing = Thing::setup()?;
+    // .. code that uses thing and ? ..
+    thing.cleanup();
+    Ok(())
+}
+
+// 清单 5-2: 使用"? "运算符的多步骤易错函数.
+<span class="boring">}</span></code></pre></pre>
+<p>这并不完全符合预期. 在<code>setup</code>和<code>cleanup</code>之间的任何问题都会导致整个函数的提前返回, 从而跳过<code>cleanup</code>的代码! 这就是<code>try</code>块要解决的问题. 一个尝试块的行为就像一个单次迭代的循环, 其中<code>?</code>使用<code>break</code>而不是<code>return</code>, 并且该块的最后表达式有一个隐含的<code>break</code>. 我们现在可以修改清单5-2中的代码, 使其总是执行清理, 如清单5-3所示</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn do_the_thing() -&gt; Result&lt;(), Error&gt; {
+    let thing = Thing::setup()?;
+    let r = try {
+    // .. code that uses thing and ? ..
+    };
+    thing.cleanup();
+    r
+}
+
+// 清单 5-3: 一个多步骤的易错函数, 总是自己清理.
+<span class="boring">}</span></code></pre></pre>
+<p>在写这篇文章时, <code>try</code>代码块也不稳定, 但对其有用性有足够的共识, 它们很可能以类似于这里描述的形式出现.</p>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>本章介绍了在<code>Rust</code>中构造错误类型的两种主要方法: 枚举和擦除. 我们研究了在何时使用哪一种方式, 以及它们各自的优缺点. 我们还了解了一些<code>?</code>操作符的背后的机制, 并考虑了<code>?</code>如何在未来变得更加实用. 在下一章中, 我们将从代码中抽身出来, 看看你是如何组织一个<code>Rust</code>项目的. 我们将研究特性标志、依赖管理和版本管理, 以及如何使用工作区和子包管理更复杂的<code>crate</code>. 下一页见!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="chapter-03.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="chapter-05.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="chapter-03.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="chapter-05.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="editor.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

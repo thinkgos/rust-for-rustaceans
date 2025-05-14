@@ -1,0 +1,460 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第3章-设计接口 - Rust For Rustaceans 阅读和翻译</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust For Rustaceans 阅读和翻译</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/thinkgos/Rust-For-Rustaceans" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="第三章-设计接口"><a class="header" href="#第三章-设计接口">第三章 设计接口</a></h1>
+<p>每个项目, 无论大小, 都有一个<code>API</code>. 事实上, 它通常有几个. 其中有些是面向用户的, 比如<code>HTTP</code>端点或命令行接口, 有些是面向开发者, 比如库的开放接口. 除此之外, <code>Rust crate</code>还有一些内部接口: 每个类型、<code>trait</code>和模块边界都有自己的微型<code>API</code>, 你的代码与之交互. 随着你的代码库的规模和复杂性的增长, 你会发现非常值得在如何设计内部<code>API</code>上投入一些心思和精力, 使用和维护代码尽可能的愉快.</p>
+<p>在这一章中, 我们将探讨在<code>Rust</code>中编写惯用接口的一些最重要的考虑事项, 无论这些接口的用户是你自己还是使用你的库的其他开发者. 这基本上可以归结为四个原则: 你的接口应该是不出意外的(<code>unsurprising</code>), 灵活的(<code>flexible</code>), 明显的(<code>obvious</code>)和受约束的(<code>constrained</code>). 我将依次讨论这些原则, 为编写可靠、可用的接口提供一些指导.</p>
+<p>我强烈建议读完本章后, 看看``Rust<code>API</code>指南(<code>https://rust-lang.github.io/api-guidelines/</code>). 那里有一个很好的清单, 根据清单中详细介绍了解每项建议. 本章中的许多建议也可以通过<code>cargo clippy</code>工具检查的, 如果你还没有使用该工具, 建议开始在代码中使用它. 我还鼓励你阅读<code>RFC 1105</code>(<code>https://rust-lang.github.io/rfcs/1105-api-evolution.html</code>)和<code>The Cargo Book</code>中关于<code>SemVer</code>兼容性的章节(<code>https://doc.rust-lang.org/cargo/reference/semver.html</code>), 这些章节涵盖了<code>Rust</code>中哪些是、哪些不是破坏性变更.</p>
+<h2 id="不意外的unsurprising"><a class="header" href="#不意外的unsurprising">不意外的(Unsurprising)</a></h2>
+<p>最小意外原则, 又称最小意外法则, 在软件工程中经常被提及, 同样也适用于<code>Rust</code>接口. 尽可能地, 你的接口应该足够直观, 应该直观到如果用户需要推断, 他们通常会推断正确. 当然, 并不是所有关于你的应用程序的接口能直观呈现, 但任何不令人意外的东西都应该是直观的. 核心思想是紧贴用户可能已经了解的东西, 这样他们就不必以不同于他们习惯的方式重新学习概念. 这样一来, 你就可以把他们的脑力节省下来, 用于解决那些真正与你的接口有关的问题.</p>
+<p>有很多方法可以使你的接口变得可预测. 在这里, 我们将探讨如何使用命名、常见<code>trait</code>和人体工程学<code>trait</code>的技巧来帮助用户.</p>
+<h3 id="命名惯例"><a class="header" href="#命名惯例">命名惯例</a></h3>
+<p>用户在使用接口时, 首先会通过接口的名称来了解它; 他们会立即从所接触到的类型、方法、变量、字段和库的名称中推断出一些东西. 如果你的接口重用了其他(也许是常见的)接口的名称--比如说方法和类型, 用户就会知道可以对你的方法和类型做出某些假设. 名为<code>iter</code>的方法可能接收<code>&amp;self</code>, 并且可能给你一个迭代器. 名为<code>into_inner</code>的方法可能会接收<code>self</code>, 并且返回某种包装好的类型. 名为<code>SomethingError</code>的类型可能实现了<code>std::error::Error</code>, 并出现在各种<code>Result</code>中. 通过使用相同目的的通用名称, 使用户更容易推断事物的作用, 并让他们更容易理解你的接口的不同之处.</p>
+<p>由此推论, 名字相同的东西实际上应该以同样的方式工作. 否则, 例如, 如果你的<code>iter</code>方法使用<code>self</code>, 或者<code>SomethingError</code>类型没有实现<code>Error</code>, 用户很可能会根据他们期望的接口工作方式写出错误的代码. 他们会感到意外和沮丧, 并不得不花时间去研究你的接口与他们的期望有何不同. 如果我们能为用户省去这种麻烦, 我们就应该这么做.</p>
+<h3 id="类型的共同traits"><a class="header" href="#类型的共同traits">类型的共同traits</a></h3>
+<p><code>Rust</code>中的用户还会做出一个主要的假设, 即接口中的一切都"都能正常工作". 他们期望能够用<code>{:?}</code>打印任何类型, 并将任何东西发送到另一个线程, 他们还期望每个类型都是<code>Clone</code>. 在可能的情况下, 我们应该再次避免让用户感到意外, 并积极实现大多数标准<code>trait</code>, 即使我们并不立即需要它们.</p>
+<p>由于第二章中讨论的一致性规则, 编译器将不允许用户在需要时实现这些<code>trait</code>. 用户不允许为外部类型实现一个外部<code>trait</code>(如<code>Clone</code>), 相反. 他们需要将你的接口类型包裹在他们自己的类型中, 如果不了解该类型的内部结构, 编写一个合理的实现可能会相当困难.</p>
+<p>在这些标准<code>trait</code>中, 首先是<code>Debug trait</code>. 几乎每个类型都应该实现<code>Debug</code>, 即使它只打印类型的名称. 使用<code>#[derive(Debug)]</code>通常是实现接口中<code>Debug trait</code>的最好方法, 但请记住, 所有派生<code>trait</code>都会自动为任何泛型参数添加相同的约束. 你可以简单地通过利用<code>fmt::Formatter</code>上的各种<code>debug_</code> 辅助函数来编写自己的实现.</p>
+<p>紧随其后的是<code>Rust</code>的自动<code>trait Send</code> 和 <code>Sync</code>(以及在较小的程度上的<code>Unpin</code>). 如果一个类型没有实现这些<code>trait</code>之一, 通常需要一个很好的理由的. 不是<code>Send</code>的类型不能被放在<code>Mutex</code>中, 甚至不能在包含线程池的应用程序中. 未实现<code>Sync</code>的类型不能通过 <code>Arc</code> 共享或放在静态变量中. 用户已经开始期望类型能在这些情况下工作, 特别是在几乎所有东西都在线程池上运行的异步世界中, 如果你不确保你的类型实现这些<code>trait</code>, 他们会感到沮丧. 如果你的类型不能实现这些<code>trait</code>, 请确保妥善记录这一事实及其原因.</p>
+<p>你应该实现的下一组几乎通用的<code>trait</code>是<code>Clone</code>和<code>Default</code>. 这些<code>trait</code>可以很容易地被派生或实现, 对大多数类型来说, 实现这些<code>trait</code>是有意义的. 如果你的类型不能实现这些<code>trait</code>, 请确保在你的文档中注明, 因为用户通常期望能够根据自己的需要轻松地创建更多(和新)类型的实例. 如果他们不能, 他们会感到惊讶.</p>
+<p>在预期<code>trait</code>的层次结构中再往下一步就是比较<code>trait</code>. <code>PartialEq</code>, <code>PartialOrd</code>, <code>Hash</code>, <code>Eq</code>, 和 <code>Ord</code>. <code>PartialEq trait</code>是特别可取的, 因为用户在某些时候不可避免地会有两个你的类型的实例, 他们希望用<code>==</code>或<code>assert_eq</code>来比较! 即使你的类型只对同一类型的实例进行等价比较, 也值得实现<code>PartialEq</code>, 以使你的用户能够使用 <code>assert_eq</code>!</p>
+<p><code>PartialOrd</code>和<code>Hash</code>更为专业, 适用范围可能没那么广, 但在可能的情况下, 你也要实现它们.  这对于用户可能用作<code>map</code>的键的类型, 或者他们可能使用任何<code>std::collection</code>集合类型来进行重复的类型, 尤其如此, 因为它们往往需要这些边界. 除了<code>PartialEq</code>和<code>PartialOrd</code>之外, <code>Eq</code>和<code>Ord</code>还对实现类型的比较操作有额外的语义要求. 这些在这些<code>trait</code>的文档中都有很好的记录, 只有当你确定这些语义确实适用于你的类型时, 你才应该实现它们.</p>
+<p>最后, 对于大多数类型来说, 实现<code>serde crate</code>的<code>Serialize</code>和<code>Deserialize trait</code>是有意义的. 这些都可以很容易地派生出来, 而且<code>serde_derive</code> 包甚至有机制可以重写一个字段或枚举变体的序列化. 由于<code>serde</code> 是一个第三方板块, 你可能不希望添加对它的必要依赖. 因此, 大多数库选择提供一个<code>serde trait</code>, 只有在用户选择时才增加对<code>serde</code> 的支持.</p>
+<p>你可能想知道为什么我没有把可派生<code>Copy trait</code>列入本节. 有两件事使<code>Copy</code>与其他提到的<code>trait</code>不同. 第一件事是, 用户一般不期望类型是<code>Copy</code>; 恰恰相反, 他们倾向于期望, 如果他们想要某个东西的两个副本, 他们必须调用 <code>clone</code>. 复制改变了移动给定类型的值的语义, 这可能会让用户感到意外. 这与第二个观察相联系: 一个类型很容易不再是<code>Copy</code>, 因为<code>Copy</code>类型高度受限. 一个开始很简单的类型很容易最终不得不容纳一个字符串, 或者其他一些非拷贝类型. 如果发生这种情况, 你不得不删除<code>Copy</code>的实现, 这就是一个向后不兼容的变化. 相比之下, 你很少需要删除<code>Clone</code>的实现, 所以这是个不太沉重的承诺.</p>
+<h3 id="人体工程学trait的实现-ergonomictraitimplementations"><a class="header" href="#人体工程学trait的实现-ergonomictraitimplementations">人体工程学<code>trait</code>的实现 (Ergonomic<code>trait</code>Implementations)</a></h3>
+<p><code>Rust</code>不会自动为对实现<code>trait</code>的类型的引用实现<code>trait</code>. 换个说法, 一般情况下, 你不能用<code>&amp;Bar</code>调用<code>fn foo&lt;T: Trait&gt;(t: T)</code>, 即使<code>Bar:Trait</code>. 这是因为<code>Trait</code>可能包含了取值为<code>&amp;mut self</code>或<code>self</code>的方法, 这显然不能在<code>&amp;Bar</code>上调用. 尽管如此, 这种行为可能会让看到 <code>Trait</code>只有<code>&amp;self</code>方法的用户感到非常惊讶.</p>
+<p>因此, 在定义新的<code>trait</code>时, 你通常会想为该<code>trait</code>提供适当的通用实现, 如<code>&amp;T where T: Trait</code>, <code>&amp;mut T where T: Trait</code>, 以及<code>Box&lt;T&gt; where T: Trait</code>. 你可能只能实现其中的一部分, 这取决于<code>Trait</code>的方法的具体接收器. 标准库中的许多<code>trait</code>都有类似的实现, 正是因为这样可以减少用户的意外.</p>
+<p>迭代器是另一种情况, 在这种情况下, 你通常想在对一个类型的引用上特别添加<code>trait</code>实现. 对于任何可以被迭代的类型, 考虑为<code>&amp;MyType</code>和<code>&amp;mut MyType</code>实现<code>IntoIterator</code>. 这样, 就像用户所期望的那样<code>for</code>可以在你的类型的借用实例上正常工作, .</p>
+<h3 id="包装类型"><a class="header" href="#包装类型">包装类型</a></h3>
+<p><code>Rust</code>没有经典意义上的对象继承.  然而, <code>Deref trait</code>和它的表亲<code>AsRef</code>都提供了类似于继承的东西. 如果<code>T: Deref&lt;Target = U&gt;</code>的话, 这些<code>trait</code>允许你拥有一个<code>T</code>类型的值, 并通过直接在<code>T</code>类型的值上调用<code>U</code>类型方法. 这对用户来说, 就像魔法一样, 一般来说非常的棒.</p>
+<p>如果你提供的是相对透明的包装类型(如<code>Arc</code>), 你很有可能想要实现<code>Deref</code>, 这样用户就可以通过使用<code>.</code>操作符来调用内部类型上的方法. 如果访问内部类型不需要任何复杂或潜在的缓慢逻辑, 你也应该考虑实现<code>AsRef</code>, 它允许用户轻松地将<code>&amp;WrapperType</code>作为<code>&amp;InnerType</code>使用. 对于大多数包装类型, 你还应尽可能地实现<code>From&lt;InnerType&gt;</code>和<code>Into&lt;InnerType&gt;</code>, 这样你的用户就可以轻松地添加或删除包装.</p>
+<p>你可能也遇到过 <code>Borrow trait</code>, 它感觉与<code>Deref</code>和<code>AsRef</code>非常相似, 但实际上有点不同. 具体来说, <code>Borrow</code>是为一个更狭窄使用情况而定制的: 允许调用者提供同一类型的多个基本相同的变体中的任何一个. 也许, 它本被称为等价(<code>Equivalent</code>). 例如, 对于一个<code>HashSet&lt;String&gt;</code>, <code>Borrow</code>允许调用者提供一个<code>&amp;str</code>或者一个<code>&amp;String</code>. 虽然<code>AsRef</code>也可以实现同样的功能, 但如果没有<code>Borrow</code>的额外要求, 即目标类型对<code>Hash</code>、<code>Eq</code>和<code>Ord</code>的实现与实现类型完全相同, 那么这么做就不安全了. <code>Borrow</code>还为<code>T</code>、<code>&amp;T</code>和<code>&amp;mut T</code>提供了一个<code>Borrow&lt;T&gt;</code>的通用实现, 这使得它在<code>trait</code>约束中的使用非常方便, 可以接受一个给定类型的自有值或引用值. 一般来说, <code>Borrow</code>适用于你的类型本质上等同于另一个类型, 而<code>Deref</code>和 <code>AsRef</code>则广泛适用于实现你的类型可以"作为"的任何东西.</p>
+<blockquote>
+<p><code>Deref</code>和固有方法
+当<code>T</code>上有以<code>self</code>的方法时, 围绕点运算符和<code>Deref</code>的魔法会让人感到困惑和意外. 例如, 给定一个值 <code>t: T</code>, 不清楚<code>t.frobnicate()</code>是对<code>T</code>还是对底层的<code>U</code>进行<code>frobnicate</code>的调鵑!
+因此, 那些允许你透明地调用内部类型的方法的类型应该避免使用固有方法. <code>Vec</code>有一个<code>push</code>方法, 即使它解除对<code>slice</code>的引用, 因为你知道<code>slice</code>不会很快得到一个<code>push</code>方法. 但是, 如果您的类型取消对用户控制的类型的引用, 那么您添加的任何固有方法也可能存在于该用户控制的类型上, 从而导致问题. 在这些情况下, 倾向于<code>fn frobnicate(t: t)</code>形式的静态方法. 这样, <code>t.frobnicate()</code>总是调用<code>U::frobnicate</code>, 而<code>t::frobnicate(t)</code>可以用来<code>T</code>本身.</p>
+</blockquote>
+<h2 id="灵活的"><a class="header" href="#灵活的">灵活的</a></h2>
+<p>你写的每一段代码都隐含地或明确地包括一个契约. 契约由一组要求和一组承诺组成. 要求是对如何使用代码的限制, 而承诺是对代码如何被使用的保证. 当设计一个新的接口时, 你要仔细考虑这个契约. 一个好的经验法则是避免强加不必要的限制, 只做出你能遵守的承诺.  增加限制或删除承诺通常需要对语义版本进行重大变更, 而且可能会破坏其他地方的代码. 另一方面, 放宽限制或给出额外的承诺, 通常是向后兼容的.</p>
+<p>在<code>Rust</code>中, 限制通常以<code>trait</code>约束和参数类型的形式出现, 而承诺则以<code>trait</code>实现和返回类型的形式出现. 例如, 比较清单3-1中的三个函数签名</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn frobnicate1(s: String) -&gt; String
+fn frobnicate2(s: &amp;str) -&gt; Cow&lt;'_, str&gt;
+fn frobnicate3(s: impl AsRef&lt;str&gt;) -&gt; impl AsRef&lt;str&gt;
+
+// 清单 3-1: 具有不同契约的类似函数签名
+<span class="boring">}</span></code></pre></pre>
+<p>这三个函数签名都接收一个字符串并返回一个字符串, 但它们的契约却截然不同.</p>
+<p>第一个函数要求调用者以<code>String</code>类型的形式拥有字符串, 它承诺将返回一个拥有(所有权)的 <code>String</code>. 由于契约要求调用者分配字符串, 并要求我们返回一个拥有(所有权)的字符串, 我们以后不能以向后兼容的方式使这个函数免分配.</p>
+<p>第二个函数放宽了契约: 调用者可以提供任何字符串的引用, 所以用户不再需要分配或放弃字符串的所有权. 它还承诺返回一个<code>std::borrow::Cow</code>, 这意味着它可以返回一个字符串引用或者一个所有权的字符串, 这取决于它是否需要拥有该字符串. 这里的承诺是, 该函数将始终返回一个<code>Cow</code>, 这意味着我们不能在以后改变为使用其他优化的字符串表示. 调用者也必须特别提供一个<code>&amp;str</code>, 因此, 如果他们自己的一个预先存在的<code>String</code>, 他们必须将其解除引用为一个<code>&amp;str</code>来调用我们的函数.</p>
+<p>第三个函数取消了这些限制. 它只要求用户传入可以生成字符串引用的类型, 并且只承诺返回值可以生成字符串引用.</p>
+<p>这些函数签名中没有哪个一定比其他的更好. 如果函数中需要一个字符串的所有权, 你可以使用第一个参数类型来避免额外的字符串拷贝. 如果你想让调用者利用已分配并返回字符串的情况, 第二个返回类型为<code>Cow</code>的函数可能是一个好选择. 相反, 我想让你从中得到的启示是, 你应该仔细考虑你的接口所绑定的契约, 因为事后改变它可能是破坏性变更.</p>
+<p>在本节的其余部分, 我将举例说明经常出现的接口设计决策, 以及它们对接口契约的影响.</p>
+<h3 id="泛型参数"><a class="header" href="#泛型参数">泛型参数</a></h3>
+<p>接口必须对用户提出的一个明显的要求是, 他们必须向你的代码提供哪些类型. 如果你的函数明确地接受一个<code>Foo</code>, 用户必须拥有并给你一个<code>Foo</code>. 这是无法绕过的. 在大多数情况下, 使用泛型而不是具体类型是值得的, 这样可以让调用者传递任何符合你的函数实际需要的类型, 而不是只传递一种特定的类型. 将清单3-1中的<code>&amp;str</code>改为<code>AsRef&lt;str&gt;</code>是这种放松的一个例子. 以这种方式放宽要求的一个方法是, 从参数的完全泛型化, 不加任何约束, 然后根据编译器的错误来发现你需要添加哪些约束.</p>
+<p>然而, 如果将这种方法发挥到极致, 就会使每个函数的每个参数都成为自己的泛型, 这将是既难读又难理解的. 对于何时应该或不应该将某个参数泛型化, 并没有硬性规定, 因此请根据自己的最佳判断来决定. 一个好的经验法则是, 如果你能想到用户可能经常合理地使用其他类型, 而不是一开始使用的具体类型, 那可以就把参数设成泛型.</p>
+<p>你可能还记得, 在第2章, 泛型代码通过单态化, 对曾经使用过的每一种类型的组合都会拷贝一份副本. 考虑到这一点, 使大量参数泛化的想法可能会让你担心你的二进制文件过于庞大. 在第2章中, 我们也讨论了如何使用动态分发来缓解这种情况, 其性能代价(通常)可以忽略不计, 这在这里也适用. 对于那些你无论如何都要通过引用来获取的参数(记得<code>dyn Trait</code>不是<code>Sized</code>, 你需要一个宽指针来使用它们), 你可以很容易地用一个使用动态派发的参数来替换你的泛型参数. 例如, 你可以用<code>&amp;dyn AsRef&lt;str&gt;</code>来代替<code>impl AsRef&lt;str&gt;</code>.</p>
+<p>不过, 在你去做这件事之前, 有几件事情你应该考虑一下. 首先, 你是代表用户做出这个选择的, 而用户无法选择不使用动态分发. 如果你知道你要应用动态分发的代码永远不会对性能敏感, 这可能是好的. 但如果有用户想在他们的高性能应用中使用你的库, 那么在热循环中调用的函数中的动态分发可能会成为一个问题. 其次, 在写这篇文章的时候, 只有当你有一个简单的<code>trait</code>约束时, 使用动态分发才能发挥作用, 比如<code>T:AsRef&lt;str&gt;</code>或<code>impl AsRef&lt;str&gt;</code>. 对于更复杂的约束, <code>Rust</code>不知道如何构造动态分发<code>vtable</code>, 所以你不能采取例如<code>&amp;dyn Hash + Eq</code>. 最后, 请记住, 对于泛型, 调用者总是可以通过传入一个<code>trait</code>对象来选择动态分发. 反之则不然: 如果你带了一个<code>trait</code>对象, 那就是调用者必须提供该对象.</p>
+<p>我们可能一开始使用具体类型的接口, 然后随着时间的推移再将它们变成泛型. 这种做法值得尝试, 这可能行的通, 但请你记住, 这种变化并不一定向后兼容, 了解其原因, 想象一下将<code>fn foo(v: &amp;Vec&lt;usize&gt;)</code>改为<code>fn foo(v: impl AsRef&lt;[usize]&gt;)</code>. 虽然每个<code>&amp;Vec&lt;usize&gt;</code>都实现了<code>AsRef&lt;[usize]&gt;</code>, 但类型推断仍然会给用户带来问题. 考虑一下如果调用者用<code>foo(&amp;iter.collect())</code>来调用<code>foo</code>会发生什么. 在最初的版本中, 编译器可以确定它应该收集到一个<code>Vec</code>, 但现在只知道它需要收集到某个实现<code>AsRef&lt;[usize]&gt;</code>的类型. 而且可能有多个这样的类型, 所以有了这个改变, 调用者的代码就不会再能编译了!</p>
+<h3 id="对象安全"><a class="header" href="#对象安全">对象安全</a></h3>
+<p>当你定义一个新的<code>trait</code>时, 该<code>trait</code>是否是对象安全的(见第2章"编译和分发"的结尾)是<code>trait</code>契约的一个不成文的部分. 如果<code>trait</code>是对象安全的, 用户可以使用<code>dyn Trait</code>将实现你的<code>trait</code>的不同类型视为单一的通用类型. 如果不是, 编译器将不允许该<code>trait</code>的<code>dyn Trait</code>. 你应该倾向于你的<code>trait</code>是对象安全的, 即使这对使用它们的人机工程学来说有一点代价(比如使用<code>impl AsRef&lt;str&gt;</code>而不是<code>&amp;str</code>), 因为对象安全可以使你的<code>trait</code>有新的使用方法. 如果你的<code>trait</code>必须有一个泛型方法, 考虑它的泛型参数是否可以<code>trait</code>本身, 或者它的泛型参数是否也可以使用动态分发来保持<code>trait</code>的对象安全. 另外, 你可以添加一个与该方法约束的<code>where Self: Sized trait</code>, 这样就可以只用该<code>trait</code>的具体实例来调用该方法(而不是通过<code>dyn Trait</code>). 你可以在<code>Iterator</code>和<code>Read trait</code>中看到这种模式的例子, 它们是对象安全的, 但在具体实例上提供了一些额外的方便方法.</p>
+<p>你应该愿意做出多少牺牲来保护对象的安全, 这个问题没有唯一的答案. 我的建议是, 你要考虑你的<code>trait</code>将如何被使用, 以及用户想把它作为一个<code>trait</code>对象使用是否有意义. 如果你认为用户可能希望使用你的<code>trait</code>的许多不同的实例放在一起使用, 你应该更努力地提供对象安全. 例如, 动态分发对于<code>FromIterator``trait</code>来说是没有用的, 因为它的一个方法不接受<code>self</code>, 所以你首先就不能构造一个<code>trait</code>对象. 同样, <code>std::io::Seek</code> 作为一个<code>trait</code>对象本身是相当无用的, 因为你能用这样一个<code>trait</code>对象做的唯一事情就是探索, 而无法读写.</p>
+<blockquote>
+<p><code>Drop trait</code>对象
+你可能认为<code>Drop trait</code>作为一个<code>trait</code>对象也是无用的, 因为作为一个<code>trait</code>对象, 你能用<code>Drop</code>做的就是析构它. 但事实证明, 有一些库特别希望能够丢弃任意类型. 例如, 一个提供延迟丢弃值的库, 用于并发垃圾收集或只是延迟清理, 只关心值是否可以被丢弃, 而不关心其他. 有趣的是, <code>Drop</code>的故事并没有结束; 因为<code>Rust</code>也需要能够丢弃<code>trait</code>对象, 每个 <code>vtable</code> 都包含<code>drop</code>方法. 实际上, 每个<code>dyn Trait</code>也是一个<code>dyn Drop</code>.</p>
+</blockquote>
+<p>请记住, 对象安全是你的公共接口的一部分, 如果你以一种向后兼容的方式修改了一个<code>trait</code>, 比如增加了一个带有默认实现的方法, 但这使得该<code>trait</code>不再是对象安全的, 你需要提升你的主要语义版本号.</p>
+<h3 id="借用-vs-所有权"><a class="header" href="#借用-vs-所有权">借用 vs 所有权</a></h3>
+<p>对于在<code>Rust</code>中定义的几乎每一个函数、<code>trait</code>和类型, 你必须决定它是否应该拥有数据的所有权, 或者只是持有对其数据的引用. 无论你做出什么样的决定, 都会对界面的人体工程学和性能产生深远影响, 幸运的是, 这些决定往往是自己做出的.</p>
+<p>如果你写的代码需要数据的所有权, 比如调用带有<code>self</code> 的方法或将数据转移到另一个线程, 它必须存储所有权数据. 当你的代码必须拥有数据时, 一般也应该让调用者提供拥有的数据, 而不是通过引用取值并克隆它们. 这使得, 调用者可以控制分配, 并且可以预先了解使用相关接口的成本.</p>
+<p>另一方面, 如果你的代码不需要拥有这些数据, 它应该使用引用进行操作. 这个规则的一个常见例外是像<code>i32</code>、<code>bool</code>或<code>f64</code>这样的小类型, 它们直接存储和复制与通过引用存储一样便宜. 不过, 不要以为这条规则适用所有的<code>Copy</code>类型都是正确的; <code>[u8; 8192]</code>是<code>Copy</code>, 但如果到处存储和复制它的成本会很昂贵.</p>
+<p>当然, 在现实世界中, 事情往往没有那么一目了然. 有时, 你事先并不知道你的代码是否需要拥有数据. 例如, <code>String::from_utf8_lossy</code>需要拥有传递给它的字节序列的所有权中包含无效的<code>UTF-8</code>序列时, 才需要获得该序列的所有权. 在这种情况下, <code>Cow</code>类型是你的朋友: 如果数据允许, 它可以让你对引用进行操作, 如果需要, 它可以让你产生一个拥有所有权的值.</p>
+<p>其他时候, 引用的生命周期会使接口复杂化, 以至于使用起来很麻烦. 如果你的用户在使用你的接口后代码编译时很费劲, 那就说明你可能要(甚至不必要地)对某些数据块拥有所有权. 如果你这样做, 在你决定对可能是一大块字节的数据进行堆分配之前, 先从那些克隆成本低或者对性能不敏感的数据开始.</p>
+<h3 id="易出错的和阻塞的析构函数"><a class="header" href="#易出错的和阻塞的析构函数">易出错的和阻塞的析构函数</a></h3>
+<p>以I/O为中心的类型在析构时往往需要进行清理. 这可能包括刷新写入磁盘的数据, 关闭文件, 或优雅地终止与远程主机的连接. 执行这种清理的自然地方是类型的<code>Drop</code>实现. 不幸的是, 一旦一个值被丢弃, 除了<code>panic</code>之外, 我们没有办法向用户传达错误了. 异步代码中也会出现类似的问题, 我们希望在有工作未完成时就结束工作. 当<code>drop</code>被调用时, 执行器可能已经关闭了, 我们没有办法做更多的工作. 我们可以尝试启动另一个执行器, 但这也会带来一系列的问题, 比如异步代码中的阻塞, 我们将在第8章看到.</p>
+<p>这些问题没有完美的解决方案, 无论我们做什么, 一些应用程序将不可避免地回落到我们的<code>Drop</code>实现. 出于这个原因, 我们需要通过<code>Drop</code>提供尽力而为的清理. 如果清理出错, 至少我们尝试过--吞下错误并继续前进. 如果一个执行器仍然可用, 我们可能会生成一个<code>future</code>来进行清理, 但如果它永远不会运行, 我们也已经尽力了.</p>
+<p>不过, 我们应该为那些希望不留下线程的用户提供更好的选择. 我们可以通过提供一个显式的析构器来做到这一点. 这通常以一个方法的形式出现, 该方法拥有<code>self</code>的所有权, 并暴露销毁过程中固有的任何错误(使用<code>-&gt; Result&lt;_, _&gt;</code>)或异步(使用<code>async fn</code>). 细心的用户可以使用该方法来优雅地销毁任何相关的资源.</p>
+<blockquote>
+<p>NOTE: 一定要在文档中显示突出析构函数!</p>
+</blockquote>
+<p>像往常一样, 这需要权衡利弊. 一旦添加了显式析构函数, 就会遇到两个问题. 首先, 由于你的类型实现了<code>Drop</code>, 你不能再在析构函数中移出该类型的任何字段. 这是因为在你的显式析构器运行后<code>Drop::drop</code>仍然会被调用, 而且它需要<code>&amp;mut self</code>, 这要求<code>self</code>的任何部分都没有被移动. 其次, <code>drop</code> 接收的是<code>&amp;mut self</code>, 而不是<code>self</code>, 所以你的<code>Drop</code> 实现不能简单地调用你的显式析构函数并忽略其结果(因为它并不拥有<code>self</code>). 有几个方法可以解决这些问题, 但都不完美.</p>
+<p>第一个方法是是顶层类型成为一个包裹在<code>Option</code>里的新类型, 而这个新类型又持有一些持有该类型所有字段的内部类型. 然后你可以在两个析构函数中使用<code>Option::take</code>, 并且只在内部类型还没有被占用时才调用内部类型的显式析构函数. 因为内层类型没有实现<code>Drop</code>, 所以你可以拥有那里的所有字段的所有权. 这种方法的缺点是, 你想在顶层类型上提供的所有方法现在必须包括通过<code>Option</code>(你知道它总是<code>Some</code>, 因为<code>Drop</code>还没有被调用)到内部类型上的字段的代码.</p>
+<p>第二个解决方法是使你的每个字段都能被取走. 你可以通过用<code>None</code>替换<code>Option</code>来"取走"它(这就是<code>Option::take</code>的作用), 但你也可以对许多其他类型的字段这样做.  例如, 你可以通过简单地用它们廉价的构造默认值替换<code>Vec</code>或<code>HashMap</code>来取走它们--<code>std::mem::take</code>是你的朋友. 如果你的类型有合理的"空"值, 这种方法就很好用, 但如果你必须用<code>Option</code>包裹几乎所有的字段, 然后用一个匹配的<code>unwrap</code>来修改这些字段的每一次访问, 就会变得很乏味.</p>
+<p>第三种选择是在<code>ManuallyDrop</code>类型中保存数据, 它可以解引用到内部类型, 所以无需解包. 你也可以在<code>drop</code>中使用<code>ManuallyDrop::take</code>来在销毁时取得所有权. 这种方法的主要缺点是<code>ManuallyDrop::take</code>是不安全的. 没有任何安全机制来确保你在调用<code>take</code>后不会尝试使用<code>ManuallyDrop</code>中的值, 或者不会多次调用<code>take</code>. 如果你这样做了, 你的程序就会默默地表现出未定义的行为, 并会发生不好的事情.</p>
+<p>最终, 你应该选择这些方法中最适合你应用的方法. 我倾向于选择第二种方案, 只有当你发现自己处于<code>Option</code>中时才会切换到其他方法. 如果代码足够简单, 你可以很容易地检查你的代码的安全性, 而且你对自己的能力有信心, 那么<code>ManuallyDrop</code>解决方案是非常好的.</p>
+<h2 id="易理解的"><a class="header" href="#易理解的">易理解的</a></h2>
+<p>虽然有些用户可能熟悉支撑接口的实现的某些方面, 但他们不可能理解所有的规则和限制. 他们不会知道在调用<code>bar</code>之后再调用<code>foo</code>是绝对不行的, 也不会知道只有在月亮呈47度角且过去18秒内没有人打喷嚏的情况下, 调用不安全方法<code>baz</code>才是安全的. 只有当接口清楚地表明发生了一些奇怪的事情, 他们才会去查阅文档或仔细阅读类型签名. 因此, 对你来说, 让用户尽可能容易地理解你的接口, 并让他们尽可能难以错误地使用你的接口是至关重要的. 在这方面, 你所掌握的两个主要技术是你的文档和类型系统, 所以让我们依次看一下这两个技术.</p>
+<blockquote>
+<p>NOTE: 你也可以利用命名来向用户暗示, 一个接口的内容不只是看起来那么简单. 如果用户看到一个名为<code>dangerous</code>的方法, 他们很有可能会阅读其文档.</p>
+</blockquote>
+<h3 id="文档"><a class="header" href="#文档">文档</a></h3>
+<p>让接口透明化的第一步是写好文档. 我可以写一整本书来介绍如何编写文档, 但在这里我们还是专注于针对<code>Rust</code>的建议.</p>
+<p>首先, 清楚地记录代码可能执行意外操作的情况, 或者它依赖于用户执行超出类型签名规定的事情. <code>panic</code>是这两种情况的一个很好的例子: 如果你的代码可能会恐慌, 请记录这一事实, 以及它可能恐慌的情况. 同样地, 如果你的代码可能会返回一个错误, 请记录它在哪些情况下会返回错误. 对于不安全的函数, 记录调用者必须保证什么才能使调用安全.</p>
+<p>其次, 在<code>crate</code>和模块层面上为你的代码提供端到端的使用范例. 这些示例比特定类型或方法的示例更重要, 因为它们让用户感觉到所有东西是如何结合在一起的. 有了对接口结构的高层次理解后, 开发者可能很快就会意识到特定的方法和类型的作用, 以及它们应该在何处使用. 端到端示例也给用户一个自定义使用的起点, 他们可以, 而且经常会复制粘贴这个示例, 然后根据他们的需要进行修改. 这种"边做边学"的方式往往比让他们尝试从组件中拼凑出一些东西更有效.</p>
+<blockquote>
+<p>NOTE: 特定于方法的示例表明, 是的, <code>len</code>方法确实返回了长度, 不太可能让用户对你的代码有什么新的了解.</p>
+</blockquote>
+<p>第三, 组织文档. 把所有的类型、<code>trait</code>和函数放在一个顶层的模块中, 会让用户感到不知从何下手. 利用模块的优势, 将语义相关的项目组合在一起. 然后, 使用文档内的链接来相互连接项目. 如果类型A的文档谈到了B <code>trait</code>, 那么就应该在这里链接到该<code>trait</code>. 如果能让用户更容易地探索你的接口, 他们就不太会错过重要的联系或依赖关系. 也可以考虑用<code>#[doc(hidden)]</code> 来标记你的接口中那些不打算公开但由于历史遗留原因需要的部分, 这样就不会使文档变得杂乱无章.</p>
+<p>最后, 尽可能丰富你的文档. 链接到解释概念、数据结构、算法或接口的其他方面的外部资源, 这些资源可能在其他地方有很好的解释. <code>RFCs</code>、博客文章和白皮书都是很好的选择, 如果有相关的话. 使用<code>#[doc(cfg(..))]</code> 来强调只在特定配置下才可用的项目, 这样用户就能很快意识到文档中列出的某些方法是不可用的. 使用<code>#[doc(alias = "...")]</code> 以其它名称显示类型和方法, 以便用户搜索. 在顶层文档中, 指出用户常用的模块、特性、类型、<code>trait</code>和方法.</p>
+<h3 id="类型系统指导"><a class="header" href="#类型系统指导">类型系统指导</a></h3>
+<p>类型系统是确保你的接口是明显的、自动文档化和防误用的绝佳工具. 你可以利用几种技术使你的接口很难被误用, 从而使它们更有可能被正确使用.</p>
+<p>第一种是语义类型, 即添加类型来表示值的含义, 而不仅仅是其原始类型. 最典型的例子是布尔运算: 如果函数需要三个布尔参数, 那么很有可能一些用户会弄乱这些值的顺序, 并在出了大问题之后才意识到这一点. 另一方面, 如果提供三个不同的双变量枚举类型的参数, 编译器没报错那么用户就不会获得错误的顺序: 如果他们试图将 <code>DryRun::Yes</code>传递给<code>overwrite</code>参数, 这将根本不起作用, 将<code>overwrite::No</code>作为<code>dry_run</code>参数也不行. 除了布尔类型, 我还可以应用语义类型. 例如, 围绕数字类型的<code>newtype</code>可以为所包含的值提供一个单位, 或者它可以将原始指针参数限制在仅由另一个方法返回的参数上.</p>
+<p>一个密切相关的技术是使用零大小的类型来表示类型实例的某一个特定的事实为真. 例如, 考虑一个叫做<code>Rocket</code>的类型, 它代表真正的火箭的状态. 无论火箭处于什么状态, 火箭上的一些操作(方法)都应该是可用的, 但有些操作只有在特殊情况下才有意义. 例如, 如果火箭已经被发射了, 就不可能再发射. 同样的, 如果火箭还没有发射, 也不可能分离燃料箱. 我们可以将这些建模为枚举变体, 但是这样一来, 所有的方法在每个阶段都是可用的, 我们就需要引入可能的恐慌了.</p>
+<p>相反, 如清单3-2所示, 我们可以在<code>Rocket</code>上引入一个通用参数<code>Stage</code>, 并用它来限制什么情况下可以使用什么方法.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Grounded;   // (1)
+struct Launched;
+// and so on
+struct Rocket&lt;Stage = Grounded&gt; {
+    stage: std::marker::PhantomData&lt;Stage&gt;, // (2)
+}
+impl Default for Rocket&lt;Grounded&gt; {}    // (3)
+impl Rocket&lt;Grounded&gt; {
+    pub fn launch(self) -&gt; Rocket&lt;Launched&gt; { }
+}
+impl Rocket&lt;Launched&gt; { // (4)
+    pub fn accelerate(&amp;mut self) { }
+    pub fn decelerate(&amp;mut self) { }
+}
+impl&lt;Stage&gt; Rocket&lt;Stage&gt; { // (5)
+    pub fn color(&amp;self) -&gt; Color { }
+    pub fn weight(&amp;self) -&gt; Kilograms { }
+}
+
+// 第 3-2 项: 使用标记类型来限制实现的方法
+<span class="boring">}</span></code></pre></pre>
+<p>我们引入单元类型来表示火箭的每个阶段(1). 我们实际上不需要存储阶段--只需要存储它提供的元信息--所以我们把它存储在<code>PhantomData</code>(2) 后面, 以保证它在编译时将其消除. 然后, 我们只在<code>Rocket</code>持有特定类型的参数时为其编写实现块. 你只能在地面上建造一个火箭(目前), 而且你只能从地面上发射它(3). 只有当火箭发射后, 你才能控制它的速度(4). 无论火箭处于什么状态, 你都可以对它做一些事情, 这些事情我们放在一个通用的实现块中(5).  你会注意到, 以这种方式设计的接口, 用户根本不可能在错误的时间调用方法, 我们已经将使用规则编码在类型本身中, 并使非法状态无法表示.</p>
+<p>这个概念也延伸到许多其他领域; 如果函数忽略了指针参数, 除非给定的布尔参数为真, 那么最好把这两个参数结合起来. 有了一个枚举类型, 其中一个变体代表<code>false</code>(没有指针), 一个变体代表 <code>true</code>, 持有一个指针, 无论是调用者还是实现者都不会误解这两者之间的关系. 这是一个强大的想法, 我强烈建议你加以利用.</p>
+<p>另一个让接口显而易见的小工具是<code>#[must_use]</code>注解. 把它添加到任何类型、<code>trait</code>或函数中, 如果用户的代码接收到该类型或<code>trait</code>的元素, 或调用该函数, 而没有显示地处理它, 编译器就会发出警告. 你可能已经在<code>Result</code>的上下文中看到了这一点: 如果一个函数返回<code>Result</code>, 而你没有把它的返回值赋值给某个地方, 你会得到一个编译器警告. 请注意不要过度使用这个注解--只有在用户不使用返回值时很可能会犯错时才会添加它.</p>
+<h2 id="受约束的"><a class="header" href="#受约束的">受约束的</a></h2>
+<p>随着时间的推移, 一些用户会依赖你的接口的每一个属性, 无论是错误还是功能. 这对于公开的库来说尤其如此, 因为你无法控制你的用户. 因此, 在进行用户可见的改变之前, 你应该仔细考虑. 无论你是添加新的类型、字段、方法或<code>trait</code>实现, 还是更改现有的实现, 你都要确保这个改变不会破坏现有用户的代码, 而且你打算将这个变更保留一段时间. 频繁的向后不兼容的变更(语义版本中的主要版本增加)肯定会引起用户的不满.</p>
+<p>许多向后不兼容的变更是显而易见的, 比如重命名一个公共类型或删除一个公共方法, 但有些更改更为微妙, 与<code>Rust</code>的工作方式有很大关系. 在这里, 我们将介绍一些比较棘手的微妙变化, 以及如何为它们规划变化. 你会发现, 你需要在其中一些变化与你希望你的接口灵活性之间取得平衡--有时候, 有些东西必须要让步.</p>
+<h3 id="类型修改"><a class="header" href="#类型修改">类型修改</a></h3>
+<p>删除或重命名公共类型几乎肯定会破坏某些用户的代码. 为了解决这个问题, 你要尽可能地利用<code>Rust</code>的可见性修改器, 比如<code>pub(crate)</code>和<code>pub(in path)</code>. 你拥有的公有类型越少, 以后更改的自由度就越大, 而不会破坏现有的代码.</p>
+<p>不过, 用户代码可以在更多的方面依赖你的类型, 而不仅仅是名称. 请看清单3-3中的公共类型和该代码的给定代码.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// 在你的接口
+pub struct Unit;
+// 在用户的代码
+let u = lib::Unit;
+
+// 清单 3-3: 一个看起来无辜的公共类型
+<span class="boring">}</span></code></pre></pre>
+<p>现在想想如果你给<code>Unit</code>添加一个私有字段会发生什么. 即使添加的字段是私有的, 但这个更改仍然会破坏用户的代码, 因为他们所依赖的构造函数已经消失了. 类似地, 请看清单3-4中的代码和用法.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// 你的接口
+pub struct Unit { pub field: bool };
+// 用户代码
+fn is_true(u: lib::Unit) -&gt; bool {
+    matches!(u, Unit { field: true })
+}
+
+// 清单 3-4: 访问单个公共字段的用户代码
+<span class="boring">}</span></code></pre></pre>
+<p>在这里, 给<code>Unit</code>添加一个私有字段也会破坏用户代码, 这次是因为<code>Rust</code>的穷举模式匹配检查逻辑能够看到用户看不到的接口部分. 编译器发现有更多的字段, 尽管用户代码无法访问它们, 并以不完整为由拒绝用户的模式匹配. 如果我们将元组结构构变成带有命名字段的普通结构, 也会出现类似的问题: 即使字段本身完全相同, 但旧的模式对新的类型定义也不再有效.</p>
+<p><code>Rust</code>提供了<code>#[non_exhaustive]</code>属性来帮助缓解这些问题. 你可以把它添加到任何类型的定义中, 编译器将不允许在该类型上使用隐式构造函数(如<code>lib::Unit { field1: true }</code>)和非穷举模式匹配(即没有尾巴的模式, <code>..</code>). 如果你怀疑自己将来可能会修改某个特定的类型, 这是一个很好的属性. 但它确实限制了用户的代码, 例如剥夺了用户依赖穷举模式匹配的能力, 所以如果你认为给定的类型可能会保持稳定, 请避免添加该属性.</p>
+<h3 id="trait实现"><a class="header" href="#trait实现"><code>trait</code>实现</a></h3>
+<p>正如第2章中所述, <code>Rust</code>的一致性规则不允许对给定类型的多个<code>trait</code>的实现. 由于我们不知道下游代码可能添加了哪些实现, 所以添加一个现有<code>trait</code>的通用实现通常是一种破坏性的改变. 同样的道理也适用于为一个现有类型实现一个外来<code>trait</code>, 或者为一个外来类型实现一个现有<code>trait</code>--在这两种情况下, 外来<code>trait</code>或类型的所有者可能同时添加一个冲突的实现, 所以这一定是一个破坏性的变更.</p>
+<p>删除<code>trait</code>的实现是一种破坏性的变更, 但为新的类型实现<code>trait</code>从来都不是问题, 因为任何<code>crate</code>都不能有与该类型冲突的实现.</p>
+<p>也许与直觉相反, 在为现有的类型实现任何<code>trait</code>也要小心谨慎. 请看清单 3-5 中的代码, 就会明白其中的原因.</p>
+<pre><pre class="playground"><code class="language-rust edition2021">// crate1 1.0
+pub struct Unit;
+pub trait Foo1 { fn foo(&amp;self) }
+// note that Foo1 is not implemented for Unit
+
+// crate2; depends on crate1 1.0
+use crate1::{Unit, Foo1};
+trait Foo2 { fn foo(&amp;self) }
+impl Foo2 for Unit { .. }
+fn main() {
+    Unit.foo();
+}
+
+// 清单 3-5: 为一个现有的类型实现一个`trait`可能会引起问题. </code></pre></pre>
+<p>如果你在<code>crate1</code>中添加了<code>impl Foo1 for Unit</code>, 而没有将其标记为破坏性变更, 那么下游的代码会突然停止编译, 因为现在对<code>foo</code>的调用是不明确的. 这甚至可以适用于新的公共<code>trait</code>的实现, 如果下游的包使用通配符导入(使用<code>cate1::*</code>). 如果你提供了一个<code>prelude</code>模块, 并指示用户使用通配符导入, 你将特别需要记住这一点.</p>
+<p>对现有<code>trait</code>的大多数改变也是破坏性的改变, 例如改变方法签名或添加新方法. 改变方法的签名会破坏该<code>trait</code>的所有实现, 可能还会破坏很多使用, 而添加一个新的方法"只是"破坏所有的实现. 不过, 添加一个带有默认实现的新方法并没有问题, 因为现有的实现将继续适用.</p>
+<p>我在这里说 "一般 "和 "大多数", 是因为作为接口作者, 我们有一个工具可以让我们绕过其中的一些规则: 密封的<code>trait</code>. 一个密封的<code>trait</code>是一个只能由其他包使用, 而不能实现的<code>trait</code>. 这立即使一些破坏性的变化变得不那么破坏. 例如, 你可以为一个密封的<code>trait</code>添加一个新的方法, 因为你知道在当前的包之外没有任何实现需要考虑. 同样地, 你可以为新的外部类型实现一个密封的<code>trait</code>, 因为你知道定义该类型的外部包不可能添加一个冲突的实现.</p>
+<p>密封<code>trait</code>最常用于派生<code>trait</code>--为实现特定其他<code>trait</code>的类型提供通用实现的<code>trait</code>. 只有当外部的包实现你的<code>trait</code>没有意义时, 你才应该密封<code>trait</code>; 这严重限制了该<code>trait</code>的实用性, 因为下游的<code>crate</code>将不再能够为他们自己的类型实现该<code>trait</code>. 你也可以使用密封的<code>trait</code>来限制哪些类型可以被用作类型参数, 比如在清单3-2中的火箭例子中, 将<code>Stage</code>类型限制为只有<code>Grounded</code>和<code>Launched</code>的类型.</p>
+<p>清单 3-6 显示了如何封存一个<code>trait</code>, 以及如何在定义箱中为它添加实现.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait CanUseCannotImplement: sealed::Sealed /* (1)  */ { .. }
+mod sealed {
+    pub trait Sealed {}
+    impl&lt;T&gt; Sealed for T where T: TraitBounds {} // (2)
+}
+impl&lt;T&gt; CanUseCannotImplement for T where T: TraitBounds {}
+
+// 清单 3-6: 如何密封一个`trait`并为其添加实现
+<span class="boring">}</span></code></pre></pre>
+<p>诀窍是添加一个私有的、空的<code>trait</code>, 作为你希望密封(1)的<code>trait</code>的一个父<code>trait</code>. 由于父<code>trait</code>在一个私有模块中, 其他的<code>crate</code>无法访问它, 因此也无法实现它. 封闭的<code>trait</code>要求底层类型实现<code>Sealed</code>, 所以只有我们明确允许的类型(2)才能最终实现该<code>trait</code>.</p>
+<blockquote>
+<p>NOTE: 如果你确实以这种方式密封了<code>trait</code>, 请确保你记录了这一事实, 这样用户在试图自己实现<code>trait</code>时就不会感到沮丧了.</p>
+</blockquote>
+<h3 id="隐性契约"><a class="header" href="#隐性契约">隐性契约</a></h3>
+<p>有时, 对代码某一部分所做的更改会以微妙的方式影响接口中其他部分的契约. 发生这种情况的两种主要方式是通过重导出和自动<code>trait</code>.</p>
+<h4 id="重导出"><a class="header" href="#重导出">重导出</a></h4>
+<p>如果你的接口的任何部分暴露外部类型, 那么对这些外部类型的任何改变也是对你接口的改变. 例如, 考虑一下如果你迁移到一个新的依赖关系的主要版本, 并将该依赖关系中的一个类型作为你的接口中的一个迭代器类型公开, 会发生什么. 依赖于你的接口的用户可能也会直接依赖该依赖关系, 并期望你的接口提供的类型与该依赖关系中的同名类型相同. 但是你更改了依赖项的主要版本, 即使类型的名称是相同, 这也不再是真的相同了. 清单3-7显示了一个这样的例子.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// your crate: bestiter
+pub fn iter&lt;T&gt;() -&gt; itercrate::Empty&lt;T&gt; { .. }
+// their crate
+struct EmptyIterator { it: itercrate::Empty&lt;()&gt; }
+EmptyIterator { it: bestiter::iter() }
+
+// 清单 3-7: 重新导出使外部的包成为接口契约的一部分. 
+<span class="boring">}</span></code></pre></pre>
+<p>如果你的<code>crate</code>从<code>itercrate 1.0</code>移到<code>itercrate 2.0</code>, 但其他方面没有变化, 那么本列表中的代码将不再被编译. 尽管类型没有改变, 编译器认为(正确地)<code>itercrate1.0::Empty</code>和<code>itercrate2.0::Empty</code>是不同的类型. 因此, 你不能将后者赋值给前者, 这将破坏您的接口.</p>
+<p>为了减少类似的问题, 通常最好使用<code>newtype</code>模式来包装外部类型, 然后只公开外部类型中你认为有用的部分. 在很多情况下, 你可以通过使用<code>impl Trait</code>来避免<code>newtype</code>包装器, 只向调用者提供非常小的契约. 通过较少的承诺, 就可以减少破坏性的改动.</p>
+<blockquote>
+<p>SEMVER 的诀窍
+<code>itercrate</code>的示例可能让你产生误解. 如果<code>Empty</code>类型没有改变, 那么为什么编译器不允许任何使用它的代码继续工作, 而不管代码是使用它的1.0还是2.0版本？答案是很..... 复杂. 归根结底: <code>Rust</code>编译器并不会因为两个类型字段相同, 就认为它们是相同的. 举个简单的例子, 想象一下<code>itercrate 2.0</code>为<code>Empty</code>增加了一个<code>#[derive(Copy)]</code>. 现在, 这个类型突然有了不同的移动语义, 这取决于你使用的是1.0还是2.0! 而用其中一个类型编写的代码在另一个类型中就无法运行了.</p>
+<p>这个问题往往会出现在大型的、广泛使用的库中, 随着时间的推移, <code>crate</code>中的某个地方很有可能发生破坏性的改动. 不幸的是, 语义上的版本控制是在<code>crate</code>层面上进行的, 而不是在类型层面上, 因此, 任何地方的破坏性改变都是一种破坏性改变.</p>
+<p>一切并没有结束. 几年前, David Tolnay(<code>serde</code>的作者, 还有其他大量的<code>Rust</code>贡献者)想出了一个巧妙的技巧来处理这种情况. 他称其为"semver技巧". 这个想法很简单: 如果某个类型的<code>T</code>在破坏性变改中保持不变(比如从1.0到2.0), 那么在发布2.0之后, 你可以发布一个新的1.0次要版本, 该版本依赖于2.0, 并且用2.0中的<code>T</code>的重导出替换<code>T</code>.</p>
+<p>这样做可以确保两个主要版本中都只有一个单一的<code>T</code>类型. 这反过来又意味着任何依赖于<code>1.0</code>的板块都可以使用<code>2.0</code>的 T, 反之亦然. 因为这只发生在你明确选择的类型上, 因此那些实际上会破坏的变更将继续存在.</p>
+</blockquote>
+<h4 id="自动-traitsauto-traits"><a class="header" href="#自动-traitsauto-traits">自动 traits(Auto-Traits)</a></h4>
+<p><code>Rust</code>有一些<code>trait</code>, 会根据每个类型所包含的内容自动实现. 其中与本讨论最相关的是<code>Send</code>和<code>Sync</code>, 尽管<code>Unpin</code>、<code>Sized</code>和<code>UnwindSafe trait</code>也有类似的问题. 就其本质而言, 这些<code>trait</code>为你接口中的几乎所有类型添加了一个隐藏的承诺. 这些<code>trait</code>甚至可以通过其他类型的消除类型传播, 比如<code>impl Trait</code>.</p>
+<p>这些<code>trait</code>的实现(通常)是由编译器自动添加的, 但这也意味着, 如果这些实现不再适用, 也不会自动添加. 所以, 如果你有一个包含私有类型<code>B</code>的公共类型<code>A</code>, 而你改变了<code>B</code>, 使其不再是<code>Send</code>, 那么<code>A</code>现在也不再是<code>Send</code>了. 这就是一个破坏性的变更!</p>
+<p>这些变更可能很难被跟踪, 通常直到接口的用户抱怨他们的代码不再工作时才会被发现. 为了在这些情况发生之前捕捉到它们, 在你的测试套件中加入一些简单的测试是个不错的做法, 以检查你的所有类型是否以你期望的方式实现了这些<code>trait</code>.  清单3-8给出了这样一个测试的例子.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn is_normal&lt;T: Sized + Send + Sync + Unpin&gt;() {}
+#[test]
+fn normal_types() {
+    is_normal::&lt;MyType&gt;();
+}
+
+// 清单 3-8: 测试一个类型是否实现了一组特征
+<span class="boring">}</span></code></pre></pre>
+<p>注意, 该测试并不运行任何代码, 只是测试代码的编译情况. 如果<code>MyType</code>不再实现<code>Sync</code>, 测试代码将不能编译, 你将知道你刚才的改变破坏了自动<code>traits</code>的实现.</p>
+<blockquote>
+<p>从文档中隐藏项目
+通过<code>#[doc(hidden)]</code>属性可以让你在文档中隐藏一个公共项目, 而不会让碰巧知道它存在的代码无法访问. 这通常被用来公开宏所需要的方法和类型, 且用户代码不需要的. 这种隐藏如何与你的接口契约互动还存在一些争议. 一般来说, 标记为<code>#[doc(hidden)]</code>的项目只在其公共效应范围内才被视为契约的一部分; 例如, 如果用户代码最终可能包含一个隐藏的类型, 那么该类型是<code>Send</code>是契约的一部分, 而其名称则不是. 隐藏的固有方法和隐藏在密封<code>trait</code>上的方法通常不是你的接口契约的一部分, 尽管你应该确保在这些方法的文档中明确说明这一点. 是的, 隐藏的项目仍然应该被记录下来!</p>
+</blockquote>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>在本章中, 我们探讨了设计<code>Rust</code>接口的许多方面, 无论是供外部使用, 还是仅仅作为<code>crate</code>中不同模块之间的一个抽象边界. 我们介绍了很多具体的陷阱和技巧, 但最终, 高层次的原则应该指导你的思考方向: 你的接口应该是不令人意外的、灵活的、明显的和受约束的. 在下一章中, 我们将深入探讨如何表述和处理<code>Rust</code>代码中的错误.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="chapter-02.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="chapter-04.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="chapter-02.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="chapter-04.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="editor.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

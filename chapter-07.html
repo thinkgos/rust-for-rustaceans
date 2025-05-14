@@ -1,0 +1,438 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第7章-宏 - Rust For Rustaceans 阅读和翻译</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust For Rustaceans 阅读和翻译</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/thinkgos/Rust-For-Rustaceans" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="第七章-宏"><a class="header" href="#第七章-宏">第七章 宏</a></h1>
+<p>宏在本质上是一种让编译器为你生成代码的工具. 你向编译器提供一套根据输入参数生成代码的规则, 编译器会将每次宏调用替换为应用该规则后生成的代码, 宏可以被看作一种由你定义替换规则的自动代码替换机制.</p>
+<p><code>Rust</code>的宏具有多种形式和结构, 使实现各种类型的代码生成变得更容易. 主要有两种宏: 声明性宏和过程宏, 本章将对它们逐一进行探讨. 我们还将介绍宏在日常编码中的常见用途, 以及在更高级用法中可能遇到的一些陷阱.</p>
+<p>来自C系语言的程序员可能习惯于<code>C</code>和<code>C++</code>的那片"混乱之地", 在那里你可以用<code>#define</code>将每个<code>true</code>改为<code>false</code>, 甚至移除所有的<code>else</code>关键字. 如果你也是如此, 就需要摆脱"宏等于不良实践"的刻板印象. <code>Rust</code>中的宏远不如<code>C</code>的宏那般"狂野失控". 它们遵循(大多)定义明确的规则, 并且对误用具有较强的防护性.</p>
+<h2 id="声明宏declarative-macros"><a class="header" href="#声明宏declarative-macros">声明宏(Declarative Macros)</a></h2>
+<p>声明式宏是使用<code>macro_rules!</code>语法定义的, 它允许你方便地定义类似函数的宏, 而无需像过程宏那样编写一个专用的<code>crate</code>. 定义好声明式宏后, 可以通过宏名加感叹号来调用它. 我更倾向于将这种宏看作一种由编译器辅助完成的查找替换工具: 它适用于许多规律明确、结构良好的转换任务, 并能有效消除重复样板代码. 到目前为止, 你在<code>Rust</code>中遇到的大多数宏都可能是声明性宏. 但请注意, 并非所有函数形式的宏都是声明性宏; <code>macro_rules!</code> 本身就是一个例外, <code>format_args!</code>也是如此. <code>!</code>仅表示该宏调用会在编译时被替换为不同的源代码.</p>
+<blockquote>
+<p>注意: 由于<code>Rust</code>的解析器专门识别和解析带有<code>!</code>的宏调用, 因此它们只允许用于解析器允许的位置. 它们在大多数常见场景中都可以使用, 比如在表达式位置或<code>impl</code>块中, 但并非适用于所有地方. 例如(截至目前), 在需要标识符或<code>match</code>分支的位置无法调用函数形式的宏.</p>
+</blockquote>
+<p>声明式宏为何被称为声明式, 这一点可能并不直观. 毕竟, 在程序中你不是一直都在"声明"各种内容吗? 在这里, "声明式"指的是: 你并不指定输入应如何被转换为输出, 而只是声明"当输入是B时, 输出应为A". 你只需声明它应该如此, 编译器会负责实现背后所有的解析和转换逻辑. 这使得声明式宏简洁而富有表现力, 但也容易显得晦涩, 因为你只能使用一套有限的语法来表达这些声明.</p>
+<h3 id="什么时候使用它们"><a class="header" href="#什么时候使用它们">什么时候使用它们</a></h3>
+<p>当你发现自己在重复编写相同的代码, 而又希望避免这样做时, 声明式宏就特别有用. 它们最适合用于结构固定的代码替换--如果你打算进行复杂的代码转换或大规模的代码生成, 那过程宏可能会更合适.</p>
+<p>我最常在编写重复且结构相似的代码时使用声明式宏, 例如测试代码和<code>trait</code>实现中. 在测试中, 我经常希望多次运行相同的测试逻辑, 但配置略有不同. 这时我可能会写出类似于代码清单7-1中所示的东西.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn test_inner&lt;T&gt;(init: T, frobnify: bool) { ... }
+#[test]
+fn test_1u8_frobnified() {
+    test_inner(1u8, true);
+}
+// ...
+#[test]
+fn test_1i128_not_frobnified() {
+    test_inner(1i128, false);
+}
+
+// 第 7-1 项: 重复测试代码
+<span class="boring">}</span></code></pre></pre>
+<p>虽然这种写法可以工作, 但它过于冗长、重复, 且容易出错. 使用宏可以大大优化这一过程, 如清单7-2所示.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! test_battery {
+    ($($t:ty as $name:ident),*) =&gt; {$(
+        mod $name {
+                #[test]
+                fn frobnified() { test_inner::&lt;$t&gt;(1, true) }
+                #[test]
+                fn unfrobnified() { test_inner::&lt;$t&gt;(1, false) }
+            })*
+        }
+}
+test_battery! {
+    u8 as u8_tests,
+    // ...
+    i128 as i128_tests
+);
+
+// 清单 7-2: 让一个宏为你重复. 
+<span class="boring">}</span></code></pre></pre>
+<p>这个宏将每个以逗号分隔的指令扩展成一个独立的模块, 它包含两个测试, 一个是以<code>true</code>调用<code>test_inner</code>, 另一个是以<code>false</code>调用. 虽然宏的定义并不简单, 但它显著简化了添加新测试的过程. 在调用<code>test_battery!</code>时, 每种类型只需占一行, 宏会自动为<code>true</code>和<code>false</code>两种参数生成测试. 我们还可以扩展它, 使其为不同的<code>init</code>值生成测试. 这样一来, 就大大降低了遗漏某个配置项测试的风险.</p>
+<p>在<code>Trait</code>实现方面的情况也类似. 如果你定义了一个自定义的<code>trait</code>, 通常会希望为标准库中的多个类型实现它, 即使这些实现非常简单. 假设你发明了一个名为<code>Clone</code>的<code>trait</code>, 并希望为标准库中所有实现了<code>Copy</code>的类型都实现它. 你可以使用一个类似代码清单7-3中的宏, 避免手动为每个类型编写实现.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! clone_from_copy {
+    ($($t:ty),*) =&gt; {
+        $(impl Clone for $t {
+            fn clone(&amp;self) -&gt; Self { *self }
+        })*
+    }
+}
+clone_from_copy![bool, f32, f64, u8, i8, /* ... */];
+
+// 清单 7-3: 使用宏来实现许多类似类型的特质, 一举两得
+<span class="boring">}</span></code></pre></pre>
+<p>在这里, 我们为每个提供的类型生成一个<code>Clone</code>的实现, 具体实现就是通过<code>*</code>从<code>&amp;self</code>中复制值. 你可能会好奇, 为什么我们不直接为所有满足<code>T:Copy</code>的类型添加一个通用的<code>Clone</code>的实现. 我们当然可以这么做, 但主要原因之一是, 这样会强制其他<code>crate</code>中那些恰好是<code>Copy</code>的类型也使用这个统一的<code>Clone</code>实现. 编译器中有一个叫做<code>specialization</code>(特化)的实验性<code>feature</code>提供一个解决方法, 但截至目前, 这个<code>trait</code>仍未稳定. 所以, 在当前阶段, 手动枚举具体类型会更合适. 这种模式不仅适用于简单的转发实现, 例如, 你也可以轻松地修改清单7-3中的代码, 对所有整数类型实现<code>AddOne trait</code>.</p>
+<blockquote>
+<p>注意: 如果你在犹豫该使用泛型还是声明式宏, 那你应该优先选择泛型. 泛型通常比宏更易用, 并且能更好地与语言中的其他结构集成. 记住这个经验法则: 如果代码的变化依赖于类型, 就使用泛型; 否则就使用宏.</p>
+</blockquote>
+<h3 id="他们如何工作的"><a class="header" href="#他们如何工作的">他们如何工作的</a></h3>
+<p>每种编程语言都有自己的语法规则, 规定了如何将源代码中的字符转化为<code>token</code>. <code>token</code>是语言的最底层构建单元, 包括数字、标点符号、字符串和字符字面量, 以及标识符; 在这个层级上, 语言关键字和变量名没有区别. 例如, 在<code>Rust</code>的语法中, 文本<code>(value + 4)</code>在会被表示为五个<code>token</code>: <code>(</code>, <code>value</code>, <code>+</code>, <code>4</code>, <code>)</code>. 将文本转化为<code>token</code>的过程, 为编译器的其余部分与底层繁锁的文本解析细节之间提供了一层抽象. 例如, 在<code>token</code>表示法中, 空白字符是不存在的; <code>/*"foo"*/</code>和<code>"/*foo*/"</code>表达的语义完全不同: 前者不会生成任何<code>token</code>, 后者会生成一个内容为<code>/*foo*/</code>的字符串字面量<code>token</code>.</p>
+<p>一旦源代码被转换为<code>token</code>序列, 编译器会遍历这些<code>token</code>并为它们分配语法意义. 例如, 以<code>()</code>为界限的<code>token</code>构成一个组, <code>!</code>表示宏调用, 等等. 这就是解析的过程, 它最终生成一个抽象语法树(AST), 描述了源代码所代表的结构. 举个例子, 考虑表达式<code>let x = || 4</code>, 它由以下<code>token</code>序列组成: <code>let</code>(关键字)、<code>x</code>(标识符)、<code>=</code>(标点符号)、两个<code>|</code>(标点符号)和<code>4</code>(字面意思). 当编译器将其转化为语法树时, 它表示为一个语句, 其中模式是标识符<code>x</code>, 其右侧表达式是一个闭包, 闭包有一个空参数列表, 且其主体是一个整数<code>4</code>的字面量表达式. 请注意, 语法树的表示方法比<code>token</code>序列要丰富得多, 因为它为符合语言语法的<code>token</code>组合赋予了语法意义.</p>
+<p><code>Rust</code>宏决定了一段特定<code>token</code>序列应被转换为何种语法树, 当编译器在解析过程中遇到一个宏调用时, 它必须先对宏求值, 以确定替换用的<code>token</code>序列, 而这组<code>token</code>最终会构成该宏调用对应的语法树. 然而, 此时编译器仍处于解析<code>token</code>阶段, 尚未准备好对宏进行求值, 因为它此时仅仅解析了宏定义的<code>token</code>. 因此, 编译器会推迟解析宏调用括号内的内容, 并将其中的输入<code>token</code>序列暂存下来. 当编译器准备好对宏进行求值时, 它会以先前暂存的<code>token</code>序列作为输入对宏求值, 解析宏展开所生成的<code>token</code>, 并将得到的语法树插入到原宏调用的位置中.</p>
+<p>从技术上讲, 编译器确实会对宏的输入进行一部分解析. 具体来说, 它会解析出诸如字符串字面量和有界分组等基本结构, 因此生成的是一系列的<code>token</code>树, 而不仅仅是普通的<code>token</code>. 例如, 代码<code>x - (a.b + 4)</code>解析为三个<code>token</code>树的序列. 第一个<code>token</code>树是标识符<code>x</code>, 第二个<code>token</code>树是标点符号<code>-</code>的, 第三个<code>token</code>树是使用括号括起来的分组, 该组本身由五个<code>token</code>树组成: <code>a</code>(一个标识符)、<code>.</code>(标点符号)、<code>b</code>(另一个标识符)、<code>+</code>(另一个标点符号)和 <code>4</code>(字面量). 这意味着宏的输入不一定是合法的<code>Rust</code>语句, 但它必须是<code>Rust</code>编译器可以解析的代码结构. 例如, 在<code>Rust</code>中不能在宏调用之外编写<code>for &lt;- x</code>, 但在宏调用内部可以, 只要宏展一后生成的是合法的语法. 另一方面, 你不能将<code>for{</code>传递给宏, 因为它缺少闭合的右大括号.</p>
+<p>声明式宏总是生成合法有效的<code>Rust</code>代码作为输出. 你不能让一个宏生成函数调用的一半, 或者只生成一个<code>if</code>而不包含随后的代码块. 声明式宏必须生成一个表达式(基本上是任何可以赋值给变量的任何东西), 一个语句, 如<code>let x = 1</code>; 一个条目, 如<code>trait</code>定义或<code>impl</code> 块, 一个类型, 或者一个模式匹配. 这使得<code>Rust</code>的宏机制较强的误用抵抗力: 你根本无法编写出会生成非法<code>Rust</code>代码的声明式宏, 因为宏的定义本身就无法通过编译!</p>
+<p>从宏观层面来看, 声明式宏的机制就是这些--当编译器遇到宏调用时, 它会将调用括号中的<code>token</code>传递给宏, 解析宏展开所产生的<code>token</code>流, 然后用生成的抽象语法树(AST)替换原始的宏调用.</p>
+<h3 id="如何编写声明式宏"><a class="header" href="#如何编写声明式宏">如何编写声明式宏</a></h3>
+<p>要详尽解释声明式宏所支持的全部语法超出了本书的范围. 不过我们会介绍基本语法, 因为其中确实存在一些值得注意的特殊之处.</p>
+<p>声明性宏由两个主要部分组成: 匹配器(matchers)和转换器(transcribers). 一个宏可以包含多个匹配器, 每个匹配器都对应一个转换器. 当编译器遇到一个宏调用时, 它会按顺序依次尝试宏中的每个匹配器, 一旦找到一个能匹配调用中标志的匹配器, 它就会使用相应转换器中的内容替换掉宏调用. 代码清单7-4显示了声明式宏规则的各个部分是如何协同工作的.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! /* macro name */ {
+    (/* 1st matcher */) =&gt; { /* 1st transcriber */ };
+    (/* 2nd matcher */) =&gt; { /* 2nd transcriber */ };
+}
+
+// 清单 7-4: 声明性宏定义组件
+<span class="boring">}</span></code></pre></pre>
+<h4 id="匹配器matchers"><a class="header" href="#匹配器matchers">匹配器(Matchers)</a></h4>
+<p>你可以把宏匹配器看作是一个<code>token</code>树, 编译器会尝试以预定义的方式"扭转"它, 以匹配它在调用地点得到的输入<code>token</code>树. 举个例子, 假设有一个宏匹配器是<code>$a:ident + $b:expr</code>. 这个匹配器会匹配任意标识符(<code>:ident</code>), 后跟一个加号, 再后跟任意<code>Rust</code>表达式(<code>:expr</code>). 如果宏调用传入<code>x + 3 * 5</code>, 编译器会发现这个模式可以匹配, 只要将<code>$a = x</code>和<code>$b = 3 * 5</code>. 尽管<code>*</code>从未出现在匹配器中, 但编译器识别到<code>3 * 5</code>是一个合法的表达式, 因此它可以被匹配为<code>$b:expr</code>, 因为<code>:expr</code>接受所有合法的表达式.</p>
+<p>匹配器可能会变得相当复杂, 但它们拥有极强的表达能力, 类似于正则表达式. 下面是一个不算太复杂的示例, 该匹配器接受一个或多个(<code>+</code>)逗号分割 (<code>),</code>) 的<code>key =&gt; value</code>格式的键/值对序列 (<code>$()</code>):</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>$($key:expr =&gt; $value:expr),+
+<span class="boring">}</span></code></pre></pre>
+<p>关键在于, 调用使用该匹配器的宏时, <code>key</code>或<code>value</code>可以是任意复杂的表达式, 匹配器的魔力将确保键和值表达式被正确地划分开.</p>
+<p>宏支持多种片段类型; 你已经见到用于标识符的<code>:ident</code>和用于表达式的<code>:expr</code>, 但还有用于类型的<code>:ty</code>, 甚至还有表示任意单个<code>token</code>树的<code>:tt</code>, 你可以在<code>Rust</code>语言参考的第三章中找到完整的片段类型列表(<code>https://doc.rust-lang.org/reference/macrosby-example.html</code>). 这些片段类型, 加上重复匹配模式的机制(<code>$()</code>), 可以让你匹配大多数常见的代码模式. 但如果你发现使用匹配器难以表达你想要的模式, 你也许可以尝试使用过程宏, 过程宏不需要遵循<code>macro_rules!</code>所要求的严格语法. 本章稍后我们会更详细地介绍过程宏.</p>
+<h4 id="转换器transcribers"><a class="header" href="#转换器transcribers">转换器(Transcribers)</a></h4>
+<p>一旦编译器匹配了一个声明性的宏匹配器, 它便使用匹配器关联的转换器生成代码. 宏匹配器定义的变量称为元变量, 编译器将在转换器中替换每个元变量的所有出现(如上一节例子中的<code>$key</code>), 用与匹配器部分相符的输入替换它. 如果你的匹配器中有重复(比如同一例子中的<code>$(),+</code>), 你可以在转换器中使用相同的语法, 它将根据输入中的每次匹配重复一次, 每次展开都会持有该迭代中每个元变量的适当替代. 例如, 对于<code>$key</code>和<code>$value</code>匹配器, 我们可以编写以下转录器, 针对每个匹配的<code>$key/$value</code>对生成一个<code>insert</code>调用到插入到<code>map</code>中去.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>(map.insert($key, $value);)+
+<span class="boring">}</span></code></pre></pre>
+<p>请注意, 在这里我们希望每次重复都带有分号, 而不仅仅是用来限定重复的范围, 所以我们将分号放置在重复括号内.</p>
+<blockquote>
+<p>注意: 你必须在转换器中的每次重复中使用一个元变量, 以便编译器知道在匹配器中使用哪个重复项(以防有多个重复项).</p>
+</blockquote>
+<h4 id="卫生性hygiene"><a class="header" href="#卫生性hygiene">卫生性(Hygiene)</a></h4>
+<p>你可能听说过<code>Rust</code>的宏是"卫生的", 并且也许你知道"卫生性"让它们更安全或更易于使用, 但未必理解这意味着什么. 当我们说<code>Rust</code>宏是"卫生的", 我们指的是一个声明式宏(通常)不能影响那些没有明确传递给它的变量. 一个简单的例子是, 如果你声明一个名为<code>foo</code>的变量, 然后调用一个也定义了名为<code>foo</code>的宏, 那么宏中的<code>foo</code>默认在调用点(宏被调用的地方)不可见. 类似的, 宏不能访问在调用点定义的变量(甚至是<code>self</code>), 除非它们被显式传进来.</p>
+<p>大多数情况下, 你可以把宏标识符看作存在于它们自己的命名空间中, 与它们展开后的代码命名空间是分开的. 举个例子, 看看清单7-5中的代码, 其中有一个宏试图(但失败了)在调用点遮蔽一个变量.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! let_foo {
+    ($x:expr) =&gt; {
+        let foo = $x;
+    }
+}
+let foo = 1;
+// expands to let foo = 2;
+let_foo!(2);
+assert_eq!(foo, 1);
+
+// 清单 7-5: 宏存在于他们自己的小宇宙中. 大多数情况下. 
+<span class="boring">}</span></code></pre></pre>
+<p>在编译器展开<code>let_foo!(2)</code>之后, 断言看起来应该会失败. 然而, 原始代码中的<code>foo</code>和宏生成的<code>foo</code>存在于不同的命名空间中, 它们之间没有任何关系, 除了它们恰好共享一个可读的名称. 事实上, 编译器会抱怨说宏中的<code>let foo</code>是一个未使用的变量. 这种卫生机制对于调试宏非常有帮助--你不必担心因为你碰巧选择了相同的变量名就会不小心在宏调用者中遮蔽或覆盖变量!</p>
+<p>然而, 这种卫生机制并不适用于变量标识符之外的内容. 声明性宏确实与调用点共享类型、模块和函数的命名空间. 这意味着你的宏可以定义新的函数, 这些函数可以在调用作用域内被调用, 可以向其他地方定义的类型添加新的实现(而不是传递进来的), 引入新的模块, 并且该模块可以在宏被调用的地方访问, 等等. 这是设计使然--如果宏不能像这样影响更广泛的代码, 使用它们来生成类型、<code>trait</code>实现和函数将会变得更加繁锁, 而这正是它们最有用的地方.</p>
+<p>宏中类型的非卫生性问题在编写你希望从你的<code>crate</code>导出的宏时尤为重要. 为了使宏真正能够被重用, 为了确保宏真正可重用, 你不能假设调用者作用域内会有什么类型. 也许调用你的宏的代码定义了<code>mod std {}</code>或者导入了自己的<code>Result</code>类型. 为了安全起见, 确保你使用完全指定的类型, 比如<code>::core::option::Option</code>或<code>::alloc::boxed::Box</code>. 如果你特别需要引用定义宏的<code>crate</code>中的东西, 使用特殊的元变量<code>$crate</code>.</p>
+<blockquote>
+<p>注意: 尽量避免使用<code>::std</code>路径, 以确保宏在<code>no_std</code>的<code>crate</code>中也能正常工作.</p>
+</blockquote>
+<p>如果你希望宏能够影响调用者作用域中的特定变量, 你可以选择在宏与调用者之间共享标识符. 关键是要记住标识符的来源, 因为它将绑定到其产生的命名空间中. 如果你在宏内部写入<code>let foo = 1</code>, 那么标识符<code>foo</code>来源于宏, 它在调用者的标识符命名空间中是不可见的. 另一方面, 如果宏把<code>$foo:ident</code>作为参数, 然后写上<code>let $foo = 1</code>, 当调用者用<code>!(foo)</code>调用宏时, 标识符将来源于调用者, 因此会绑定到调用者作用域中的<code>foo</code>.</p>
+<p>标识符不一定需要显式地作为参数传入; 只要该标识符出现在源自宏外部的代码中, 它就会引用调用者作用域中的同名标识符. 在清单7-6的例子中, 变量标识符虽然是作为<code>:expr</code>出现的, 但仍然可以访问调用者作用域中的该变量.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! please_set {
+    ($i:ident, $x:expr) =&gt; {
+        $i = $x;
+    }
+}
+let mut x = 1;
+please_set!(x, x + 1);
+assert_eq!(x, 2);
+
+// 清单 7-6: 让宏在调用地点访问标识符
+<span class="boring">}</span></code></pre></pre>
+<p>我们本可以在宏中使用<code>=$i+1</code>, 但我们不能使用<code>=x+1</code>, 因为<code>x</code>这个名称在宏的定义作用域中是不可见的.</p>
+<p>关于声明宏和作用域的最后一点说明: 与<code>Rust</code>中的几乎所有其他东西不同, 声明宏只有在被声明后才能在源代码中使用. 如果你尝试在文件前面使用一个在后面才定义的宏, 这是行不通的! 这个规则是全局适用于你的整个项目的; 如果你在一个模块中定义了一个宏, 想要在另一个模块中使用它. 那么定义宏的模块必须在<code>crate</code>中出现在调用它的模块之前, 而不能在其之后. 如果<code>foo</code>和<code>bar</code>是位于<code>crate</code>根部下的两个模块, 且<code>foo</code>定义了一个<code>bar</code>想要使用的宏, 那么在<code>lib.rs</code>中, <code>mod foo</code>必须出现在<code>mod bar</code>之前。</p>
+<blockquote>
+<p>注意: 这是宏作用域规则(正式称为"文本作用域")有一个例外, 那就是如果你使用了<code>#[macro_export]</code>宏. 这个标注会实质上将宏提升到<code>crate</code>的根作用域, 并将其标志为<code>pub</code>, 这样它就可以在<code>crate</code>的任何地方使用, 甚至可以被依赖这个<code>crate</code>的其他<code>crate</code>使用.</p>
+</blockquote>
+<h2 id="过程宏procedural-macros"><a class="header" href="#过程宏procedural-macros">过程宏(Procedural Macros)</a></h2>
+<p>你可以把过程宏看作是解析器和代码生成的组合, 而你要做的就是写中间的粘合代码. 在宏观上看, 对于过程宏, 编译器收集传递给宏的输入<code>token</code>序列, 然后运行你的程序, 以确定用哪些<code>token</code>来替换它们.</p>
+<p>过程宏之所以被称为"过程宏", 是因为你要定义如何根据输入<code>token</code>来生成代码, 而不是直接写出要生成的代码. 编译器这边并没有太多智能可言--在它看来, 过程宏差不多就是一个可以任意替换代码的源代码预处理器. 唯一的要求是你的输入必须能够被解析为一串合法的<code>Rust token</code>, 但仅此而已!</p>
+<h3 id="过程宏的类型types-of-procedural-macros"><a class="header" href="#过程宏的类型types-of-procedural-macros">过程宏的类型(Types of Procedural Macros)</a></h3>
+<p>过程宏有三种不同的形式, 每种形式都专门针对一个常见的使用场景</p>
+<ul>
+<li>函数宏, 如<code>macro_rules!</code>生成的.</li>
+<li>属性宏, 如<code>#[test]</code>.</li>
+<li>派生宏, 如<code>#[derive(Serialize)]</code>.</li>
+</ul>
+<p>这三种类型都使用相同的底层机制: 编译器会将一串<code>token</code>传递给你的宏, 并期望你返回一串可能与输入语法树相关的<code>token</code>作为输出. 不过, 它们在宏的调用方式以及输出的处理方式上有所不同. 我们将简要地介绍每一种形式.</p>
+<h4 id="函数宏function-like-macros"><a class="header" href="#函数宏function-like-macros">函数宏(Function-Like Macros)</a></h4>
+<p>函数宏是过程宏中最简单的形式. 它与声明宏类似, 只是将调用处的宏代码替换为过程宏生成的代码. 然而, 与声明式宏不同的是, 它不再有任何"护栏"限制: 这些宏(像所有的过程式宏一样)不要求具备"卫生性", 也不会阻止你与调用处周围代码中的标识符产生冲突. 相反, 你需要在宏中显式指定哪些标识符应该与外部代码重叠(使用<code>Span::call_site</code>), 以及哪些标识符应当被视为宏内部私有的(使用<code>Span::mixed_site</code>, 我们稍后会讨论这个).</p>
+<h4 id="属性宏"><a class="header" href="#属性宏">属性宏</a></h4>
+<p>属性宏也会整体替换其所修饰的代码, 但这个宏需要两个输入: 一个是属性中的<code>token</code>树(不包括属性的名字), 另一个是它所修饰的整个项目的<code>token</code>树, 包括该项目可能具有的其他属性. 属性宏允许你轻松地编写一个过程宏来转换某个项, 例如可以为函数定义添加前置或后置代码(像<code>#[test]</code>那样), 或者修改结构体的字段.</p>
+<h4 id="派生宏"><a class="header" href="#派生宏">派生宏</a></h4>
+<p>派生宏与其他两个宏略有不同, 它是对宏的目标进行添加内容, 而不是替换它. 尽管这个限制看起来很严苛, 但派生宏实际上是促使创建过程宏的最初动力之一. 具体来说, <code>Serde</code> crate需要派生宏来实现其现在广为人知的<code>#[derive(Serialize, Deserialize)]</code>魔法.</p>
+<p>派生宏可以说是过程宏中最简单的, 因为它们有如此严格的形式: 你只能在被注解的项之后追加项; 你不能替换被注解的项, 也不能让推导过程接受参数. 派生宏确实允许你定义辅助属性--这些属性可以放在被标注的类型内部中, 以提供线索给派生宏(比如<code>#[serde(skip)]</code>)--但这些属性大多充当标记作用, 不是独立的宏.</p>
+<h3 id="过程宏的成本"><a class="header" href="#过程宏的成本">过程宏的成本</a></h3>
+<p>在我们讨论每种不同的过程宏类型适用的情况之前, 值得讨论的是, 为什么在使用过程宏之前你可能需要三思——也就是编译时间的增加.</p>
+<p>过程宏可能会显著增加编译时间, 主要有两个原因. 首先, 它们往往会带来一些相当重的依赖. 例如, <code>syn crate</code>为 <code>Rust token</code>流解析器, 使得编写过程宏的体验更加容易, 但是启用所有<code>feature</code>时, 它的编译可能需要几十秒. 你可以(并且应该)通过禁用你不需要的<code>feature</code>, 并在调试模式而不是发布模式下编译过程宏来减轻这一问题. 代码在调试模式下的通常编译得更快, 对于大多数过程宏, 你甚至不会注意到执行时间的差异.</p>
+<p>过程宏增加编译时间的第二个原因是, 它们让你很容易生成大量的代码而且没有意识到. 虽然宏可以让你不必实际输入生成的代码, 但它并没有节省编译器的解析、编译和优化这些代码的时间. 随着你使用更多的过程宏, 生成的样板代码会积累起来, 而且可能导致编译时间膨胀.</p>
+<p>这就是说, 过程宏的实际执行时间通常很少会成为整体编译时间的因素. 虽然编译器必须等待过程宏完成其操作后才能继续, 但实际上, 大多数过程宏并不会进行任何复杂的计算. 也就是说, 如果你的过程宏特别复杂, 你可能会发现编译时间的很大一部分被你的程序宏代码所占用, 这是值得注意的.</p>
+<h3 id="所以你认为你想要一个宏"><a class="header" href="#所以你认为你想要一个宏">所以你认为你想要一个宏</a></h3>
+<p>现在让我们看看每种过程宏的一些使用场景. 我们从简单的开始: 派生宏.</p>
+<h4 id="何时使用派生宏"><a class="header" href="#何时使用派生宏">何时使用派生宏</a></h4>
+<p>派生宏只用于一件事: 在可以自动化的情况下, 自动实现某个<code>trait</code>. 并非所有的<code>trait</code>都能轻松自动化实现, 但很多可以. 在实践中, 只有某个<code>trait</code>经常被实现, 并且它对任何给定类型的实现方式都比较明确时, 你才应该考虑为它添加一个派生宏. 第一个条件似乎是常识; 如果你的<code>trait</code>只会被实现一两次, 可能不值得为它编写和维护一个复杂的派生宏.</p>
+<p>不过, 第二个条件可能就没有那么直观了: 所谓"明显"的实现到底是什么意思? 以<code>Debug</code>这样的<code>trait</code>为例. 如果你知道<code>Debug</code>是做什么的, 并且给定一个类型, 你可能会期望<code>Debug</code>的实现会输出每个字段的名字以及该字段值的调试形式.  这就是<code>derive(Debug)</code>的作用. 那么<code>Clone</code>呢? 你大概会希望它对每个字段都执行一次克隆--而<code>derive(Clone)</code>也确实就是这么做的. 对于<code>derive(serde::Serialize)</code>, 我们期望它序列化每个字段及值, 而它也确实照做了. 通常来说, 你希望<code>trait</code>的派生能符合开发者对其功能的直觉理解. 如果某个<code>trait</code>没有明显的派生, 或者更糟的是, 你的派生实现和开发者直觉中的实现方式不一致, 那你最好就不要为它提供派生宏.</p>
+<h4 id="何时使用函数宏"><a class="header" href="#何时使用函数宏">何时使用函数宏</a></h4>
+<p>函数宏比较难给出一条通用的经验法则. 你也许会说, 当你想要一个类似于函数的宏, 但又无法用<code>macro_rules!</code>来表达时, 就该用函数式宏! 但这是一个相当主观的指导原则. 毕竟, 如果你真的用心去做, 声明宏也能实现很多功能.</p>
+<p>不过, 有两个特别好的理由可以让你选择使用函数式宏:</p>
+<ul>
+<li>如果你已经有了一个声明宏了, 而它的定义变得非常复杂, 以至于宏难以维护.</li>
+<li>如果你有一个纯函数需要在编译时执行, 但又无法用<code>const fn</code>来表达, 那么这就是使用函数式宏的一个好理由. 列如<code>phf crate</code>, 当在编译时给定一组键时, 它会使用完美哈希函数来生成一个哈希映射或集合. 另一个例子是<code>hex-literal</code>, 它接收一串十六进制的字符, 并将其替换为对应的字节. 一般来说, 任何不仅仅是在编译时转换输入, 而是真正对其进行计算的操作, 都可能是函数宏的理想候选场景.</li>
+</ul>
+<p>我不建议为了在宏中打破<strong>卫生性</strong>而使用函数宏. 函数宏默认的卫生性是一项有用的特性, 当你有意打坏它之前, 应该非常慎重地考虑.</p>
+<h4 id="何时使用属性宏"><a class="header" href="#何时使用属性宏">何时使用属性宏</a></h4>
+<p>累到讨论属性宏了. 尽管它们可以说是过程宏中最通用的一种, 但也是最难判断何时该使用的一种. 多年来, 一次又一次, 我看到属性宏在四种场景中展现出巨大的价值.</p>
+<h5 id="测试生成test-generation"><a class="header" href="#测试生成test-generation">测试生成(Test generation)</a></h5>
+<p>在多种不同配置下运行同一个测试是非常常见的需求, 或者运行多个具有相同初始化代码的类似测试. 虽然声明宏可能可以表达这种需求, 但你的代码通常更易于阅读和维护, 如果你使用类似<code>#[foo_test]</code>这样的属性, 为每个带注解的测试引入统一的前置和后置代码, 或者使用可重复的属性, 例如<code>#[test_case(1)]</code>, <code>#[test_case(2)]</code>来标记某个测试应该用不同的输入重复运行多次.</p>
+<h5 id="框架注解"><a class="header" href="#框架注解">框架注解</a></h5>
+<p>像<code>rocket</code>这样的库使用属性宏来为函数和类型添加额外的信息, 以便框架在不需要用户做大量手动配置的情况下使用这些信息. 能够写出<code>#[get("/&lt;name&gt;")] fn hello(name: String)</code>要比用函数指针等设置一个配置结构简单得多. 从本质上讲, 这些属性构成了一种微型的特定领域语言(DSL), 隐藏了原本必须编写的大量样板代码. 同样, 异步I/O框架<code>tokio</code>允许你使用<code>#[tokio::main] async fn main()</code>自动设置运行时并执行你的异步代码, 从而让你不需要在每个异步程序的主函数中重复编写相同的运行时初始化代码.</p>
+<h5 id="透明的中间件"><a class="header" href="#透明的中间件">透明的中间件</a></h5>
+<p>有些库希望以某种方式注入到你的应用程序中, 以不引人注意的方式提供附加功能, 而不会改变应用程序的功能. 例如, 像<code>tracing</code>这样的跟踪和日志库以及像<code>metered</code>这样的指标收集库, 允许你通过给函数添加一个属性来透明地插桩该函数, 然后每次调用该函数时都会运行一些额外的代码, 这些代码由库来定义.</p>
+<h5 id="类型转换type-transformers"><a class="header" href="#类型转换type-transformers">类型转换(Type transformers)</a></h5>
+<p>有时修, 你希望做的不仅仅是为一个类型派生<code>trait</code>, 而是从根本上修改类型的定义. 在这种情况下, 属性宏是最合适的方式. <code>pin_project crate</code>就是一个很好的例子: 它的主要目的并不是实现某个特定的<code>trait</code>, 而是确保对某个类型字段的所有<code>pinned</code>访问, 都遵循<code>Rust</code>的<code>Pin</code>类型和<code>Unpin trait</code>所规定的严格规则(我们将在第8章中进一步讨论这些类型). 它通过生成额外的辅助类型, 向被注解的类型添加方法, 以及引入静态安全检查机制来实现这点, 从而确保用户不会因为操作不当而"搬起石头砸自己的脚". 虽然<code>pin_project</code>也可以用派生宏来实现, 但那个派生<code>trait</code>的实现并不直观, 这就违反了我们关于何时使用过程宏的一条规则.</p>
+<h3 id="它们是如何工作的"><a class="header" href="#它们是如何工作的">它们是如何工作的?</a></h3>
+<p>所有过程宏的核心是<code>TokenStream</code>类型, 它可以被迭代以获取构成该<code>token</code>流的各个<code>TokenTree</code>项. 这些<code>TokenTree</code>项要么是单个的<code>token</code>, 例如标识符、标点符号或字面值, 要么是被一个分隔符(<code>()</code>或<code>{}</code>)包裹的另一个<code>TokenStream</code>. 通过遍历<code>TokenStream</code>, 你可以解析出任何你想要的语法, 只要这些单个<code>token</code>是合法的<code>Rust token</code>. 如果你希望将输入明确地作为<code>Rust</code>代码来解析, 你可能需要使用<code>syn crate</code>, 它实现了一个完整的<code>Rust</code>解析器, 可以将<code>TokenStream</code>变成一个易于遍历的<code>Rust</code>抽象语法树(AST).</p>
+<p>对于大多数过程宏, 你不仅要解析<code>TokenStream</code>, 还需要生成要注入到调用该过程宏的程序中的<code>Rust</code>代码. 有两种主要的方法来实现这一点. 第一种是手动构建<code>TokenStream</code>, 并每次添加一个<code>TokenTree</code>. 第二种是使用<code>TokenStream</code>的<code>FromStr</code>实现, 调用<code>"".parse::&lt;TokenStream&gt;()</code>将包含<code>Rust</code>代码的字符串解析到<code>TokenStream</code>. 你也可以混合使用这两种方法; 如果你想在宏的输入前添加一些代码, 只需为前置代码构造一个<code>TokenStream</code>, 然后使用<code>Extend trait</code>来追加原始输入即可.</p>
+<blockquote>
+<p>注意: <code>TokenStream</code>也实现了<code>Display trait</code>, 它可以漂亮地打印出流中的<code>token</code>. 这对于调试来说是非常方便的.</p>
+</blockquote>
+<p><code>token</code>比我到目前描述的要神奇一些, 因为每个<code>token</code>, 甚至每个<code>TokenTree</code>, 都有一个<code>span</code>. <code>span</code>是编译器用来生成的代码与其来源代码关联起来的方式. 每个<code>token</code>的<code>span</code>都标志了该<code>token</code>的来源. 例如, 考虑一个类似标列7-7中的(声明)宏, 它为给定的类型生成了一个简单的Debug实现.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! name_as_debug {
+    ($t:ty) =&gt; {
+        impl ::core::fmt::Debug for $t {
+            fn fmt(&amp;self, f: &amp;mut ::core::fmt::Formatter&lt;'_&gt;) -&gt; ::core::fmt::Result
+            { ::core::write!(f, ::core::stringify!($t)) }
+} }; }
+
+// 清单 7-7: 实现 Debug 的一个非常简单的宏
+<span class="boring">}</span></code></pre></pre>
+<p>现在假设有人使用<code>name_as_debug!(u31)</code>来调用这个宏. 技术上讲, 编译器错误发生在宏内部, 具体是在我们写<code>for $t</code>的地方(而<code>$t</code> 的另一个用法可以处理无效的类型). 但我们希望编译器能够把错误指向用户代码中的<code>u31</code>--而这正是<code>span</code>所能做到的.</p>
+<p>生成的代码中<code>$t</code>的<code>span</code>是在宏调用中映射到<code>$t</code>的代码. 这条信息会在编译器中传递下去, 并与最终的编译器错误关联起来. 当该编译器最终被打印出来时, 编译器会打印宏内部的错误, 指出<code>u31</code>类型不存在, 它会高亮宏调用中作为参数的<code>u31</code>, 因为那才是该错误所关联的<code>span</code>.</p>
+<p><code>span</code>是非常灵活的, 如果你使用<code>compile_error!</code>宏, 它们可以让你编写出能够生成复杂错误信息的过程宏. 顾名思义, <code>compile_error!</code>会在其所在位置让编译器抛出错误, 并使用所提供的字符串作为错误信息. 这看起来可能没什么用, 直到你将它与<code>span</code>配合使用. 通过将你为<code>compile_error!</code>所生成的<code>TokenTree</code>的<code>span</code>设置为输入的一部份代码的<code>span</code>, 你实际上是在告诉编译器: 抛出这个错误, 并指向源代码中的这部分位置. 这两种机制结合使用, 可以让宏生成的错误看起来就像来自代码中相关部分, 即便实际的编译器错误其实发生在用户根本看不到的生成代码中.</p>
+<blockquote>
+<p>注意: 如果你曾好奇<code>syn</code>的错误处理是如何工作的, 它的<code>Error</code>类型实现了一个<code>Error::to_compile_error</code>方法, 这个方法将其转化为一个只包含<code>compile_error!</code>指令的<code>TokenStream</code>. <code>syn</code>的<code>Error</code>类型的特别巧妙之处在于, 它内部保存了一个错误集合, 每个错误都会产生一个独立的<code>compile_error!</code>指令, 并有自己的<code>span</code>, 这样你就可以轻松地从过程宏中生成多个独立的错误.</p>
+</blockquote>
+<p><code>span</code>的强大功能不仅于此; 它们还是<code>Rust</code>宏卫生实现的关键. 当你构造一个<code>Ident token</code>时, 你还需要为该标识符指定一个<code>span</code>, 而这个<code>span</code>决定了该标识符的作用域. 如果你将标识符的<code>span</code>设置为<code>Span::call_site()</code>, 那么该标识符将在宏被调用的地方被解析, 因此不会与周围的作用域隔离开. 另一方面, 如果你把它设置为<code>Span::mixed_site()</code>, 那么(变量)标识符就会在宏的定义处被解析, 这样就能确保宏与调用站点的同名变量完全遵循宏卫生规则. <code>Span::mixed_site</code>之所以如此命名, 是因为它符合<code>macro_rules!</code>中标识符卫生规则! 正如我们之前讨论的, 它在解析标识符时, 将宏定义站点用于变量, 而调用站点用于类型、模块以及其他所有内容.</p>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>在本章中, 我们介绍了声明宏和过程宏, 并讨论了在何种情况下你可能会在自己的代码中使用它们. 我们还深入探讨了支撑每种类型宏的机制, 以及在编写自己宏时需要注意的一些特性和陷阱. 在下一章中, 我们将开始探索异步编程和<code>Future</code>特性. 我保证--它就在下一页.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="chapter-05.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="chapter-05.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="editor.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

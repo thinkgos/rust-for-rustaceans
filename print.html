@@ -1,0 +1,1495 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Rust For Rustaceans 阅读和翻译</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust For Rustaceans 阅读和翻译</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/thinkgos/Rust-For-Rustaceans" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="第0章-引言"><a class="header" href="#第0章-引言">第0章 引言</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第一章---基础"><a class="header" href="#第一章---基础">第一章 - 基础</a></h1>
+<p>当你深入研究<code>Rust</code>高级知识之前, 对基础知识有扎实的理解非常重要. 与其他编程语言一样, 在<code>Rust</code>中, 当你开始以更复杂的方式使用该语言时, 各种关键字和概念的准确含义变得非常重要. 在本章中, 我们将讲解许多<code>Rust</code>的原语, 并尝试更清晰地定义它们的含义, 工作原理, 以及它们为何如此设计. 具体来说, 我们将了解变量和值区别, 它们在内存中的表示方式, 以及在程序的不同内存区域. 然后, 我们将讨论所有权、借用和生命周期的一些微妙之处, 这些是你在继续学习本书之前必须掌握的内容.</p>
+<p>你可以选择从头到尾阅读本章, 也可以将它作为参考资料, 查阅那些你不太确定的概念. 我建议你只有在完全理解本章内容后再继续学习, 因为对这些原语工作原理的误解会很快影响你对更高级主题的理解, 或者导致你错误地使用它们.</p>
+<h2 id="谈谈内存"><a class="header" href="#谈谈内存">谈谈内存</a></h2>
+<p>并非所有内存都是一样的. 在大多数编程环境中, 你的程序可以访问栈(<code>stack</code>)、堆(<code>heap</code>)、寄存器(<code>register</code>)、文本段(<code>text segment</code>)、内存映射寄存器(<code>memory-mapped register</code>)、内存映射文件(<code>memory-mapped file</code>), 甚至是非易失性 <code>RAM</code>(<code>Nonvolatile RAM</code>). 在特定情况下, 你选择使用哪一种会影响到你能其中存储什么, 它能存储多久, 以及您使用什么机制来访问它. 这些内存区域的具体细节因平台而异且也超出了本书的范围, 但有些内存区域对理解<code>Rust</code>代码非常重要, 因此值得在这里介绍.</p>
+<h3 id="内存术语"><a class="header" href="#内存术语">内存术语</a></h3>
+<p>在深入探讨内存区域之前, 你首先需要了解值、变量和指针之间的区别. 在<code>Rust</code>中, 一个值是由类型和该类型的值域的组合. 一个值可以使用其类型的表示方式转化为字节序列, 但其抽象角度来看, 值更像是程序员所表达的"意义". 例如, <code>u8</code> 类型中的数字 <code>6</code> 是数学整数 <code>6</code> 的一个实例, 它在内存中的表示是字节 <code>0x06</code>. 类似地, <code>"Hello world"</code>是字符串域值域中的一个值, 其表示方法是<code>UTF-8</code>编码的字节序列. 一个值的意义与它的字节存储位置无关.</p>
+<p>一个值被存储在一个<em>place</em>(位置)中, 这是<code>Rust</code>中表示"一个可以容纳值的位置"的术语. 这个位置可以在栈上, 也可以在堆上, 或者其他位置. 最常见的存储值的位置是变量, 它是栈上的一个具名的值槽.</p>
+<p>指针是一个包含某段内存地址的值, 因此指针指向一个位置. 指针可以被解引用, 以访问其指向的内存位置中存储的值. 我们可以将同一个指针存储在多个变量中, 从而使这些变量间接地引用同一块内存位置, 从而引用同一个底层值.</p>
+<p>请看清单 2-1 中的代码, 它说明了这三个要素.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = 42;
+let y = 43;
+let var1 = &amp;x;
+let mut var2 = &amp;x;
+var2 = &amp;y; // (1)
+
+// 清单 2-1: 值、变量和指针
+<span class="boring">}</span></code></pre></pre>
+<p>这里有四个不同的值. <code>42</code>(一个<code>i32</code>), <code>43</code>(一个<code>i32</code>), 变量<code>x</code> 的地址(一个指针), 以及 变量<code>y</code> 的地址(一个指针). 还有四个变量: <code>x</code>、<code>y</code>、<code>var1</code> 和 <code>var2</code>. 后两个变量都持有指针类型的值, 因为引用在本质上就是指针. 虽然 <code>var1</code> 和 <code>var2</code> 最初存储的是同一个值, 但它们分别存储该值的独立副本; 当我们修改 <code>var2</code>(1)中存储的值时, <code>var1</code> 中的值不会受到影响. 尤其是<code>=</code> 运算符, 它将右侧表达式的值赋给左侧命名的位置.</p>
+<p>一个有趣的例子说明变量、值和指针之间的区别有多重要, 比如在下面的语句中:</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let string = "Hello world";
+<span class="boring">}</span></code></pre></pre>
+<p>即使我们将一个字符串值赋给变量 <code>string</code>, 但该变量的实际值是指向字符串值"Hello world"中第一个字符的指针, 而不是整个字符串值本身. 这时你可能会说: "等等, 那么字符串值存储在哪里呢? 指针指向哪里?" 如果你注意到了这一点, 那说明你观察力很敏锐--我们稍后就会解释.</p>
+<blockquote>
+<p>NOTE: 从技术上讲, 字符串还包括字符串的长度. 我们将在第 3 章讨论胖指针类型时讨论这个问题.</p>
+</blockquote>
+<h3 id="深入了解变量"><a class="header" href="#深入了解变量">深入了解变量</a></h3>
+<p>我之前给出的变量定义比较宽泛, 本身不太可能有用. 当你接触更复杂的代码时, 你将需要一个更准确的思维模型, 来帮助你理解程序实际在做什么. 我们可以使用许多这样的模型. 详细描述它们将耗费几章的篇幅, 也超出了本书的范围, 但大体上可以将它们分为两类: 高层模型(<code>High-level</code>)和低层模型(<code>low-level</code>). 高层模型在处理生命周期和借用之类的代码时非常有用, 而低层模型则适用理解不安全代码和裸指针. 接下来两个小节将介绍变量变量模型, 这足够满足本书的大部分内容.</p>
+<h4 id="高层模型"><a class="header" href="#高层模型">高层模型</a></h4>
+<p>在高级模型中, 我们不把变量看作是存放字节的地方. 而是把它们看作在程序中用于标识值的名字, 随着值的创建、移动和使用而存在. 当你把一个值赋给变量后, 这个值就由该变量命名. 当以后访问这个变量时, 你可以想象从上一次访问到这次访问这间画一条线, 这条线表示两次访问之间的依赖关系. 如果该变量中的值被移动了, 就不能再从该它画出依赖线了.</p>
+<p>在这个模型中, 变量只有在持有合法值的情况下存在; 你不能从一个未初始化或已被移动了值的变量画出依赖线, 因为它实际上并不存在. 使用这种模型, 整个程序由许多依赖线组成, 这此依赖线通常称为流, 每一条流都会追踪某个值的特定实例的生命周期. 流可以分叉和合并, 每个分支都会跟踪该值的一个独立生命周期. 编译器可以检查, 在程序的任何给定点, 所有可以并行存在的流是否兼容. 例如, 不能有两个并行的流同时对一个值进行可变访问. 也不能在没有值(未初始化)的流中借用一个值. 清单2-2显示了这两种情况的示例.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut x;
+// 这是非法的, 没有地方可以获取流
+// assert_eq!(x, 42);
+x = 42;     // (1)
+// 这是正确的, 可以从上面分配的值中画出一个流. 
+let y = &amp;x; // (2)
+// 这就建立了第二个来自 x 的、可变的流. 
+x = 43;     // (3)
+// 这样就继续从 y 那里获得流, 而 y 又从 x 那里获得流.  
+// 但这条流与对 x 的分配相冲突! 
+assert_eq!(*y, 42); // (4)
+
+// 清单 2-2: 借用检查器会发现的非法流
+<span class="boring">}</span></code></pre></pre>
+<p>首先, 在<code>x</code>被初始化之前, 我们不能使用它, 因此我们无法画出流. 只有当我们给<code>x</code>赋值后, 我们才能从它那里画出流. 这段代码有两个流: 一个从<code>(1)</code>到<code>(3)</code>的独占(<code>&amp;mut</code>)流, 一个从<code>(1)</code>到<code>(2)</code>到<code>(4)</code>的共享(<code>&amp;</code>)流. 借用检查器检查每个流的每个节点, 并确保没有其他不兼容的流同时存在. 在本例中, 当借用检查器检查<code>(3)</code>处的独占流时, 它看到了终止于<code>(4)</code>处的共享流. 由于你不能同时对一个值进行独占和共享使用, 借用检查器(正确地)拒绝了这段代码. 请注意, 如果没有<code>(4)</code>, 这段代码可以正常编译. 共享流将在<code>(2)</code>处终止, 而当检查<code>(3)</code>处的独占流时, 不会有冲突的流存在.</p>
+<p>如果声明一个新变量与之前的变量同名, 它们仍被视为不同的变量. 这被称为"shadows"(变量遮蔽)-- 后一个变量"shadows"(遮蔽)了前一个同名的变量. 这两个变量共存, 但后续代码无法再使用前一个变量. 这个模型与编译器, 特别是借用检查器, 对你的程序的理解大致吻合, 编译器内部使用这种模式来生成高效的代码.</p>
+<h4 id="底层模型"><a class="header" href="#底层模型">底层模型</a></h4>
+<p>变量是对内存位置的命名, 这些位置可能包含合法的值, 也可能不包含. 你可以把变量看作一个“值槽”. 当你对它赋值时, 这个槽被填满了, 它的原有的值(如果有的话)就会被释放和并替换掉. 当你访问这个变量时, 编译器会检查该槽是否为空, 如果为空, 说明该变量未被初始化或其值已被移动了. 指向变量的指针持有的是该变量背后的内存, 可以被解引用来获取它的值. 例如, 在语句<code>let x: usize</code> 中, 变量<code>x</code>是栈上某个内存区域的命名, 这块内存足够存储一个 <code>usize</code> 类型的值, 尽管它没有一个明确的值(其槽是空的). 如果你给这个变量赋值, 比如<code>x = 6</code>, 那么这个内存区域就会保存表示值<code>6</code>的位, 即使你多次赋值<code>x</code>, 并不会改变<code>&amp;x</code>的值, 这个模型与<code>C</code>和<code>C++</code>等许多低级语言所使用的内存模型相匹配, 当需要显示推理内存行为时很有用.</p>
+<blockquote>
+<p>注意: 在本例子中, 我们忽略了CPU寄存器, 并将其视为一种优化. 实际上, 如果一个变量不需要内存地址, 编译器可能会使用一个寄存器来存储这个变量, 而不是一个内存区域.</p>
+</blockquote>
+<p>你可能会发现这两个模型中的某一个与你之前的思维模型更契合, 但我建议你试着理解这两个模型. 它们都是同样有效的, 而且都是简化的, 就像任何有用的思维模型一样. 如果您能从这两个角度来看待一段代码, 您就会发现在理解复杂的代码时会容易得多, 也更容易理解为什么它们能或不能按照您的预期编译和运行.</p>
+<h3 id="内存区域"><a class="header" href="#内存区域">内存区域</a></h3>
+<p>现在你已经掌握了我们如何使用内存, 我们需要谈谈内存到底是什么. 内存其实分为许多不同的区域, 也许令人惊讶的是, 并不是所有的区域都存储在你的计算机的<code>DRAM</code>中. 使用哪个部份内存, 会显著影响你如何编写代码. 就编写<code>Rust</code>代码而言, 三个最重要的区域是栈、堆和静态内存.</p>
+<h4 id="栈"><a class="header" href="#栈">栈</a></h4>
+<p>栈是一段内存区域, 程序使用它作为函数调用时的临时工作空间. 每次函数被调用时, 都会在栈顶分配一块连续的内存区域, 称为栈帧. 接近栈的底部的是主函数的帧, 当函数调用其他函数时, 新的的栈帧被依次压入栈中. 每个函数的栈帧包含该函数内部的所有变量, 以及传入该函数的所有参数. 当函数返回时, 它对应的栈帧就会被释放.</p>
+<p>构成函数局部变量值的字节不会立即被清除, 但访问它们是不安全, 因为它们可能被随后的函数调用所分配的栈桢覆盖. 即使它们没有被覆盖, 它们也可能包含非法的值, 例如函数返回时已被移动走的值.</p>
+<p>栈帧, 以及它们最终会消失这一关键事实, 与<code>Rust</code>中的生命周期(<code>lifetime</code>)概念密切相关. 任何存储在栈帧中的变量, 在该栈帧消失后都无法被访问, 所以对它的任何引用, 其生命周期最多只能和该栈帧的生命周期一样长.</p>
+<h4 id="堆"><a class="header" href="#堆">堆</a></h4>
+<p>堆是一块与程序当前调用栈无关的内存池. 存储在堆中的值会一直存在, 直到它们被显式地释放. 当您希望某个值的生命周期超过当前函数栈帧时, 这就非常有用. 如果该值是函数的返回值, 调用函数可以在其栈上预留一块空间, 供被调用函数在返回之前将该值写入其中. 但如果你想将该值发送到另一个线程, 而与当前线程可能根本不共享栈帧, 你可以将该值存储在堆上.</p>
+<p>堆允许您显式地分配一段连续的内存区域. 分配时, 你会得到一个指向该内存区域起点位置的指针. 该内存段将为你保留, 直到你显式释放它; 这个过程通常被称为"释放", 这个名称来源于<code>C</code>标准库中的对应函数. 由于从堆上分配的内存不会在函数返回时释放, 所以您可以在某个地方为一个值分配内存, 然后将指向该值的指针传递给另一个线程, 并让该线程安全地继续操作这个值进行. 或者, 换句话说, 当你在堆上分配内存时, 得到的指针具有不受约束的生命周期——你的程序想让它存活多长时间, 它就能存活多长时间.</p>
+<p>在<code>Rust</code>中, 与堆交互的主要机制是<code>Box</code>类型. 当您写下<code>Box::new(value)</code>时, 这个值被放在堆上, 而您得到的(<code>Box&lt;T&gt;</code>)是指向堆上该值的指针. 当<code>Box</code>最终被释放时, 内存将被释放.</p>
+<p>如果你忘记释放堆内存, 它将会一直存在, 最终你的应用程序会耗尽你机器上的所有内存. 这被称为"内存泄漏", 通常是你想要避免的. 然而, 在有些情况下, 你确实想要泄漏内存. 例如, 你有一个整个程序都能访问的只读配置. 你可以把它分配到堆上, 然后用<code>Box::leak</code>显式地泄露它, 以获得一个<code>'static</code>生命周期的引用.</p>
+<h4 id="静态内存"><a class="header" href="#静态内存">静态内存</a></h4>
+<p>"静态内存"其实是一个统称, 指的是你程序编译后生成的文件中几个密切相关区域. 当程序执行时, 这些区域会自动加载到程序的内存中. 静态内存中的值在程序的整个执行过程中一直存在. 程序的静态内存包含程序的二进制代码, 这部份通常映射为只读. 程序在运行过程中, 会逐条执行文本段中的二进制指令, 并在调用函数时跳转. 静态内存还包含用<code>static</code>关键字声明的变量, 以及代码中的某些常量值, 比如字符串.</p>
+<p>特殊的生命周期<code>'static</code>, 其名称来源于静态内存区域, 表示某个引用在"静态内存还存在的整个期间"都是有效的, 也就是直到程序结束为止. 由于静态变量的内存是在程序启动时就被分配, 因此根据定义, 指定静态内存中变量的引用就是<code>'static</code>, 因为在程序结束之前它不会被释放. 反之则不成立, 某些<code>'static</code>引用并不一定指向静态内存——但这个名字仍然是合理的: 一旦你创建了一个具有<code>'static</code>生命周期的引用, 就程序的其他部分的角度来看, 它所指向的内容就等同于在静态内存中一样, 因为它可以在程序的任意时刻安全使用, 直到程序结束.</p>
+<p>在使用<code>Rust</code>时, <code>'static</code>生命周期比真正的静态内存(例如, 通过<code>static</code>关键字)更常见. 这是因为<code>static</code>经常出现在类型参数的<code>trait</code> 约束中. 像<code>T: 'static</code>这样的约束表示, 类型参数<code>T</code>能够存活足够长的时间, 甚至可以一直存在到程序结束. 本质上, 这个约束要求<code>T</code>是拥有所有权且自给自足的, 要么它不借用任何其他(非<code>'static</code>)值, 要么它借用的值也是<code>'static</code>, 从而确保它们可以存活到程序结束. 一个<code>'static</code>作为约束的好例子是<code>std::thread::spawn</code>函数, 它用于创建了一个新的线程, 它要求传递给它的闭包是<code>'static</code> . 由于新线程的生命周期可能比当前线程更长, 因此它不能引用存储在当前线程堆栈上的任何内容. 新线程只能引用在其整个生命周期内(可能是在程序的剩余时间内)都有效的值.</p>
+<blockquote>
+<p>注意: 您可能想知道 <code>const</code> 与 <code>static</code> 有何不同. <code>const</code> 关键字将其后定义的项声明为常量. 常量项可以在编译时完全计算出来, 任何引用它们的代码都将在编译期间被替换为该常数的计算值. 常量没有与之关联的内存或其他存储空间(它不是一个位置). 您可以将<code>const</code>看作是特定值的一个方便的名称.</p>
+</blockquote>
+<h2 id="所有权"><a class="header" href="#所有权">所有权</a></h2>
+<p><code>Rust</code>的内存模型的核心思想是: 值只有一个唯一的拥有者, 也就是说, 只有一个位置(通常是一个作用域)负责最终释放每个值的内存. 这一点通过借用检查器强制执行的. 如果一个值被移动, 比如将其赋值给一个新变量、推入<code>vector</code>(向量)或放在堆上, 则它的所有权将从旧位置移动到新位置. 此时, 尽管构成该值的位置在技术上仍然存在, 但你不能再通过原始拥有者的变量访问该值. 相反, 您必须通过指向新位置的变量来访问已被移动的值.</p>
+<p>有些类型是"叛逆者", 它们不遵守这条规则. 如果一个值的类型实现了特殊的<code>Copy trait</code>, 即使它被重新分配到一个新的内存位置, 它也不会被视为移动. 相反, 该值会被复制, 新旧位置仍然都可访问. 从本质上说, 在移动的目的地构造了另一个完全相同的实例. <code>Rust</code>中大多数基本类型(比如整数和浮点类型)都是<code>Copy</code>类型. 要成为<code>Copy</code>类型, 必须能够通过复制位(bit)来复制该类型的值. 这排除了所有包含非<code>Copy</code>类型的类型, 以及那些在值被释放时需要释放资源的类型.</p>
+<p>要理解其中的原因, 考虑一下如果像 <code>Box</code> 这样的类型是<code>Copy</code>会发生什么. 如果我们执行 <code>box2 = box1</code>, 那么 <code>box1</code> 和 <code>box2</code> 都会认为他们拥有为为该<code>box</code> 分配的堆内存, 当他们超出作用域时都会试图释放这块内存. 重复释放内存可能会产生灾难性的后果.</p>
+<p>当一个值的拥有者不再需要它时, 清理这个值的责任就落在该所有者身上, 具体方式是将其释放掉. 在<code>Rust</code>中, 当持有该值的变量超出作用域时, 就会自动释放该值. 类型通常递归地释放它们所包含的值, 因此释放一个复杂类型的变量可能会导致许多值被释放. 由于<code>Rust</code>对所有权的严格要求, 我们不会意外地多次释放同一个值. 一个变量如果只是持有另一个值引用, 它并不拥有该值, 因此当变量被释放时, 该值不会被释放.</p>
+<p>清单 2-3 中的代码给出了围绕所有权、移动和复制语义以及放弃的规则的快速总结.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x1 = 42;
+let y1 = Box::new(84);
+{  // 开始一个新的作用域
+  let z = (x1, y1); // (1)
+  // z 离开作用域, 并被释放; 
+  // 它一次析构了 x1 和 y1 中的值
+} // (2)
+// x1 的值是 Copy 语义,  所以它不会移动给 z
+let x2 = x1; // (3)
+// y1 的值不是 Copy 语义, 所以它会移动给 z
+// let y2 = y1; // (4)
+
+// 清单 2-3: 移动和复制语义
+<span class="boring">}</span></code></pre></pre>
+<p>一开始我们有两个值, 数字<code>42</code>和包含数字<code>84</code>的<code>Box</code>(堆分配的值). 前者是<code>Copy</code>类型, 而后者不是. 当我们将<code>x1</code>和<code>y1</code>放入元组<code>z1</code>时, <code>x1</code>被复制到<code>z</code> 中, 而<code>y1</code> 被移动到<code>z</code> 中. 此时, <code>x1</code>仍然可以访问, 并可以再次使用(3) . 另一方面, 一旦<code>y1</code>的值被移动到(4), 它就变得不可访问, 任何尝试访问它都将导致编译器错误. 当<code>z</code>超出范围作用域(2)时, 元组所包含的值将被释放, 这将进一步释放从<code>x1</code>复制的值和从<code>y1</code>移动的值. 当<code>y1</code>中的<code>Box</code>被释放时, 它还释放用于存储<code>y1</code>值的堆内存.</p>
+<blockquote>
+<p>释放顺序</p>
+<p><code>Rust</code>会自动释放超出作用域的值, 比如清单2-3中内部作用域的<code>x1</code>和<code>y1</code>. 释放顺序的规则相当简单: 变量(包括函数参数)按相反的顺序释放, 嵌套值按源代码的顺序释放.</p>
+<p>这听起来可能很奇怪, 为什么会有这样的差异? 不过, 如果我们仔细研究一下, 就会发现它很有道理. 假设你编写了一个函数, 声明了一个字符串, 然后将该字符串的引用插入到一个新的哈希表中. 当函数返回时, 哈希表必须先被释放; 如果字符串先被释放, 那么哈希表就会持有一个无效的引用! 一般来说, 后来的变量可能包含对早期值的引用, 而由于<code>Rust</code>的生命周期规则, 反之则不能发生. 出于这个原因, <code>Rust</code>以相反的顺序释放变量.</p>
+<p>现在, 我们可以对嵌套的值(如元组、数组或结构体中的值)有同样的行为, 但这可能会让用户感到惊讶. 如果你构建了一个包含两个值的数组, 如果数组的最后一个元素先被释放, 那就显得很奇怪. 这同样适用于元组和结构, 最直观的行为是第一个元组元素或字段先被释放, 然后是第二个, 以此类推. 与变量不同的是, 在这种情况下没有必要颠倒释放顺序, 因为<code>Rust</code>(目前)不允许在单个值中进行自我引用. 所以, <code>Rust</code>采用了直观的选项.</p>
+</blockquote>
+<h2 id="借用和生命周期"><a class="header" href="#借用和生命周期">借用和生命周期</a></h2>
+<p><code>Rust</code>允许一个值的拥有者通过引用将该值借给其他人, 而不放弃所有权. 引用是一种指针, 但附带了额外的使用约束, 比如该引用是否提供了对被引用值的独占访问, 或者该被引用值是否可以同时有其他引用指向它.</p>
+<h3 id="共享引用"><a class="header" href="#共享引用">共享引用</a></h3>
+<p>共享引用(<code>&amp;</code>), 顾名思义, 是一种可以被共享的指针. 可以同时存在任意数量的共享引用指向同一个值, 并且共享引用都是可<code>Copy</code>, 因此您可以轻松地创建更多的共享引用. 共享引用指向的值是不可变的; 您不能修改或赋值一个共享引用指向的值, 也不能将共享引用强制转换为可变引用.</p>
+<p><code>Rust</code>编译器假设: 共享引用指向的值在引用存在期间, 它所指向的值就不会被改变. 例如, 如果<code>Rust</code>编译器发现某个函数多次读取同一个共享引用背后的值, 那么它完全有权只读取一次并重用该值. 更具体地说, 清单2-4中的断言应该永远不会失败.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn cache(input: &amp;i32, sum: &amp;mut i32) {
+    *sum = *input + *input;
+    assert_eq!(*sum, 2 * *input);
+} 
+
+// 清单 2-4: Rust 假设共享引用是不可变的. 
+<span class="boring">}</span></code></pre></pre>
+<p>编译器是否选择应用某个特定的优化, 在很大程度上其实是无关紧要的. 因为编译器的优化策略(启发式规则)会随着时间不断变化, 所以你编写代码时, 应依据编译器"允许做什么"来进行思考, 而不是根据编译器在特定时间特定情况下会做什么来编写代码.</p>
+<h3 id="可变引用"><a class="header" href="#可变引用">可变引用</a></h3>
+<p>共享引用的另一种选择是可变引用: <code>&amp;mut T</code>. 对于可变引用, <code>Rust</code>编译器同样充分利用这种引用所附加的约束: 编译器假定在可变引用存在期间, 不会有其他线程通过共享引用或其他可变引用访问这个目标值. 换句话说, 它假定这个可变引用是独占的. 这使得编译器能够执行一些在其他语言中难以实现的有趣优化. 以清单2-5中的代码为例.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn noalias(input: &amp;i32, output: &amp;mut i32) {
+    if *input == 1 {
+        *output = 2; // (1)
+    } if *input != 1 {  // (2)
+        *output = 3;
+    }
+}
+
+// 清单 2-5:  Rust 假设可变借用是独占的
+<span class="boring">}</span></code></pre></pre>
+<p>在<code>Rust</code>中, 编译器可以假定<code>input</code>和<code>output</code>不会指向同一块内存. 因此, (1)处对<code>output</code>的重新赋值不能影响(2)处的检查, 整个函数可以被编译为一个简单的 <code>if-else</code> 块. 如果编译器不能依赖可变引用的独占性约束, 那么这种优化就会失效, 因为在<code>noalias(&amp;x, &amp;mut x)</code>这样的用户, (1)的<code>input</code>可能导致<code>output</code>为3.</p>
+<p>一个可变引用只允许修改引用指向的那块内存位置. 至于你是否可以改变该引用本身更深层的值, 取决于中间类型所提供的方法. 用一个例子可能更容易理解, 所以考虑清单 2-6.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = 42;
+let mut y = &amp;x; // y &amp;i32 类型
+let z = &amp;mut y; // z 是 &amp;mut &amp;i32 类型
+
+// 清单 2-6: 可变性只适用于直接引用的内存
+<span class="boring">}</span></code></pre></pre>
+<p>在这个例子中, 你可以通过引用不同的变量, 将指针<code>y</code>的值改为不同的值(即不同的指针), 但不能改变指针所指向的值(即<code>x</code>的值). 同样, 你可以通过<code>z</code>改变<code>y</code>的指针值, 但不能改变<code>z</code>本身, 让它持有另一个引用.</p>
+<p>拥有一个值与拥有该值的可变引用的主要区别在于, <strong>拥有者有责任在不再需要该值时负责将其释放</strong>. 除此之外, 你可以通过一个可变引用做任何事情, 就像你拥有这个值的一样, 但有一个注意事项: <strong>如果你移动了可变引用后面的值, 那么你必须在它的位置上留下另一个值, 如果你没有这样做, 值的拥有者仍然会认为它需要释放这个值, 但是那时却没有值可以释放</strong>.</p>
+<p>清单 2-7 给出了将值移动到可变引用后面的方法示例.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn replace_with_84(s: &amp;mut Box&lt;i32&gt;) {
+    // 这是不可能的, 因为 *s 会变成空:
+    // let was = *s; // (1)
+    // 但是这可以: 
+    let was = std::mem::take(s); // (2)
+    // 这也可以: 
+    *s = was; // (3)
+    // 可以在 &amp;mut 后面交换值: 
+    let mut r = Box::new(84);
+    std::mem::swap(s, &amp;mut r); // (4)
+    assert_ne!(*r, 84);
+}
+
+let mut s = Box::new(42);
+replace_with_84(&amp;mut s);
+// (5)
+
+// 清单 2-7: 可变性仅适用于直接引用的内存. 
+<span class="boring">}</span></code></pre></pre>
+<p>我添加了代表非法操作的注释行, 你不能简单地将值移出<code>1</code>, 因为调用者仍然认为他们拥有该值, 并将会在<code>5</code>处再次释放它, 导致双重释放. 如果你只是想留下一些有效的值, <code>std::mem::take</code>(2)是一个不错的选择. 它相当于<code>std::mem::replace(&amp;mut value, Default::default())</code>; 它将值从可变引用后面移出, 但为该类型留下一个新的默认的值. 默认值是一个独立的、被拥有的值, 所以当作用域在<code>5</code>处结束时, 调用者可以安全地释放它.</p>
+<p>另外, 如果你不需要引用后面的旧值, 你可以用一个你已经拥有的值覆盖它(3), 让调用者稍后再释放这个值. 当你这样做的时候, 原先在可变引用后面的值会被立刻释放.</p>
+<p>最后, 如果你有两个可变的引用, 你可以交换它们的值(4), 即使你不拥有它们中的任何一个, 因为两个引用最后都会有一个合法的值, 供它们各自的拥有者在之后释放.</p>
+<h3 id="内部可变性"><a class="header" href="#内部可变性">内部可变性</a></h3>
+<p>有些类型提供<strong>内部可变性</strong>, 意思是它们允许你通过共享引用来修改值. 这些类型通常依赖于额外的机制(如原子CPU指令)或不变性, 来在不依赖独占引用语义的情况下, 提供安全的可变性. 这些类型通常分为两类: 一类允许您通过共享引用获得一个可变引用, 另一类允许通过共享引用的情况来替换某个值.</p>
+<p>第一类包括<code>Mutex</code>和<code>RefCell</code>这样的类型, 它们包含有安全机制, 来确保对于它们提供可变引用的任何值, 同一时刻只能存在一个可变引用, 并且不能用任何共享引用. 在底层, 这些类型(以及类似的类型)都依赖于一个名为<code>UnsafeCell</code>的类型, 它的名称会立即让你对使用它保持谨慎. 我们将在第10章中更详细地介绍<code>UnsafeCell</code>, 但现在你应该知道, 这是通过共享引用进行可变操作的唯一正确方法.</p>
+<p>提供内部可变性的另一种类型, 是那些不会返回内部值的可变引用的类型, 而只是提供操作该值的方法. <code>std::sync::atomic</code>中的原子整数类型和<code>std::cell::cell</code>类型就属于这一类. 您无法直接获取这种类型后面的<code>usize</code>或<code>i32</code>的引用, 但是可以在在某个时间点读取和替换它的值.</p>
+<blockquote>
+<p>NOTE: 标准库中的<code>Cell</code>类型是通过不变式实现安全内部可变性的一个有趣的例子. 它无法跨线程共享, 也不提供对<code>Cell</code>所含值的引用. 相反, 它的方法完全替换内部值, 要么返回该值的副本. 由于内部值不能存在任何引用, 因此随时都可以安全地移动该值. 而且, 由于<code>Cell</code>不能在多个线程间共享, 因此即使通过共享引用进行修改, 其内部值也不会被并发修改.</p>
+</blockquote>
+<h3 id="生命周期"><a class="header" href="#生命周期">生命周期</a></h3>
+<p>如果您正在阅读这本书, 您可能已经熟悉了生命周期的概念, 很可能是通过编译器不断提示违反了生命周期规则的经历中学到了. 这种程度的理解已经足够应对你将要编写的大部分<code>Rust</code>代码, 但随着我们深入研究<code>Rust</code>更复杂的部分, 你将需要一个更严谨的思维模型来应对生命周期问题.</p>
+<p><code>Rust</code>开发新手经常被教导把生命周期为作用域相对应物: 生命周期从对创建某个变量的引用开始, 到该变量被移动或超出作用域时结束. 这种理解通常是正确的且有用的, 但实际情况要更复杂一些. 生命周期其实是某个引用在有效的代码区域的名称. 虽然生命周期经常与作用域重合, 但它们不必完全一致, 这一点我们稍后会看到.</p>
+<h4 id="生命周期和借用检查器"><a class="header" href="#生命周期和借用检查器">生命周期和借用检查器</a></h4>
+<p><code>Rust</code>生命周期的核心是借用检查器. 每当使用某个生命周期为<code>'a</code>的引用时, 借用检查器都会检查<code>'a</code>是否仍然有效. 它会沿着引用的使用路径回溯到 <code>'a</code> 开始的地方, 即引用的起始点, 并检查该路径上是否有冲突的使用. 这样可以确保引用仍然指向一个可以安全访问的值. 这类似于我们在本章前面讨论的高级"数据流"抽像思维模型; 编译器检查我们正在访问的引用流不会与任何其他并行的流相冲突.</p>
+<p>清单 2-8 显示了一个简单的代码例子, 其中有对<code>x</code>的引用的生命周期注释.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut x = Box::new(42);
+let r = &amp;x;   // (1)            // 'a
+if rand() &gt; 0.5 {
+    *x = 84;  // (2)
+} else {
+    println!("{}", r); // (3)   // 'a
+}
+// (4)
+
+// 清单 2-8: 生命周期不需要是连续的
+<span class="boring">}</span></code></pre></pre>
+<p>当我们对<code>x</code>进行引用时, 生命周期从位置(1)开始. 在第一个分支(2)中, 我们立即尝试修改<code>x</code>, 将其值更改为<code>84</code>, 这需要一个<code>&amp;mut x</code>的可变引用. 借用检查器取出<code>x</code>的可变引用并立即检查其使用情况. 它发现在获取引用和使用引用之间没有冲突, 所以它接受代码. 如果你习惯了将生命周期理解为作用域, 这里可能会感到意外, 因为<code>r</code>在位置(2)仍然在作用域中(在(4)退出作用域). 但是借用检查器足够聪明, 它意识到如果这个分支被执行, 以后就不会再使用<code>r</code>, 因此在这里对<code>x</code>进行可变访问是没有问题的. 或者换一种说法, 在(1)处创建的生命周期不会扩展到这个分支: 没有来自<code>r</code>(2)之后的流, 因此不存在冲突流. 然后借用检查器在(3)的打印语句中找到了对<code>r</code>的使用. 它沿着路径返回到(1), 并发现没有冲突的用途((2)不在该路径上), 所以它也接受这种使用.</p>
+<p>如果我们在清单2-8中在(4)处再添加一个对<code>r</code>的使用, 代码将无法编译. 生命周期<code>'a</code>将从(1)一直持续到(4)(<code>r</code> 的最后一次使用), 当借用检查器检查<code>r</code>的新的使用时, 它会在(2)处发现一个冲突的使用.</p>
+<p>生命周期可以变得相当复杂. 在清单2-9中, 你可以看到一个有漏洞的生命周期的例子, 它在开始和最终结束的地方间歇性地失效了</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut x = Box::new(42);
+let mut z = &amp;x;        // (1)   // 'a
+for i in 0..100 {
+    println!("{}", z); // (2)   // 'a
+    x = Box::new(i);   // (3)
+    z = &amp;x;            // (4)   // 'a
+} 
+println!("{}", z);              // 'a
+
+// 清单 2-9: 生命周期有漏洞
+<span class="boring">}</span></code></pre></pre>
+<p>当我们获取<code>x</code>的引用时, 生命周期从(1)开始. 然后我们在(3)处移出<code>x</code>, 这将结束生命周期<code>'a</code>, 因为它的引用不再有效. 借用检查器认为<code>'a</code>在(2)处已经结束, 这使得<code>x</code> 和(3)之间没有冲突流. 然后, 通过更新<code>z</code>在(4)中的引用, 从而重新启动了生命周期. 无论代码现在是循环回到<code>2</code>, 还是继续到最后的<code>println!</code>语句, 这两个使用点现在都有一个合法的值来源, 而且不存在冲突的数据流, 因此借用检查器接受了该代码.</p>
+<p>再次说明, 这与我们之前讨论的内存数据流模型完全一致. 当<code>x</code>被移动了, <code>z</code> 就不存在了. 当我们稍后重新赋值<code>z</code>时, 其实是我们创建了一个全新的变量, 它只从那一刻开始存在. 以这种模型来看, 这个例子就显得不奇怪了.</p>
+<blockquote>
+<p>NOTE: 借用检查器是本身是是保守的, 而且必须如此. 如果它不能确定一个借用是否合法, 它就会拒绝它, 因为允许非法借用的后果可能是灾难性的. 借用检查器正在不断变得更智能, 但有些时候它仍然需要我们“解释”某个借用为何是合法的. 这就是为什么我们有<code>unsafe</code>的<code>Rust</code>的部分原因.</p>
+</blockquote>
+<h4 id="泛型生命周期"><a class="header" href="#泛型生命周期">泛型生命周期</a></h4>
+<p>有时你需要在自定义的类型中存储引用, 这些引用需要有一个生命周期, 以便借用检查器可以在该类型的方法中使用这些引用时检查其有效性. 如果你希望类型的方法返回一个比<code>self</code>引用更长的生命周期时, 尤其重要.</p>
+<p><code>Rust</code> 允许你像对类型参数进行泛型那样, 对一个或多个生命周期参数进行定义. <strong>Steve Klabnik</strong> 和 <strong>Carol Nichols</strong> 合著的&lt;&lt;<code>The Rust Programming Language</code>&gt;&gt;(No Starch Press, 2018)详细介绍了这个主题, 所以我在此不再赘述基本知识. 但是, 当您编写更复杂的此类类型时, 有两个关于类型和生命周期之间的交互的细节值得你注意.</p>
+<p>首先, 如果你的类型也实现了<code>Drop</code>, 那么释放你的类型也算使用你的类型泛型的任意生命周期或类型. 本质上来讲, 当你的类型的实例被释放时, 借用检查器会检查此时是否仍然合法地使用任何泛型生命周期参数. 这是必要的, 因为你的<code>Drop</code>代码确实可能会使用到这些引用. 如果你的类型没有实现 <code>Drop</code>, 释放这个类型就不算使用它里面的引用, 并且只要用户不再使用你的类型实例, 就可以忽略存储在其中的引用, 就像我们在清单2-7中看到的那样. 我们将在第10章中更多地讨论这些关于<code>Drop</code>的规则.</p>
+<p>其次, 尽管一个类型可以对多个生命周期进行泛型化, 但这么做通常只会让类型签名不必要地复杂化. 通常情况下, 一个类型只对单个泛型生命周期就足够了, 并且编译器会选择所有插入到该类型中的引用中生命周期中较短的那个, 作为该生命周期参数的实际值. 你应该只在以下情况中使用多个生命周期参数: 当你的类型内部包含多个引用, 并且类型的方法需要返回一个只与其中某个引用的生命周期相关的引用时.</p>
+<p>请看清单2-10中的类型, 它为您提供了一个迭代器, 迭代器将遍历被其它特定字符串分隔.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct StrSplit&lt;'s, 'p&gt; {
+    delimiter: &amp;'p str,
+    document: &amp;'s str,
+}
+impl&lt;'s, 'p&gt; Iterator for StrSplit&lt;'s, 'p&gt; {
+    type Output = &amp;'s str;
+    fn next(&amp;self) -&gt; Option&lt;Self::Output&gt; {
+        todo!()
+    }
+}
+fn str_before(s: &amp;str, c: char) -&gt; Option&lt;&amp;str&gt; {
+    StrSplit { document: s, delimiter: &amp;c.to_string() }.next()
+}
+
+// 清单 2-10:  一个需要多个泛型生命周期的类型
+<span class="boring">}</span></code></pre></pre>
+<p>当你构造这个类型时, 你需要提供要搜索的<code>delimiter</code>和<code>document</code>, 它们都是对字符串值的引用. 当你要求搜索下一个字符串时, 返回的是对<code>document</code>的引用. 想像一下, 如果你在这个类型中使用单一生命周期会发生什么. 迭代器产生的值会被绑定到<code>document</code>和<code>delimiter</code>共同的生命周期上. 这将使<code>str_before</code>这样的函数无法编写: 因为它的返回类型的生命周期与函数局部变量的生命周期相关联--也就是由<code>to_string</code>创建出来的<code>String</code>--而借用检查器将拒绝该代码.</p>
+<h4 id="生命周期型变"><a class="header" href="#生命周期型变">生命周期型变</a></h4>
+<p>"型变"(<code>Variance</code>)是程序员经常接触到的一个概念, 但很少知道它的名称, 因为它大多时候是隐形的. 简单来说, 变量描述了哪些类型是其他类型的子类型, 以及何时可以用子类型代替父类型(反之亦然). 一般来说, 如果类型<code>A</code>至少和类型<code>B</code>一样有用, 那<code>A</code>就是<code>B</code>的子类型. 在<code>Java</code>中, 如果<code>Turtle</code>是<code>Animal</code>的子类型, 你可以把<code>Turtle</code>传给接受<code>Animal</code>的函数, 或者在<code>Rust</code>中, 你可以把一个<code>&amp;'static str</code>传给接受<code>&amp;'a str</code>的函数.</p>
+<p>虽然型变通常隐藏在幕后, 但它经常出现, 我们需要对它工作原理有所了解. <code>Turtle</code>是<code>Animal</code>的一个子类型, 因为<code>Turtle</code>比某些不确定的<code>Animal</code>更"有用"--<code>Turtle</code>可以做任何<code>Animal</code>能做的事, 而且可能更多. 同样,<code>'static</code>是<code>'a</code>的一个子类型, 因为<code>'static</code>的生命周期至少与任何<code>'a</code>一样长, 所以更有用. 或者, 更一般地说, 如果<code>'b:'a</code>(<code>'b</code>比<code>'a</code>具有更长的生命周期), 那么<code>'b</code>就是<code>'a</code>的一个子类型. 这显然不是正式的定义, 但是它已经足够接近, 具有实际指导意义.</p>
+<p>所有类型都有一个型变, 它定义了在某个类型的位置上可以使用哪些相似的类型. 型变分为三种: <strong>协变</strong>(<code>covariant</code>)、<strong>不变</strong>(<code>invariant</code>)和<strong>逆变</strong>(<code>contravariant</code>).</p>
+<ul>
+<li>如果你可以用一个子类型来替代该类型, 那么这个类型就是<strong>协变</strong>的. 例如, 如果一个变量是<code>&amp;'a T</code>类型, 你可以给它提供一个<code>&amp;'static T</code>类型的值, 因为<code>&amp;'a T</code> 在<code>'a</code>上是协变的. <code>&amp;'a T</code>在<code>T</code>上也是协变的, 所以你可以把一个<code>&amp;Vec&lt;&amp;'static str&gt;</code>传递给一个接受<code>&amp;Vec&lt;&amp;'a str&gt;</code>的函数.</li>
+<li>有些类型是<strong>不变</strong>的, 这意味着你必须准确提供完全相同的类型. <code>&amp;mut T</code>就是一个例子--如果一个函数接受一个<code>&amp;mut Vec&lt;&amp;'a str&gt;</code>, 你不能把一个<code>&amp;mut Vec&lt;&amp;'static str&gt;</code>传给它. 也就是说,<code>&amp;mut T</code>在<code>T</code>上是不变的. 如果你这样做, 该函数可能在<code>Vec</code>中放入一个短生命周期的字符串, 然后调用者会继续使用它, 错误的认为它是一个<code>Vec&lt;&amp;'static str&gt;</code>, 从而认为包含的字符串是<code>'static</code>!. <strong>任何提供可变性的类型一般都是不变的</strong>, 原因也是如此, 例如, <code>Cell&lt;T&gt;</code> 在<code>T</code>上是不变的.</li>
+<li>最后一种类别, <strong>逆变</strong>, 是针对函数参数而言的. 如果函数类型的参数不那么通用, 那么它们就会更有用. 如果你将参数类型本身的型变与它们作为函数参数时的型变进行对比, 这一点就更清楚了:</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x: &amp;'static str; // 更有用, 活的更长
+let x: &amp;'a str; // 不太有用, 活得更短
+fn take_func1(&amp;'static str) // 更严格, 所以不那么有用
+fn take_func2(&amp;'a str) // 不太严格, 所以更有用
+<span class="boring">}</span></code></pre></pre>
+<p>这种相返的关系表明, <code>Fn(T)</code>在<code>T</code>上是逆变的.</p>
+<p>那么, 当涉及到生命周期时, 为什么需要学习型变呢? 当您考虑泛型生命周期参数如何与借用检查器交互时, 型变就变得非常重要了.
+考虑清单2-11所示的类型, 它在一个字段中使用多个生命周期.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct MutStr&lt;'a, 'b&gt; {
+    s: &amp;'a mut &amp;'b str
+}
+let mut s = "hello";
+*MutStr { s: &amp;mut s }.s = "world"; // (1)
+println!("{}", s);
+
+// 清单 2-11: 需要多个泛型生命周期的类型
+<span class="boring">}</span></code></pre></pre>
+<p>乍一看, 在这里使用两个生命周期似乎是多余的--们并没有像在清单2-10中的 <code>StrSplit</code> 那样, 需要通过方法来区分结构中不同部分的借用, 但是如果你把这里的两个生命周期换成一个<code>'a</code>, 代码就不再能被编译了! 这就是为什么我们在这里使用了两个生命周期. 而这一切都是因为型变.</p>
+<blockquote>
+<p>注意: (1)处的语法可能看起来很奇怪. 它相当于定义了一个持有 <code>MutStr</code> 的变量 <code>x</code>, 然后写 <code>*x.s = "world"</code>, 只是没有变量, 所以 <code>MutStr</code> 被立即销毁了.</p>
+</blockquote>
+<p>在(1)处, 编译器必须确定生命周期参数应该被设置哪个生命周期. 如果有两个生命周期, <code>'a</code>被设置为有待确定的<code>s</code>的借用生命周期, <code>'b</code>被设置为<code>'static</code>, 因为那是提供的字符串"hello"的生命周期. 如果只有一个生命周期<code>'a</code> , 编译器推断该生命周期必须是<code>'static</code>.</p>
+<p>当我们后来试图通过共享引用访问字符串引用<code>s</code>来打印它时, 编译器试图缩短<code>MutStr</code>使用的<code>s</code>的可变借用, 以允许<code>s</code>的共享借用.</p>
+<p>在双生命周期的情况下, <code>'a</code>只是在<code>println!</code>之前结束, <code>'b</code>保持不变. 另一方面,在单生命周期的情况下, 我们遇到了一些问题. 编译器想缩短<code>s</code>的借用时间, 但为此也必须缩短<code>str</code>的借用时间. 虽然<code>&amp;'static str</code>一般来说可以缩短为任何<code>&amp;'a str</code>(<code>&amp;'a T</code> 在<code>'a</code>中是协变的), 但这里它在<code>&amp;mut T</code>后面, 而<code>&amp;mut T</code>在<code>T</code>中是不变量的. 不变要求相关类型永远不会被子类型或父类型取代, 所以编译器缩短借用的尝试失败了, 它报告说这个仍然是可变的借用, 哎哟!</p>
+<p>由于不型带来的灵活性的降低, 你想确保你的类型在尽可能多的泛型参数上保持协变(或在适当情况下保持逆变). 如果这需要引入额外的生命期参数, 你需要仔细权衡增加一个新参数的认知成本和型变的人体工程学代价.</p>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>本章的目标是建立一个坚实且统一的基础, 以便我们在接下来的章节中能够继续深入构建. 到现在, 我希望你已经牢牢掌握了<code>Rust</code>的内存和所有权模型, 而之前那些你从借用检查器那里遇到的报错, 现在看起来也不那么神秘了. 你或许之前已经了解了我们所讲内容的一部分, 但希望这一章能为你构建一个更完整的整体概念, 展示它们是如何协同工作的. 在下一章中, 我们将对类型系统进行类似的深入探讨. 我们将了解类型在内存中的表示方式, 了解泛型和<code>trait</code>是如何产生实际运行代码的, 还会看看<code>Rust</code>为更高级的用例使用场景提供的一些特殊类型和<code>trait</code>结构.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第二章-类型"><a class="header" href="#第二章-类型">第二章 类型</a></h1>
+<p>现在基础知识介绍完后, 我们来看看<code>Rust</code>的类型系统. 我们将跳过&lt;&lt;<code>The</code>Rust<code>Programming Language</code>&gt;&gt;中涉及的基础知识, 转而深入研究不同类型在内存中的布局、<code>trait</code>和<code>trait</code>约束的来龙去脉、存在性类型以及<code>crate</code>边界使用类型的规则.</p>
+<h2 id="内存中的类型"><a class="header" href="#内存中的类型">内存中的类型</a></h2>
+<p>每个<code>Rust</code>值都有一个类型. 在<code>Rust</code>中, 类型有很多作用, 我们将在本章中看到, 但它们最基本的作用是告诉你如何解释内存的比特. 例如, <code>0b10111101</code> (用十六进制符号写成<code>0xBD</code>) 的比特序列本身并不意味着什么, 直到你给它指定一个类型.  当解释为<code>u8</code>类型时, 这个比特序列就是数字<code>189</code>. 当在<code>i8</code> 类型下解释时, 它是<code>-67</code>. 当你定义自己的类型时, 编译器的工作是确定定义类型的每个部分在该类型的内存表示中的位置. 你的结构体的每个字段在比特序列中出现在哪里? 你的枚举的判别式存储在哪里? 当你开始编写更高级的<code>Rust</code>代码时, 了解这个过程是很重要的, 因为这些细节会影响你的代码的正确性和性能.</p>
+<h3 id="对齐"><a class="header" href="#对齐">对齐</a></h3>
+<p>在讨论如何确定一个类型的内存表示之前, 我们首先需要讨论对齐的概念, 它决定了一个类型的字节可以存储在哪里. 一旦确定了一个类型的表示方法, 你可能会认为可以任意选择内存位置, 并把存储在那里的字节解释为该类型. 理论上是这样的, 但在实际上硬件也限制了特定类型的存放位置. 这方面最明显的例子是, 指针指向字节(bytes), 而不是比特(bits). 如果你把一个<code>T</code>类型的值放在计算机内存的第4位开始, 你将没有办法引用它的位置; 你只能创建一个指针, 只指向字节0或字节1(第8位). 因此, 所有的值, 无论其类型如何, 都必须以字节边界为起点. 我们说, 所有的值都必须至少是字节对齐的--它们必须被放在一个8位(bits)的倍数的地址上.</p>
+<p>有些值的对齐规则比字节对齐更为严格. 在CPU和内存系统中, 内存通常以大于单字节的块为单位进行访问. 例如, 在64位的CPU上, 大多数数值都是以8个字节(64 位)为单位进行访问的, 每个操作都是以8字节对齐的地址开始. 这被称为CPU的字大小. 然后, CPU使用一些聪明的方法来处理较小的值, 或跨越这些块边界的值的读写.</p>
+<p>在可能的情况下, 你要确保硬件能够以其"原生"对齐方式运行. 要了解原因, 考虑一下如果你试图读取<code>i64</code>从8字节块的中间开始(也就是说, 它的指针不是8字节对齐的)会发生什么. 硬件将不得不进行两次读取--一次是从第一块的后半部分读取<code>i64</code> 的开始, 另一次是从第二块的前半部分读取<code>i64</code> 的其余部分, 然后将结果拼接在一起. 这效率并不高. 由于该操作分散在对底层内存的多次访问中, 如果你正在读取的内存被不同的线程同时写入, 你也可能会得到奇怪的结果. 您可能会在其他线程写入之前读取前4个字节，而在写入之后读取后4个字节，从而导致值损坏。</p>
+<p>对未对齐的数据操作被称为错位访问, 会导致糟糕的性能和并发性问题. 因此, 许多CPU运算要求或强烈希望其参数是自然对齐的. 自然对齐的值是指其对齐方式与其大小相匹配. 因此, 例如, 对于一个8字节的加载, 提供的地址需要8字节对齐.</p>
+<p>由于对齐访问通常更快, 并提供更强的一致性语义, 编译器试图尽可能地利用对齐访问. 为些, 编译器会根据每个类型所包含的类型来计算其对齐方式. 内置值通常是根据其大小来对齐的, 所以<code>u8</code>是字节对齐的, <code>u16</code>是2字节对齐的, <code>u32</code>是4字节对齐的, <code>u64</code>是 8 字节对齐的. 复杂类型--包含其他类型的类型--通常被分配为它们所包含的任何类型的最大对齐方式. 例如, 一个包含<code>u8</code>、<code>u16</code>和<code>u32</code>的类型会因为<code>u32</code>而被4字节对齐.</p>
+<h3 id="布局"><a class="header" href="#布局">布局</a></h3>
+<p>既然您了解了对齐方式, 我们就可以探索编译器如何决定类型的内存表示, 即布局. 默认情况下,<code>Rust</code>编译器几乎不保证类型的布局方式, 这让我们很从根本上理解其原理. 幸运的是,<code>Rust</code>提供了一个<code>repr</code>属性, 您可以将其添加到类型定义中, 从而为该类型请求一个特定的内存表示法. 最常见的是<code>repr(C)</code>. 顾名思义, 它会以与<code>C</code>或<code>C++</code>编译器布局相同类型的方式兼容的方式布局类型. 当编写使用外来函数接口(我们将在第11章中讨论)与其他语言接口的<code>Rust</code>代码很有帮助, 因为<code>Rust</code>将生成与其他语言编译器的期望相匹配的布局. 由于<code>C</code>布局是可预测的, 不受更改的影响, 因此在不安全的上下文中, 如果您正在使用指向类型的原始指针, 或者如果您需要在两个具有相同字段的不同类型之间进行转换, <code>repr(C)</code>就非常有用. 当然, 它非常适合我们迈出布局算法的第一步.</p>
+<blockquote>
+<p>NOTE: 另一个有用的表示是<code>repr(transparent)</code>, 它只能用于单个字段的类型, 它保证了外部类型的布局与内部类型的布局完全相同. 这在与<code>newtype</code>模式结合使用时很方便, 在<code>newtype</code>模式中, 您可能想对某个结构A和结构NewA(A)的内存表示进行操作, 就好像它们是相同的一样. 如果没有<code>repr(transparent)</code>,<code>Rust</code>编译器就不能保证它们拥有相同的布局.</p>
+</blockquote>
+<p>那么, 让我们看看编译器会如何用<code>repr(C)</code>来布局一个特定的类型: 清单2-1中的<code>Foo</code>类型. 你认为这个类型编译器会如何在内存中布局?</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[repr(C)]
+struct Foo {
+    tiny: bool,
+    normal: u32,
+    small: u8,
+    long: u64,
+    short: u16,
+}
+
+// 清单 2-1: 对齐影响布局. 
+<span class="boring">}</span></code></pre></pre>
+<p>首先, 编译器会看到<code>tiny</code>字段, 它的逻辑大小是1位(true 或 false). 但由于CPU和内存以字节为单位进行操作, 因此在内存表示中, <code>tiny</code>是1个字节. 接下来, <code>normal</code>是一个4字节类型, 所以我们希望它是4字节对齐的. 但是即使<code>Foo</code>是对齐的, 我们分配给<code>tiny</code>的1个字节将会使<code>normal</code>错过它的对齐. 为了解决这个问题, 编译器在<code>tiny</code>和<code>normal</code>之间的内存表示中插入了3个字节的填充, 这些字节的值不确定，在用户代码中会被忽略. 填充的是没有数值, 但会占用空间.</p>
+<p>对于下一个字段<code>small</code>, 对齐方式很简单: 它是一个1字节的值, 在结构中当前字节偏移量是1+3+4=8. 这已经是字节对齐的, 所以<code>small</code>可以紧随<code>normal</code>字段. 但对于<code>long</code>, 我们又遇到了一个问题. 我们现在是1+3+4+1=9字节进入<code>Foo</code>. 如果<code>Foo</code>是对齐的, 那么<code>long</code>就不是我们想要的8字节对齐, 所以我们必须再插入7字节的填充来使<code>long</code>再次对齐. 这也方便了我们确保最后一个字段<code>short</code>所需的 2 字节对齐, 使总数达到26字节. 现在我们已经完成了所有字段的对齐, 我们还需要确定<code>Foo</code>本身的对齐方式. 这里的规则是使用 <code>Foo</code> 任何一个字段的最大对齐方式, 由于<code>long</code>的原因, 它将是8字节. 因此, 为了确保<code>Foo</code>在放入数组时保持对齐, 编译器添加了最后6个字节的填充, 使 <code>Foo</code> 的大小是其32字节对齐的倍数.</p>
+<p>现在我们准备摆脱<code>C</code>语言的束缚, 考虑一下如果我们不使用清单2-1中的 <code>repr(C)</code>, 布局会发生什么变化. <code>C</code>表示法的主要限制之一是它要求我们以原始结构定义中的相同顺序放置所有字段. 默认的<code>Rust</code>表示法<code>repr(Rust)</code>除去了这一限制, 以及其他一些较小的限制, 例如对恰好有相同字段的类型进行确定性的字段排序. 也就是说, 在使用默认的<code>Rust</code>布局时, 即使两个不同的类型以相同的顺序共享相同类型的所有字段, 也不能保证它们的布局是一样的.</p>
+<p>由于我们现在可以对字段进行重新排序, 我们可以按照大小递减的顺序排列段. 这意味着我们不再需要<code>Foo</code>字段之间的填充; 字段本身被用来实现必要的对齐！<code>Foo</code> 的大小与字段大小相当: 只有16个字节. 这就是为什么<code>Rust</code>默认情况下不对一个类型在内存中的布局做太多保证的原因之一: 通过给编译器更多重新排列的余地, 我们可以产生更有效的代码.</p>
+<p>原来还有第三种方法来布局类型, 那就是告诉编译器我们需要在字段之间有任何填充. 这样做, 意味着我们愿意接受使用错位访问的性能损失. 最常见的使用情况是, 每增加一个额外的字节对内存的影响是可以感觉到的, 比如你有很多类型的实例, 内存非常有限, 或者如果你通过一个低带宽的媒介(如网络连接)发送内存中的表示. 为了选择这种行为, 你可以用<code>#[repr(packed)]</code>来注解类型. 请记住, 这可能会导致代码速度大大降低, 在极端情况下, 如果你尝试执行CPU只支持对齐参数的操作, 这可能会导致程序崩溃.</p>
+<p>有时, 你想给一个特定的字段或类型提供比其技术上要求的更大的对齐方式. 你可以使用属性<code>#[repr(align(n))]</code>来做到这一点. 这方面的一个常见的用例是确保在内存中连续存储的不同数值(比如在一个数组中)最终出现在CPU的不同缓存行中. 这样就能避免错误共享, 而错误共享会导致并发程序性能大幅度下降. 当两个不同的CPU访问碰巧共享一个缓存行的不同值时, 就会出现错误共享; 虽然理论上它们可以并行操作, 但它们最终都会争相更新缓存中的同一个条目. 我们将在第11章中更详细地讨论并发性问题.</p>
+<h3 id="复合类型"><a class="header" href="#复合类型">复合类型</a></h3>
+<p>你可能对编译器如何在内存中表示其他<code>Rust</code>类型感到好奇. 这里有一个快速参考:</p>
+<p><strong>元组</strong> 表示为结构体, 相同类型元组值的字段顺序相同.
+<strong>数组</strong> 表示为所含类型的连续序列, 元素之间没有填充.<br />
+<strong>联合</strong> 每个变体的布局是独立选择的. 对齐是所有变体的最大值.<br />
+<strong>枚举</strong> 与<strong>联合</strong>s相同, 但有一个额外的隐藏共享字段, 存储枚举变体判别符. 判别值是代码用来确定一个给定值持有哪一个枚举变体的值. 判别字段的大小取决于变体的数量.</p>
+<h3 id="动态大小的类型和胖指针"><a class="header" href="#动态大小的类型和胖指针">动态大小的类型和胖指针</a></h3>
+<p>你可能在<code>Rust</code>文档的各种奇怪角落和错误信息中遇到过<code>Sized</code> trait这个标记性. 通常, 它的出现是因为编译器希望你提供一个<code>Sized</code>的类型, 但你(显然)没有. <code>Rust</code>中的大多数类型都自动实现了<code>Sized</code>, 也就是说, 它们有一个在编译已知的大小, 但有两种常见的类型却没有: <code>trait object</code>和<code>slices</code>. 例如, 如果你有一个<code>dyn Iterator</code>或者一个<code>[u8]</code>, 它们都没有一个明确定义的大小. 它们的大小取决于一些只有在程序运行时才知道的信息, 而不是在编译期, 这就是为什么它们被称为动态大小的类型(DSTs). 没有人提前知道你的函数收到的<code>dyn Iterator</code>是这个200字节的结构还是那个8字节的结构. 这就带来了一个问题: 编译器通常必须知道某些东西的大小, 以便产生有效的代码, 例如要为类型为(<code>i32</code>, <code>dyn Iterator</code>, <code>[u8]</code>, <code>i32</code>)的元组分配多少空间, 或者如果代码试图访问第四个字段, 应该使用什么偏移量. 但是如果类型不是 <code>Sized</code>, 就无法获得这些信息.</p>
+<p>编译器几乎在所有地方都要求类型是<code>Sized</code>的. 结构字段、函数参数、返回值、变量类型和数组类型都必须是<code>Sized</code>的. 这个约束是非常普遍, 以至于你写的每一个类型约束都包括<code>T: Sized</code>, 除非你明确地用 <code>T: ?Sized</code>(<code>?</code>的意思是"可能不是")来选择不使用它. 但如果你有一个<code>DST</code>并想用它做一些事情, 比如你真的想让你的函数接受一个<code>trait object</code>或一个<code>slice</code>作为参数, 这就很无助了.</p>
+<p>解决的办法是将它们放在胖指针后面. 胖指针与普通指针类似, 但它包含一个额外的字段, 它提供了编译器为指针生成合理代码所需要的额外信息. 当你引用一个<code>DST</code>时, 编译器会自动为你构造一个胖指针. 对于一个<code>slice</code>, 额外的信息只是<code>slice</code>的长度. 对于<code>trait object</code>来说, 我们稍后会讨论这个问题. 最重要的是, 这个胖指针是有尺寸的. 具体来说, 它是 <code>usize</code> (目标平台上一个字的大小) 的两倍: 一个<code>usize</code>用于保存指针, 一个<code>usize</code>用于保存"完整"类型所需的额外信息.</p>
+<blockquote>
+<p>NOTE: Box 和 Arc 也支持存储胖指针, 这就是为什么它们都支持 <code>T: ?Sized</code>.</p>
+</blockquote>
+<h2 id="trait-和-trait-bounds"><a class="header" href="#trait-和-trait-bounds">Trait 和 Trait Bounds</a></h2>
+<p><code>trait</code>是<code>Rust</code>类型系统的关键部分--它们是允许类型之间相互操作的粘合剂, 尽管它们在定义时并不了解彼此. <code>The Rust Programming Language</code>很好地介绍了如何定义和使用<code>trait</code>, 因此我在此不再赘述. 取而代之的是, 我们要看看<code>trait</code>的一些技术方面: 它们是如何实现的, 你必须遵守的限制, 以及<code>traits</code>的一些更深奥的用途.</p>
+<h3 id="编译和分发"><a class="header" href="#编译和分发">编译和分发</a></h3>
+<p>现在, 你可能已经在<code>Rust</code>中编写了相当数量的泛型代码. 你已经在类型和方法上使用了泛型类型参数, 甚至可能在这里和那里使用了一些<code>trait</code>约束. 但是你有没有想过, 当你编译泛型代码时, 它究竟会发生什么, 或者当你在<code>dyn Trait</code>上调用一个<code>trait</code>方法时, 会发生什么?</p>
+<p>当你写一个在<code>T</code>上泛型的类型或函数时, 你实际上是在告诉编译器为每个类型<code>T</code>制作一个该类型或函数的副本. 当你构造一个<code>Vec&lt;i32&gt;</code>或<code>HashMap&lt;String, bool&gt;</code>时, 编译器基本上是复制粘贴泛型类型和它的所有实现块, 并将每个泛型参数的所有实例替换为你提供的具体类型. 它制作了一个<code>Vec</code>类型的完整副本, 每个<code>T</code>都被替换为<code>i32</code>, 而<code>HashMap</code>类型的完整副本, 每个<code>K</code>都被替换为<code>String</code>, 每个<code>V</code>都被替换为<code>bool</code>.</p>
+<blockquote>
+<p>NOTE:实际上, 编译器并没有进行完全的复制. 它只复制你使用的部分代码, 所以如果你从未在<code>Vec&lt;i32&gt;</code>上调用<code>find</code>, <code>find</code>的代码就不会被复制和编译.</p>
+</blockquote>
+<p>这一点也适用于泛型函数. 请看清单2-2中的代码, 它显示了一个泛型方法.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl String {
+    pub fn contains(&amp;self, p: impl Pattern) -&gt; bool {
+        p.is_contained_in(self)
+    }
+}
+
+// 清单 2-2: 使用静态分发的泛型方法
+<span class="boring">}</span></code></pre></pre>
+<p>每个不同的模式类型都有一个该方法的副本(<code>impl Trait</code>是<code>&lt;T: Trait&gt;</code>的简写) . 我们需要为每个<code>impl Pattern</code>类型提供一个不同的函数体副本, 因为我们需要知道<code>is_contained_in</code>函数的地址来调用它. 需要告知CPU跳转到哪里并继续执行. 对于任何给定的模式, 编译器知道该地址是该模式类型实现该<code>trait</code>方法的地方的地址. 但没有一个地址可以用于任何类型, 所以我们需要为每个类型准备一个副本, 每个副本都有自己的地址可以跳转.  这被称为<strong>静态分发</strong>, 因为对于任何给定的方法副本, 我们"分发"的地址是静态已知的.</p>
+<blockquote>
+<p>NOTE: 你可能已经注意到, "static" 这个词在这个上下文有点超载. 静态通常是指任何在编译时已知的任何内容, 或者可以被当作已知的来对待, 因为这样它就可以被写入静态内存, 正如我们在第2章中讨论的.</p>
+</blockquote>
+<p>从一个泛型到许多非泛型的过程被称为单态化, 这也是<code>Rust</code>泛型代码通常和非泛型代码表现一样好的部分原因.  当编译器开始优化你的代码时, 就好像根本没有泛型的存在一样！每个实例都被单独优化的, 并且包含的所有类型都是已知的. 因此, 代码的效率就像直接调用传入的模式的 <code>is_contained_in</code> 方法一样, 没有任何<code>trait</code>存在. 编译器对所涉及的类型有充分的了解, 甚至可以内联 <code>is_contained_in</code>的实现.</p>
+<p>单态化也是有代价的: 所有这些类型的实例化都需要单独编译, 如果编译器不能将它们优化掉, 就会增加编译时间. 每个单态化的函数也会产生自己的机器代码块, 从而会使你的程序变得更大. 而且, 由于泛型方法的不同实例之间不共享指令, CPU的指令缓存也是无效的, 因为它现在需要保存有效相同指令的多个副本.</p>
+<blockquote>
+<p>非泛型内部函数</p>
+<p>通常, 泛型方法中的大部分代码是不依赖于类型的. 例如, 考虑<code>HashMap::insert</code>的实现. 计算所提供键的哈希值的代码取决于映射的键类型, 但是遍历映射的桶以找到插入点的代码可能不需要. 在这种情况下, 为方法的非通用部分共享单态生成的机器代码会更有效, 并且只在实际需要的地方生成不同的副本.</p>
+<p>在这种情况下, 可以使用一种模式是在执行共享操作的泛型方法中声明一个非泛型的辅助函数. 这样, 编译器就只需复制粘贴与类型相关的代码, 而辅助函数被共享.</p>
+<p>把函数变成内部函数还有一个好处, 就是你不会用一个单一目的的函数来污染你的模块. 你可以在方法之外声明这样一个辅助函数; 但是要注意不要让它成为泛型植入块下的方法, 因为那样它仍然会被单态化.</p>
+</blockquote>
+<p>静态分发的替代方法是动态分发, 它能让代码能够在不知道泛型是什么类型的情况下调用一个泛型类型的<code>trait</code>方法. 我在前面说过, 我们这所以需要清单2-2中方法的多个实例, 是因为如果不这么做, 你的程序就不知道要跳转到什么地址才能调用给定的模式上<code>trait</code>方法<code>is_contained_in</code>. 通过动态分发, 调用者会简单地告诉你. 如果你用<code>&amp;dyn Pattern</code>代替 <code>impl Pattern</code>, 你就告诉调用者他们必须为这个参数提供两个信息: <code>pattern</code>的地址和<code>is_contained_in</code>方法的地址. 实际上, 调用者给了我们一个指针, 指向一个叫做虚拟方法表(<code>vtable</code>)的内存块, 这个虚拟方法表保存了有关类型的所有<code>trait</code>方法的实现地址, 其中一个就是<code>is_contained_in</code>. 当方法中的代码想要调用所提供的模式的<code>trait</code>方法时, 它会在<code>vtable</code>中查找该<code>pattern</code>的<code>is_contained_in</code>的实现地址, 然后调用该地址的函数. 这使得我们无论调用者想使用什么类型, 都可以使用相同的函数体.</p>
+<blockquote>
+<p>NOTE: 每个<code>vtable</code>都包含了关于具体类型的布局和对齐方式的信息, 因为这些信息在使用一个类型时总是需要的这些信息. 如果你想看一个显式<code>vtable</code>的例子, 看看<code>std::task::RawWakerVTable</code>类型.</p>
+</blockquote>
+<p>你会注意到, 当我们选择使用<code>dyn</code>关键字进行动态分发时, 我们必须在它的前面放一个<code>&amp;</code>. 原因是我们在编译时不再知道调用者传入的<code>pattern</code>类型的大小, 所以我们不知道要为它预留多少空间. 换句话说<code>dyn Trait</code>是<code>!Sized</code>, 其中的<code>!</code>表示不是. 为了使它有<code>Sized</code>, 以便我们可以把它作为一个参数, 我们把它放在一个指针(我们知道指针的大小)后面. 由于我们还需要传递方法地址表, 这个指针变成了一个胖指针, 其中额外的字是指向<code>vtable</code>的指针. 你可以使用任何能够容纳胖指针的类型进行动态分发, 比如<code>&amp;mut</code>、<code>Box</code>和 <code>Arc</code>. 清单2-3显示了清单2-2的动态分发等价物.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl String {
+    pub fn contains(&amp;self, p: &amp;dyn Pattern) -&gt; bool {
+        p.is_contained_in(&amp;*self)
+    }
+}
+
+// 清单 2-3: 使用动态分发的泛型方法
+<span class="boring">}</span></code></pre></pre>
+<p>实现<code>trait</code>的类型和其<code>vtable</code>的组合被称为<code>trait object</code>. 大多数<code>trait</code>可以转化为<code>trait object</code>, 但不是全部. 例如, <code>Clone trait</code>, 其 <code>clone</code> 方法返回<code>Self</code>, 不能被转化为<code>trait object</code>. 如果我们接受一个<code>dyn Clone trait</code>对象, 然后对它调用 <code>clone</code>, 编译器将不知道要返回什么类型. 或者, 考虑一下标准库中的<code>Extend trait</code>, 它有一个方法<code>extend</code>, 在所提供的迭代器的类型上是通用的 (所以它可能有很多实例). 如果你要调用一个接受动态<code>Extend</code>的方法, 那么就没有一个单一的地址可以放在<code>trait</code>对象的<code>vtable</code>中; 对于<code>extend</code>可能被调用的每种类型, 都必须有一个条目. 这些都是<code>trait</code>的示例, 它们不是对象安全的, 因此不能被转化为<code>trait object</code>. 要做到实现对象安全, <code>trait</code>的所有方法都不能是泛型的或使用<code>Self</code>类型. 此外, <code>trait</code>不能有任何静态方法(也就是说, 其第一个参数不解引用到<code>Self</code>), 因为不可能知道要调用哪个方法的实例. 例如, 不清楚 <code>FromIterator::from_iter(&amp;[0])</code> 应该执行什么代码.</p>
+<p>在阅读关于<code>trait</code>对象的内容时, 你可能会看到提到<code>trait</code>约束<code>Self: Sized</code>. 这样的约束意味着<code>Self</code>不会通过<code>trait object</code>被使用(因为它将是 <code>!Sized</code>). 你可以把这个约束放在<code>trait</code>上, 要求<code>trait</code>永远不使用动态分发, 或者你可以把它放在一个特定的方法上, 使该方法在通过<code>trait object</code>访问<code>trait</code>时不可用. 当检查一个<code>trait</code>是否是对象安全的时候, 具有<code>where Self: Sized</code> 约束的方法将被排除在外.</p>
+<p>动态分发可以缩短编译时间, 因为它不再需要编译类型和方法的多个副本, 而且可以提高CPU指令缓存的效率. 然而, 它也阻止了编译器对所使用的特定类型进行优化. 有了动态分发, 编译器对清单2-2中的<code>find</code>所能做的就是通过<code>vtable</code>插入对函数的调用--它不能再执行任何额外的优化, 因为它不知道在这个函数调用的另一边会有什么代码. 此外, 对<code>trait</code>对象的每个方法调用都需要在<code>vtable</code>中进行查找, 这比直接调用方法增加了少量的开销.</p>
+<p>当你要在静态分发和动态分发之间做出选择时, 很少有明确的正确答案. 不过, 从广义上讲, 您希望在库中使用静态分发, 而在二进制文件中使用动态发发. 在库中, 你想让你的用户来决定哪种分发最适合他们, 因为你不知道他们的需求是什么. 如果你使用动态分发, 他们也会被迫这样做, 而如果你使用静态分发, 他们可以选择是否使用动态分发. 另一方面, 在二进制文件中, 你正在编写最终的代码, 所以除了你正在编写的代码的需求外, 没有其他需求需要考虑. 动态分发通常允许你编写更干净的代码, 省去泛型参数, 并能更快地编译, 所有这些都是以(通常)付出微不足道的性能代价, 所以它通常是二进制文件的更好选择.</p>
+<h3 id="泛型-traits"><a class="header" href="#泛型-traits">泛型 Traits</a></h3>
+<p><code>Rust``trait</code>可以通过以下两种方式之一实现泛型: 使用泛型类型参数, 如<code>trait Foo&lt;T&gt;</code>, 或者使用关联类型, 如<code>trait Foo { type Bar; }</code>. 这两者之间的区别并不明显, 但幸运的是, 经验法则非常简单: 如果对给定类型的<code>trait</code>只有一种实现, 就使用关联类型, 否则就使用通用类型参数.</p>
+<p>这样做的理由是, 关联类型通常更容易操作, 但不允许多种实现. 因此, 更简单地说, 我们的建议是尽可能的使用关联类型, 就使用关联类型.</p>
+<p>有了泛型<code>trait</code>, 用户必须始终指定所有的泛型参数, 并重复这些参数的任何约束. 这很快就会变得混乱和难以维护. 如果你给一个<code>trait</code>增加了一个泛型参数, 该<code>trait</code>的所有用户也必须更新以反映这一变化. 而且, 由于一个<code>trait</code>的多个实现可能存在于一个给定的类型中, 编译器可能很难确定你想使用<code>trait</code>的哪个实例, 从而导致像<code>FromIterator::&lt;u32&gt;::from_iter</code>这样可怕的歧义函数调用. 但好处是, 你可以为同一类型多次实现<code>trait</code>--例如, 你可以针对你的类型的多个右侧类型实现<code>PartialEq</code>, 或者你可以同时实现 <code>FromIterator&lt;T&gt;</code>和 <code>FromIterator&lt;&amp;T&gt; where T: Clone</code>, 正是因为泛型<code>trait</code>所提供的灵活性.</p>
+<p>而对于关联类型, 编译器只需要知道实现<code>trait</code>的类型, 而所有的关联类型都是如此(因为只有一个实现). 这意味着约束可以全部存在于<code>trait</code>本身, 不需要在使用时重复. 反过来, 这允许<code>trait</code>在不影响用户的情况下增加更多的关联类型. 因为类型决定了<code>trait</code>的所有关联类型, 所以你永远不需要用上一段所示的统一函数调用语法来消除歧义. 然而, 你不能针对多个目标类型实现<code>Deref</code>, 也不能用多个不同的<code>Item</code> 类型实现 <code>Iterator</code>.</p>
+<h3 id="一致性和孤儿规则"><a class="header" href="#一致性和孤儿规则">一致性和孤儿规则</a></h3>
+<p><code>Rust</code>有一些相当严格的规则, 规定你可以在哪里实现<code>trait</code>, 以及你可以在哪些类型上实现它们. 这些规则的存在是为了维护一致性属性: 对于任何给定的类型和方法, 只有一个正确的选择, 那就是对该类型使用该方法的实现. 为了理解这一点的重要性, 考虑一下如果我可以为标准库中的<code>bool</code>类型编写自己的<code>Display``trait</code>的实现会发生什么. 现在, 对于任何试图打印一个<code>bool</code>值并包括我的<code>crate</code>的代码, 编译器将不知道是选择我写的实现还是标准库的实现. 这两种选择都不正确, 也不比另一种选择好, 而且编译器显然不能随机选择. 如果完全不涉及标准库,而是有两个相互依赖的<code>crate</code>, 而且它们都实现了某个共享类型的<code>trait</code>, 也会出现同样的问题. 一致性属性保证了编译器永远不会遇到这些情况下, 也永远不必做出这些选择: 总会有一个明确的选择.</p>
+<p>维护一致性的一个简单方法是确保只有定义<code>trait</code>的<code>crate</code>可以编写该<code>trait</code>的实现; 如果没有其他人可以实现该<code>trait</code>, 那么其他地方就不能有冲突的实现. 然而, 这在实践中限制性太强, 而且基本上会使<code>trait</code>失去作用, 因为除非在定义<code>crate</code>包含自己的类型, 否则无法为你自己的类型实现诸如<code>std::fmt::Debug</code>和<code>serde::Serialize</code>这样的<code>trait</code>, 这虽然解决了这个问题，却带来了另一个问题: 一个定义了<code>trait</code>的包现在不能为标准库或其他流行的包中的类型提供该<code>trait</code>的实现! 理想情况下, 我们希望找到一套规则来实现上游<code>trait</code>的愿望和上游<code>crate</code>能够在不破坏下游代码的情况下增加自己的<code>trait</code>实现的愿望之间取得平衡.</p>
+<blockquote>
+<p>NOTE: 上游指的是你的代码所依赖的东西, 下游指的是依赖你的代码的东西. 通常, 这些术语直接用于<code>crate</code>依赖关系, 但也可以用来指代码的权威分叉--如果你做一个<code>Rust</code>编译器的分叉, 官方<code>Rust</code>编译器就是你的"上游".</p>
+</blockquote>
+<p>在<code>Rust</code>中, 建立这种平衡的规则是"孤儿规则". 简单地说, "孤儿规则"说你可以为一个类型实现一个<code>trait</code>, 但该<code>trait</code>或类型必须是你本地的<code>crate</code>的. 所以, 你才能为自己的类型实现<code>Debug</code>, 也可以为<code>bool</code>实现<code>MyNeatTrait</code>, 但你不能为<code>bool</code>实现<code>Debug</code>. 如果你尝试, 你的代码将无法编译, 而且编译器会告诉你有冲突的实现.</p>
+<p>这让你走得很远; 它允许你为第三方类型实现你自己的<code>trait</code>, 并为你自己的类型实现第三方<code>trait</code>. 然而, 孤儿规则并不是故事的终结. 它还有一些额外的影响、注意事项和例外情况, 你应该注意一下.</p>
+<h4 id="通用实现"><a class="header" href="#通用实现">通用实现</a></h4>
+<p>孤规则允许你在一系列类型上实现<code>trait</code>, 代码如<code>impl&lt;T&gt; MyTrait for T where T:</code>等, 这是一个通用的实现, 它不局限于一个特定的类型, 而是适用于广泛的类型. 只有定义了一个<code>trait</code>的<code>crate</code>被允许编写一个通用实现, 并且添加一个通用实现到一个已经存在的<code>trait</code>被认为是一个破坏性的改变. 如果不是的话, 下游包含<code>impl MyTrait for Foo</code>的<code>crate</code>可能会突然停止编译, 因为你更新了定义<code>MyTrait</code>的<code>crate</code>, 出现了一个关于冲突实现的错误.</p>
+<h4 id="基本类型"><a class="header" href="#基本类型">基本类型</a></h4>
+<p>有些类型是如此重要, 以至于有必要允许任何人在其上实现<code>trait</code>, 即使这似乎违反了孤儿规则. 这些类型被标记为<code>#[fundamental]</code>属性, 目前包括 <code>&amp;</code>, <code>&amp;mut</code>, 和 <code>Box</code>. 为了孤儿规则的目的, 基本类型可能不存在--它们在孤儿规则被检查之前就被有效地删除了, 以便允许你, 例如, 为<code>&amp;MyType</code>实现 <code>IntoIterator</code>. 如果只有孤儿规则, 这个实现将不被允许, 因为它为一个外来类型实现了一个外来<code>trait</code>--<code>IntoIterator</code>和<code>&amp;</code>都来自标准库. 在一个基本类型上添加一个通用的实现也被认为是一个破坏性的变更.</p>
+<h4 id="覆盖实现-covered-implementations"><a class="header" href="#覆盖实现-covered-implementations">覆盖实现 (Covered Implementations)</a></h4>
+<p>在一些有限的情况下, 我们希望为一个外来类型实现一个外来<code>trait</code>, 而孤儿规则通常不允许这样做. 最简单的例子是当你想编写类似<code>impl From&lt;MyType&gt; for Vec&lt;i32&gt;</code> 的东西. 在这里, <code>From trait</code>是外来的, <code>Vec</code>类型也是, 但没有违反一致性的危险. 这是因为冲突的实现只能通过标准库中的覆盖实现来添加(标准库不能以其他方式命名<code>MyType</code>), 这无论如何是一个破坏性的改变.</p>
+<p>为了允许这些类型的实现, 孤儿规则包含了一个狭义的豁免, 允许在一组非常特殊的情况下为外部类型实现外部<code>trait</code>. 具体来说, 只有当至少一个<code>Ti</code> 是本地类型, 并且在第一个这样的<code>Ti</code>之前没有<code>T</code>是泛型类型<code>P1..=Pn</code>, 才允许为<code>T0</code>给定<code>impl&lt;P1..=Pn&gt; ForeignTrait&lt;T1..=Tn&gt; for T0</code>. 泛型类型参数(Ps)允许出现在<code>T0..Ti</code>中, 只要它们被某种中间类型所覆盖. 如果<code>T</code>作为其他类型的类型参数出现(比如 <code>Vec&lt;T&gt;</code>), 那么会覆盖它, 但如果它独立存在(只有 <code>T</code>),或者只是出现在基本类型(比如 <code>&amp;T</code> )后面, 则不会覆盖它. 因此, 清单 2-4 中的所有实现都是有效的.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;T&gt; From&lt;T&gt; for MyType
+impl&lt;T&gt; From&lt;T&gt; for MyType&lt;T&gt;
+impl&lt;T&gt; From&lt;MyType&gt; for Vec&lt;T&gt;
+impl&lt;T&gt; ForeignTrait&lt;MyType, T&gt; for Vec&lt;T&gt;
+
+// 清单 2-4: 外部类型的外部`trait`的有效实现
+<span class="boring">}</span></code></pre></pre>
+<p>但是, 清单 2-5 中的实现是无效的.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;T&gt; ForeignTrait for T
+impl&lt;T&gt; From&lt;T&gt; for T
+impl&lt;T&gt; From&lt;Vec&lt;T&gt;&gt; for T
+impl&lt;T&gt; From&lt;MyType&lt;T&gt;&gt; for T
+impl&lt;T&gt; From&lt;T&gt; for Vec&lt;T&gt;
+impl&lt;T&gt; ForeignTrait&lt;T, MyType&gt; for Vec&lt;T&gt;
+
+// 清单 2-5: 外部类型的外部`trait`的无效实现
+<span class="boring">}</span></code></pre></pre>
+<p>这种对孤儿规则的放宽使得为现有<code>trait</code>添加新实现时构成破坏性变更的规则变得复杂. 特别是, 为现有<code>trait</code>添加新的实现, 只有当它至少包含一个新的本地类型, 并且这个新的本地类型满足前面描述的豁免规则时, 才是非破坏性的. 添加任何其他新的实现都是一种破坏性的改变.</p>
+<blockquote>
+<p>NOTE: <code>impl&lt;T&gt; ForeignTrait&lt;LocalType, T&gt; for ForeignType</code> 是有效的, 但是 <code>impl&lt;T&gt; ForeignTrait&lt;T, LocalType&gt; for ForeignType</code> 是无效的！这看起来很随意, 但是如果没有这个规则, 你可以为写 <code>impl&lt;T&gt; ForeignTrait&lt;T, LocalType&gt; for ForeignType</code>, 而另一个包可以写 <code>impl&lt;T&gt; ForeignTrait&lt;TheirType, T&gt; for ForeignType</code>, 只有当这两个包被放在一起时才会产生冲突. 孤儿规则没有完全禁止这种模式, 而是要求你的本地类型在类型参数之前, 这打破了联系, 确保如果两个<code>crate</code>在单独使用保持一致性, 它们在组合使用时也保持一致性.</p>
+</blockquote>
+<h3 id="trait-约束"><a class="header" href="#trait-约束">Trait 约束</a></h3>
+<p>标准库中有很多<code>trait</code>约束, 无论是<code>HashMap</code>中的键必须实现<code>Hash + Eq</code>, 还是<code>Thread::Spawn</code>的函数必须是<code>FnOnce + Send + 'static</code>. 当你自己写泛型代码时, 几乎肯定会包含<code>trait</code>约束, 否则你的代码就不能对其泛型的类型做什么. 当你编写更复杂的泛型实现时, 你会发现你也需要从你的<code>trait</code>约束中获得更多的精确性, 所以让我们看看实现这一目的的一些方法.</p>
+<p>首先, <code>trait</code>约束不一定是<code>T: Trait</code>的形式, 其中<code>T</code>是你的实现或类型的泛型的某种类型. 约束可以是任意的类型限制, 甚至不需要包括泛型参数、参数类型或局部类型. 你可以写一个<code>trait</code>约束, 比如说 <code>where String: Clone</code>, 尽管<code>String: Clone</code>总是真的, 并且不包含局部类型. 你也可以写<code>where io::Error: From&lt;MyError&lt;T&gt;&gt;</code>; 你的泛型类型参数不需要只出现在左手边. 这不仅允许你表达更复杂的约束, 而且可以使你避免不必要地重复约束. 例如, 如果你的方法要构造一个<code>HashMap&lt;K, V, S&gt;</code>, 它的键是一些泛型<code>T</code>, 它的值是一个<code>usize</code>, 与其把约束写成 <code>where T: Hash + Eq, S: BuildHasher + Default</code>, 你可以写成 <code>where HashMap&lt;T, usize, S&gt;: FromIterator</code>. 这样就省去了查找你最终使用的方法的确切约束要求, 并且更清楚地传达了你的代码的真正要求. 正如你所看到的, 如果你想调用的底层<code>trait</code>方法的约束很复杂, 它也能大大降低你的约束的复杂性.</p>
+<blockquote>
+<p>DERIVE TRAIT
+虽然<code>#[derive(Trait)]</code>非常方便, 但在<code>trait</code>约束的上下文中, 你应该注意到它经常被实现的一个微妙之处. 许多<code>#[derive(Trait)]</code> 的扩展被分解为 <code>impl Trait for Foo&lt;T&gt; where T: Trait</code>. 这通常是你想要的, 但并不总是如此. 例如, 考虑一下如果我们试图以这种方式为 <code>Foo&lt;T&gt;</code> 派生 <code>Clone</code>, 而<code>Foo</code>包含一个<code>Arc&lt;T&gt;</code>, 会发生什么. 不管<code>T</code>是否实现了<code>Clone</code>, <code>Arc</code> 都实现了 <code>Clone</code>, 但是由于派生的约束, <code>Foo</code>只有在<code>T</code>实现了<code>Clone</code> 时才会实现！这通常不是一个太大的问题, 但是它确实在不需要的地方增加了一个约束. 如果我们把这个类型重命名为<code>Shared</code>, 问题可能会变得更清楚一些. 想象一下, 当编译器告诉他们不能克隆<code>Shared&lt;NotClone&gt;</code>时, 拥有<code>Shared&lt;NotClone&gt;</code> 的用户将是多么的困惑啊！在写这篇文章的时候, 这就是标准库提供的 <code>#[derive(Clone)]</code> 的工作方式, 尽管这在将来可能会改变.</p>
+</blockquote>
+<p>有时, 你需要对泛型类型的关联类型进行约束. 例如, 考虑迭代器方法<code>flatten</code>, 它接受一个迭代器, 该迭代器生成的项又实现<code>iterator</code>, 并生成这些内部迭代器的项的迭代器. 它产生的类型<code>Flatten</code>是<code>I</code>上的泛型, 而<code>I</code>外部迭代器的类型. 如果<code>I</code>实现了<code>Iterator</code>, 并且<code>I</code>产生的项本身也实现了<code>IntoIterator</code>,那么<code>Flatten</code>就实现 <code>Iterator</code>. 为了使您能够写出这样的约束, <code>Rust</code>允许您使用<code>type::AssocType</code> 语法引用类型的关联类型. 例如, 我们可以使用 <code>I::Item</code> 来引用<code>I</code>的<code>Item</code>类型. 如果一个类型有多个同名的关联类型, 比如提供关联类型的<code>trait</code>本身就是泛型(因此有很多实现), 你可以用语法<code>&lt;Type as Trait&gt;::AssocType</code>来消除歧义. 使用这个方法, 你不仅可以为外部迭代器的类型编写约束, 还可以为该外部迭代器的项类型编写约束.</p>
+<p>在广泛使用泛型的代码中, 您可能会发现需要编写一个对类型的引用的约束. 这通常没有问题, 因为您可能还会有一个泛型的生命周期参数, 可以将其用作这些引用的生命周期. 不过, 在某些情况下, 您希望约束说明"此引用在任何生命周期实现此<code>trait</code>". 这种约束被称为高阶<code>trait</code>约束, 它在与<code>Fn trait</code>关联时特别有用. 例如, 假设你想成为一个泛型函数, 它接受一个对<code>T</code> 的引用, 并返回一个对<code>T</code>内部的引用, 如果你写<code>F: Fn(&amp;T) -&gt; &amp;U</code>, 您需要为这些引用提供一个生命周期, 但是您真正想说的"只要输出与输入相同, 就可以使用任何生命周期". 使用高阶的生命周期, 你可以写<code>F: for&lt;'a&gt; Fn(&amp;'a T) -&gt; &amp;'a U</code>表示在任何生命周期中<code>'a</code>的约束都必须成立. <code>Rust</code>编译器足够聪明, 当你用这样的引用编写<code>Fn</code>约束时, 它会自动添加<code>for</code>, 这涵盖了此<code>trait</code>的大部分用例. 在编写本文时, 这种显式形式很少被需要, 因此标准库只在三个地方使用它, 但它确实存在, 因此值得了解.</p>
+<p>为了把所有这些结合起来, 请看清单2-6中的代码, 它可以用来为任何可以迭代且元素为<code>Debug</code>的类型实现<code>Debug</code>.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Debug for AnyIterable
+    where for&lt;'a&gt; &amp;'a Self: IntoIterator,
+        for&lt;'a&gt; &lt;&amp;'a Self as IntoIterator&gt;::Item: Debug {
+    fn fmt(&amp;self, f: &amp;mut Formatter) -&gt; Result&lt;(), Error&gt; {
+        f.debug_list().entries(self).finish()
+    }
+}
+
+// 清单 2-6: 对任何可迭代的集合来说, Debug 的实现都过于通用. 
+<span class="boring">}</span></code></pre></pre>
+<p>你可以把这个实现复制粘贴到几乎所有的集合类型上, 它就会"正常工作". 当然, 你可能想要一个更智能的调试实现, 但这很好地说明了<code>trait</code>约束的威力.</p>
+<h3 id="标记-traits"><a class="header" href="#标记-traits">标记 Traits</a></h3>
+<p>通常, 我们使用<code>trait</code>来表示多种类型可以支持的功能; <code>Hash</code>类型可以通过调用<code>hash</code>进行哈希处理, <code>Clone</code>类型可以通过调用<code>clone</code>进行克隆, <code>Debug</code> 类型可以通过调用<code>fmt</code>进行格式化. 但并不是所有的<code>trait</code>都是这样起作用的. 有些<code>trait</code>(称为标记<code>trait</code>)用于指示实现类型的属性. 标记<code>trait</code>没有方法或相关的类型, 只是用来告诉你某一特定类型可以或不可以以某种方式使用. 例如, 如果一个类型实现了<code>Send</code>标记<code>trait</code>, 那么它可以安全地跨线程边界发送. 如果它没有实现这个标记符<code>trait</code>, 发送它就不安全. 没有任何方法与这种行为相关联; 这只是这个类型的事实. 在<code>std::marker</code>模块中, 标准库有许多这样的标记, 包括 <code>Send</code>,<code>Sync</code>,<code>Copy</code>,<code>Sized</code>和<code>Unpin</code>. 其中大多数(除了<code>Copy</code>)是自动<code>trait</code>; 编译器会自动为类型实现它们, 除非类型包含没有实现标记<code>trait</code>的内容.</p>
+<p>在<code>Rust</code>中, 标记<code>trait</code>有一个重要作用: 它允许你编写约束, 捕获代码中没有直接表达的语义要求. 在代码中没有调用<code>send</code>, 不会要求一个类型是<code>Send</code>. 相反, 代码假设给定的类型可以在一个单独的线程中使用, 如果没有标记<code>trait</code>, 编译器将没有办法检查这个假设. 这就需要程序员记住这个假设并仔细阅读代码, 我们都知道这不是我们想要依赖的东西. 这条路充满了数据竞争、分离故障和其他运行时问题.</p>
+<p>与标记<code>trait</code>类似的是标记类型. 它们是单元类型(如<code>struct MyMarker</code>), 不持有数据, 也没有方法. 标记类型非常有用, 可以将一个类型标记为处于特定的状态. 当你想让用户无法误用一个API时, 它们就会派上用场. 例如, 考虑一个像<code>SshConnection</code>这样的类型, 它可能已通过身份验证, 也可能尚末通过验证. 你可以为<code>SshConnection</code>添加一个通用类型参数, 然后创建两个标记类型. 未认证的和已认证的. 当用户第一次连接时, 他们得到 <code>SshConnection&lt;Unauthenticated&gt;</code>. 在其<code>impl</code>块中, 你只提供了一个方法: <code>connect</code>. <code>connect</code>方法返回一个<code>SshConnection&lt;Authenticated&gt;</code>, 只有在这个<code>impl</code>块中, 你才提供其余的方法来运行命令等. 我们将在第4章进一步探讨这个模式.</p>
+<h2 id="存在性类型--existential-types"><a class="header" href="#存在性类型--existential-types">存在性类型  (Existential Types)</a></h2>
+<p>在<code>Rust</code>中, 你很少需要指定你在函数主体中声明的变量的类型或调用方法的泛型参数类型. 这是因为类型推断的存在, 编译器根据代码中出现的类型来决定使用什么类型. 编译器通常只对变量和闭包的参数(和返回类型)进行类型推断; 而像函数、类型、<code>trait</code>和<code>trait</code>实现块这样的顶层定义都需要你明确命名所有的类型. 这样做有几个原因, 但主要的原因是, 当你至少有一些已知的点来作为推断的起点, 那么类型推断就会容易的多. 然而, 要完全命名一个类型并不总是容易的, 甚至是不可能的. 例如, 如果你从函数中返回一个闭包, 或者从一个<code>trait</code>方法中返回一个异步块, 它的类型并没有一个代码中键入的名称.</p>
+<p>为了处理这样的情况, <code>Rust</code>支持存在性(<code>existential</code>)类型. 你可能已经看到了存在性类型的作用. 所有标记为<code>async fn</code>或者返回类型为<code>impl Trait</code>的函数都有一个存在性的返回类型: 签名中并没有给出返回值的真实类型, 只是提示函数返回的某个类型, 而这种类型实现了调用者可以依赖的一组<code>trait</code>. 更重要的是, 调用者只能依赖实现这些<code>trait</code>的返回类型, 而不能依赖其他类型.</p>
+<blockquote>
+<p>NOTE: 从技术上讲, 严格来说, 调用者只依赖返回类型而不依赖其他. 编译器也会通过返回位置的<code>impl Trait</code>来传播<code>Send</code>和<code>Sync</code>等自动<code>trait</code>. 我们将在下一章中进一步研究这个问题.</p>
+</blockquote>
+<p>这种行为就是存在性类型的名称: 我们断言存在某种与签名相匹配的具体类型, 而我们让编译器去寻找这种类型. 编译器通常会通过在函数主体上应用类型推断来找出这个类型.</p>
+<p>并非所有<code>impl Trait</code>的实例都使用存在性类型. 如果在函数的参数位置使用<code>impl Trait</code>, 它实际上只是该函数的一个未命名的泛型参数的缩写. 例如, <code>fn foo(s: impl ToString)</code>其实是<code>fn foo&lt;S: ToString&gt;(s: S)</code>的语法糖.</p>
+<p>当你实现有关联类型的<code>trait</code>时, 存在性类型就派上用场. 例如, 设想你正在实现<code>IntoIterator trait</code>. 它有一个关联类型<code>IntoIter</code>, 持有相关类型可以转换成的迭代器类型. 有了存在性类型, 你就不需要为<code>IntoIter</code>定义一个单独的迭代器类型. 相反, 你可以将关联类型定义为<code>impl Iterator&lt;Item = Self::Item&gt;</code>, 并且只需在<code>fn into_iter(self)</code>中写入一个求值为<code>Iterator</code>的表达式, 比如通过某个现有迭代器类型上使用<code>maps</code>和<code>filters</code>.</p>
+<p>存在性类型还提供了一个很便利的特性: 它们允许你执行零成本的类型清除. 你可以使用存在性类型来隐藏底层的具体类型, 而不是仅仅因为它们出现在公共签名中就导出辅助类型--<code>iterators</code>和<code>future</code>就是这种常见的例子. 接口的用户只能看到相关类型所实现的<code>trait</code>, 而具体类型则作为只是一个实现细节. 这不仅简化了接口, 还能让你随心所欲地更改实现, 而不会破坏未来的下游的代码.</p>
+<h2 id="总结-1"><a class="header" href="#总结-1">总结</a></h2>
+<p>本章全面回顾了<code>Rust</code>类型系统. 我们探讨了编译器如何在内存中表示类型,以及如何推断类型本身. 这是在后面章节中编写不安全代码、复杂应用接口和异步代码的重要背景材料.  你还会发现, 本章中的许多类型推断在你如何设计<code>Rust</code>代码接口方面发挥了作用, 我们将在下一章介绍.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第三章-设计接口"><a class="header" href="#第三章-设计接口">第三章 设计接口</a></h1>
+<p>每个项目, 无论大小, 都有一个<code>API</code>. 事实上, 它通常有几个. 其中有些是面向用户的, 比如<code>HTTP</code>端点或命令行接口, 有些是面向开发者, 比如库的开放接口. 除此之外, <code>Rust crate</code>还有一些内部接口: 每个类型、<code>trait</code>和模块边界都有自己的微型<code>API</code>, 你的代码与之交互. 随着你的代码库的规模和复杂性的增长, 你会发现非常值得在如何设计内部<code>API</code>上投入一些心思和精力, 使用和维护代码尽可能的愉快.</p>
+<p>在这一章中, 我们将探讨在<code>Rust</code>中编写惯用接口的一些最重要的考虑事项, 无论这些接口的用户是你自己还是使用你的库的其他开发者. 这基本上可以归结为四个原则: 你的接口应该是不出意外的(<code>unsurprising</code>), 灵活的(<code>flexible</code>), 明显的(<code>obvious</code>)和受约束的(<code>constrained</code>). 我将依次讨论这些原则, 为编写可靠、可用的接口提供一些指导.</p>
+<p>我强烈建议读完本章后, 看看``Rust<code>API</code>指南(<code>https://rust-lang.github.io/api-guidelines/</code>). 那里有一个很好的清单, 根据清单中详细介绍了解每项建议. 本章中的许多建议也可以通过<code>cargo clippy</code>工具检查的, 如果你还没有使用该工具, 建议开始在代码中使用它. 我还鼓励你阅读<code>RFC 1105</code>(<code>https://rust-lang.github.io/rfcs/1105-api-evolution.html</code>)和<code>The Cargo Book</code>中关于<code>SemVer</code>兼容性的章节(<code>https://doc.rust-lang.org/cargo/reference/semver.html</code>), 这些章节涵盖了<code>Rust</code>中哪些是、哪些不是破坏性变更.</p>
+<h2 id="不意外的unsurprising"><a class="header" href="#不意外的unsurprising">不意外的(Unsurprising)</a></h2>
+<p>最小意外原则, 又称最小意外法则, 在软件工程中经常被提及, 同样也适用于<code>Rust</code>接口. 尽可能地, 你的接口应该足够直观, 应该直观到如果用户需要推断, 他们通常会推断正确. 当然, 并不是所有关于你的应用程序的接口能直观呈现, 但任何不令人意外的东西都应该是直观的. 核心思想是紧贴用户可能已经了解的东西, 这样他们就不必以不同于他们习惯的方式重新学习概念. 这样一来, 你就可以把他们的脑力节省下来, 用于解决那些真正与你的接口有关的问题.</p>
+<p>有很多方法可以使你的接口变得可预测. 在这里, 我们将探讨如何使用命名、常见<code>trait</code>和人体工程学<code>trait</code>的技巧来帮助用户.</p>
+<h3 id="命名惯例"><a class="header" href="#命名惯例">命名惯例</a></h3>
+<p>用户在使用接口时, 首先会通过接口的名称来了解它; 他们会立即从所接触到的类型、方法、变量、字段和库的名称中推断出一些东西. 如果你的接口重用了其他(也许是常见的)接口的名称--比如说方法和类型, 用户就会知道可以对你的方法和类型做出某些假设. 名为<code>iter</code>的方法可能接收<code>&amp;self</code>, 并且可能给你一个迭代器. 名为<code>into_inner</code>的方法可能会接收<code>self</code>, 并且返回某种包装好的类型. 名为<code>SomethingError</code>的类型可能实现了<code>std::error::Error</code>, 并出现在各种<code>Result</code>中. 通过使用相同目的的通用名称, 使用户更容易推断事物的作用, 并让他们更容易理解你的接口的不同之处.</p>
+<p>由此推论, 名字相同的东西实际上应该以同样的方式工作. 否则, 例如, 如果你的<code>iter</code>方法使用<code>self</code>, 或者<code>SomethingError</code>类型没有实现<code>Error</code>, 用户很可能会根据他们期望的接口工作方式写出错误的代码. 他们会感到意外和沮丧, 并不得不花时间去研究你的接口与他们的期望有何不同. 如果我们能为用户省去这种麻烦, 我们就应该这么做.</p>
+<h3 id="类型的共同traits"><a class="header" href="#类型的共同traits">类型的共同traits</a></h3>
+<p><code>Rust</code>中的用户还会做出一个主要的假设, 即接口中的一切都"都能正常工作". 他们期望能够用<code>{:?}</code>打印任何类型, 并将任何东西发送到另一个线程, 他们还期望每个类型都是<code>Clone</code>. 在可能的情况下, 我们应该再次避免让用户感到意外, 并积极实现大多数标准<code>trait</code>, 即使我们并不立即需要它们.</p>
+<p>由于第二章中讨论的一致性规则, 编译器将不允许用户在需要时实现这些<code>trait</code>. 用户不允许为外部类型实现一个外部<code>trait</code>(如<code>Clone</code>), 相反. 他们需要将你的接口类型包裹在他们自己的类型中, 如果不了解该类型的内部结构, 编写一个合理的实现可能会相当困难.</p>
+<p>在这些标准<code>trait</code>中, 首先是<code>Debug trait</code>. 几乎每个类型都应该实现<code>Debug</code>, 即使它只打印类型的名称. 使用<code>#[derive(Debug)]</code>通常是实现接口中<code>Debug trait</code>的最好方法, 但请记住, 所有派生<code>trait</code>都会自动为任何泛型参数添加相同的约束. 你可以简单地通过利用<code>fmt::Formatter</code>上的各种<code>debug_</code> 辅助函数来编写自己的实现.</p>
+<p>紧随其后的是<code>Rust</code>的自动<code>trait Send</code> 和 <code>Sync</code>(以及在较小的程度上的<code>Unpin</code>). 如果一个类型没有实现这些<code>trait</code>之一, 通常需要一个很好的理由的. 不是<code>Send</code>的类型不能被放在<code>Mutex</code>中, 甚至不能在包含线程池的应用程序中. 未实现<code>Sync</code>的类型不能通过 <code>Arc</code> 共享或放在静态变量中. 用户已经开始期望类型能在这些情况下工作, 特别是在几乎所有东西都在线程池上运行的异步世界中, 如果你不确保你的类型实现这些<code>trait</code>, 他们会感到沮丧. 如果你的类型不能实现这些<code>trait</code>, 请确保妥善记录这一事实及其原因.</p>
+<p>你应该实现的下一组几乎通用的<code>trait</code>是<code>Clone</code>和<code>Default</code>. 这些<code>trait</code>可以很容易地被派生或实现, 对大多数类型来说, 实现这些<code>trait</code>是有意义的. 如果你的类型不能实现这些<code>trait</code>, 请确保在你的文档中注明, 因为用户通常期望能够根据自己的需要轻松地创建更多(和新)类型的实例. 如果他们不能, 他们会感到惊讶.</p>
+<p>在预期<code>trait</code>的层次结构中再往下一步就是比较<code>trait</code>. <code>PartialEq</code>, <code>PartialOrd</code>, <code>Hash</code>, <code>Eq</code>, 和 <code>Ord</code>. <code>PartialEq trait</code>是特别可取的, 因为用户在某些时候不可避免地会有两个你的类型的实例, 他们希望用<code>==</code>或<code>assert_eq</code>来比较! 即使你的类型只对同一类型的实例进行等价比较, 也值得实现<code>PartialEq</code>, 以使你的用户能够使用 <code>assert_eq</code>!</p>
+<p><code>PartialOrd</code>和<code>Hash</code>更为专业, 适用范围可能没那么广, 但在可能的情况下, 你也要实现它们.  这对于用户可能用作<code>map</code>的键的类型, 或者他们可能使用任何<code>std::collection</code>集合类型来进行重复的类型, 尤其如此, 因为它们往往需要这些边界. 除了<code>PartialEq</code>和<code>PartialOrd</code>之外, <code>Eq</code>和<code>Ord</code>还对实现类型的比较操作有额外的语义要求. 这些在这些<code>trait</code>的文档中都有很好的记录, 只有当你确定这些语义确实适用于你的类型时, 你才应该实现它们.</p>
+<p>最后, 对于大多数类型来说, 实现<code>serde crate</code>的<code>Serialize</code>和<code>Deserialize trait</code>是有意义的. 这些都可以很容易地派生出来, 而且<code>serde_derive</code> 包甚至有机制可以重写一个字段或枚举变体的序列化. 由于<code>serde</code> 是一个第三方板块, 你可能不希望添加对它的必要依赖. 因此, 大多数库选择提供一个<code>serde trait</code>, 只有在用户选择时才增加对<code>serde</code> 的支持.</p>
+<p>你可能想知道为什么我没有把可派生<code>Copy trait</code>列入本节. 有两件事使<code>Copy</code>与其他提到的<code>trait</code>不同. 第一件事是, 用户一般不期望类型是<code>Copy</code>; 恰恰相反, 他们倾向于期望, 如果他们想要某个东西的两个副本, 他们必须调用 <code>clone</code>. 复制改变了移动给定类型的值的语义, 这可能会让用户感到意外. 这与第二个观察相联系: 一个类型很容易不再是<code>Copy</code>, 因为<code>Copy</code>类型高度受限. 一个开始很简单的类型很容易最终不得不容纳一个字符串, 或者其他一些非拷贝类型. 如果发生这种情况, 你不得不删除<code>Copy</code>的实现, 这就是一个向后不兼容的变化. 相比之下, 你很少需要删除<code>Clone</code>的实现, 所以这是个不太沉重的承诺.</p>
+<h3 id="人体工程学trait的实现-ergonomictraitimplementations"><a class="header" href="#人体工程学trait的实现-ergonomictraitimplementations">人体工程学<code>trait</code>的实现 (Ergonomic<code>trait</code>Implementations)</a></h3>
+<p><code>Rust</code>不会自动为对实现<code>trait</code>的类型的引用实现<code>trait</code>. 换个说法, 一般情况下, 你不能用<code>&amp;Bar</code>调用<code>fn foo&lt;T: Trait&gt;(t: T)</code>, 即使<code>Bar:Trait</code>. 这是因为<code>Trait</code>可能包含了取值为<code>&amp;mut self</code>或<code>self</code>的方法, 这显然不能在<code>&amp;Bar</code>上调用. 尽管如此, 这种行为可能会让看到 <code>Trait</code>只有<code>&amp;self</code>方法的用户感到非常惊讶.</p>
+<p>因此, 在定义新的<code>trait</code>时, 你通常会想为该<code>trait</code>提供适当的通用实现, 如<code>&amp;T where T: Trait</code>, <code>&amp;mut T where T: Trait</code>, 以及<code>Box&lt;T&gt; where T: Trait</code>. 你可能只能实现其中的一部分, 这取决于<code>Trait</code>的方法的具体接收器. 标准库中的许多<code>trait</code>都有类似的实现, 正是因为这样可以减少用户的意外.</p>
+<p>迭代器是另一种情况, 在这种情况下, 你通常想在对一个类型的引用上特别添加<code>trait</code>实现. 对于任何可以被迭代的类型, 考虑为<code>&amp;MyType</code>和<code>&amp;mut MyType</code>实现<code>IntoIterator</code>. 这样, 就像用户所期望的那样<code>for</code>可以在你的类型的借用实例上正常工作, .</p>
+<h3 id="包装类型"><a class="header" href="#包装类型">包装类型</a></h3>
+<p><code>Rust</code>没有经典意义上的对象继承.  然而, <code>Deref trait</code>和它的表亲<code>AsRef</code>都提供了类似于继承的东西. 如果<code>T: Deref&lt;Target = U&gt;</code>的话, 这些<code>trait</code>允许你拥有一个<code>T</code>类型的值, 并通过直接在<code>T</code>类型的值上调用<code>U</code>类型方法. 这对用户来说, 就像魔法一样, 一般来说非常的棒.</p>
+<p>如果你提供的是相对透明的包装类型(如<code>Arc</code>), 你很有可能想要实现<code>Deref</code>, 这样用户就可以通过使用<code>.</code>操作符来调用内部类型上的方法. 如果访问内部类型不需要任何复杂或潜在的缓慢逻辑, 你也应该考虑实现<code>AsRef</code>, 它允许用户轻松地将<code>&amp;WrapperType</code>作为<code>&amp;InnerType</code>使用. 对于大多数包装类型, 你还应尽可能地实现<code>From&lt;InnerType&gt;</code>和<code>Into&lt;InnerType&gt;</code>, 这样你的用户就可以轻松地添加或删除包装.</p>
+<p>你可能也遇到过 <code>Borrow trait</code>, 它感觉与<code>Deref</code>和<code>AsRef</code>非常相似, 但实际上有点不同. 具体来说, <code>Borrow</code>是为一个更狭窄使用情况而定制的: 允许调用者提供同一类型的多个基本相同的变体中的任何一个. 也许, 它本被称为等价(<code>Equivalent</code>). 例如, 对于一个<code>HashSet&lt;String&gt;</code>, <code>Borrow</code>允许调用者提供一个<code>&amp;str</code>或者一个<code>&amp;String</code>. 虽然<code>AsRef</code>也可以实现同样的功能, 但如果没有<code>Borrow</code>的额外要求, 即目标类型对<code>Hash</code>、<code>Eq</code>和<code>Ord</code>的实现与实现类型完全相同, 那么这么做就不安全了. <code>Borrow</code>还为<code>T</code>、<code>&amp;T</code>和<code>&amp;mut T</code>提供了一个<code>Borrow&lt;T&gt;</code>的通用实现, 这使得它在<code>trait</code>约束中的使用非常方便, 可以接受一个给定类型的自有值或引用值. 一般来说, <code>Borrow</code>适用于你的类型本质上等同于另一个类型, 而<code>Deref</code>和 <code>AsRef</code>则广泛适用于实现你的类型可以"作为"的任何东西.</p>
+<blockquote>
+<p><code>Deref</code>和固有方法
+当<code>T</code>上有以<code>self</code>的方法时, 围绕点运算符和<code>Deref</code>的魔法会让人感到困惑和意外. 例如, 给定一个值 <code>t: T</code>, 不清楚<code>t.frobnicate()</code>是对<code>T</code>还是对底层的<code>U</code>进行<code>frobnicate</code>的调鵑!
+因此, 那些允许你透明地调用内部类型的方法的类型应该避免使用固有方法. <code>Vec</code>有一个<code>push</code>方法, 即使它解除对<code>slice</code>的引用, 因为你知道<code>slice</code>不会很快得到一个<code>push</code>方法. 但是, 如果您的类型取消对用户控制的类型的引用, 那么您添加的任何固有方法也可能存在于该用户控制的类型上, 从而导致问题. 在这些情况下, 倾向于<code>fn frobnicate(t: t)</code>形式的静态方法. 这样, <code>t.frobnicate()</code>总是调用<code>U::frobnicate</code>, 而<code>t::frobnicate(t)</code>可以用来<code>T</code>本身.</p>
+</blockquote>
+<h2 id="灵活的"><a class="header" href="#灵活的">灵活的</a></h2>
+<p>你写的每一段代码都隐含地或明确地包括一个契约. 契约由一组要求和一组承诺组成. 要求是对如何使用代码的限制, 而承诺是对代码如何被使用的保证. 当设计一个新的接口时, 你要仔细考虑这个契约. 一个好的经验法则是避免强加不必要的限制, 只做出你能遵守的承诺.  增加限制或删除承诺通常需要对语义版本进行重大变更, 而且可能会破坏其他地方的代码. 另一方面, 放宽限制或给出额外的承诺, 通常是向后兼容的.</p>
+<p>在<code>Rust</code>中, 限制通常以<code>trait</code>约束和参数类型的形式出现, 而承诺则以<code>trait</code>实现和返回类型的形式出现. 例如, 比较清单3-1中的三个函数签名</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn frobnicate1(s: String) -&gt; String
+fn frobnicate2(s: &amp;str) -&gt; Cow&lt;'_, str&gt;
+fn frobnicate3(s: impl AsRef&lt;str&gt;) -&gt; impl AsRef&lt;str&gt;
+
+// 清单 3-1: 具有不同契约的类似函数签名
+<span class="boring">}</span></code></pre></pre>
+<p>这三个函数签名都接收一个字符串并返回一个字符串, 但它们的契约却截然不同.</p>
+<p>第一个函数要求调用者以<code>String</code>类型的形式拥有字符串, 它承诺将返回一个拥有(所有权)的 <code>String</code>. 由于契约要求调用者分配字符串, 并要求我们返回一个拥有(所有权)的字符串, 我们以后不能以向后兼容的方式使这个函数免分配.</p>
+<p>第二个函数放宽了契约: 调用者可以提供任何字符串的引用, 所以用户不再需要分配或放弃字符串的所有权. 它还承诺返回一个<code>std::borrow::Cow</code>, 这意味着它可以返回一个字符串引用或者一个所有权的字符串, 这取决于它是否需要拥有该字符串. 这里的承诺是, 该函数将始终返回一个<code>Cow</code>, 这意味着我们不能在以后改变为使用其他优化的字符串表示. 调用者也必须特别提供一个<code>&amp;str</code>, 因此, 如果他们自己的一个预先存在的<code>String</code>, 他们必须将其解除引用为一个<code>&amp;str</code>来调用我们的函数.</p>
+<p>第三个函数取消了这些限制. 它只要求用户传入可以生成字符串引用的类型, 并且只承诺返回值可以生成字符串引用.</p>
+<p>这些函数签名中没有哪个一定比其他的更好. 如果函数中需要一个字符串的所有权, 你可以使用第一个参数类型来避免额外的字符串拷贝. 如果你想让调用者利用已分配并返回字符串的情况, 第二个返回类型为<code>Cow</code>的函数可能是一个好选择. 相反, 我想让你从中得到的启示是, 你应该仔细考虑你的接口所绑定的契约, 因为事后改变它可能是破坏性变更.</p>
+<p>在本节的其余部分, 我将举例说明经常出现的接口设计决策, 以及它们对接口契约的影响.</p>
+<h3 id="泛型参数"><a class="header" href="#泛型参数">泛型参数</a></h3>
+<p>接口必须对用户提出的一个明显的要求是, 他们必须向你的代码提供哪些类型. 如果你的函数明确地接受一个<code>Foo</code>, 用户必须拥有并给你一个<code>Foo</code>. 这是无法绕过的. 在大多数情况下, 使用泛型而不是具体类型是值得的, 这样可以让调用者传递任何符合你的函数实际需要的类型, 而不是只传递一种特定的类型. 将清单3-1中的<code>&amp;str</code>改为<code>AsRef&lt;str&gt;</code>是这种放松的一个例子. 以这种方式放宽要求的一个方法是, 从参数的完全泛型化, 不加任何约束, 然后根据编译器的错误来发现你需要添加哪些约束.</p>
+<p>然而, 如果将这种方法发挥到极致, 就会使每个函数的每个参数都成为自己的泛型, 这将是既难读又难理解的. 对于何时应该或不应该将某个参数泛型化, 并没有硬性规定, 因此请根据自己的最佳判断来决定. 一个好的经验法则是, 如果你能想到用户可能经常合理地使用其他类型, 而不是一开始使用的具体类型, 那可以就把参数设成泛型.</p>
+<p>你可能还记得, 在第2章, 泛型代码通过单态化, 对曾经使用过的每一种类型的组合都会拷贝一份副本. 考虑到这一点, 使大量参数泛化的想法可能会让你担心你的二进制文件过于庞大. 在第2章中, 我们也讨论了如何使用动态分发来缓解这种情况, 其性能代价(通常)可以忽略不计, 这在这里也适用. 对于那些你无论如何都要通过引用来获取的参数(记得<code>dyn Trait</code>不是<code>Sized</code>, 你需要一个宽指针来使用它们), 你可以很容易地用一个使用动态派发的参数来替换你的泛型参数. 例如, 你可以用<code>&amp;dyn AsRef&lt;str&gt;</code>来代替<code>impl AsRef&lt;str&gt;</code>.</p>
+<p>不过, 在你去做这件事之前, 有几件事情你应该考虑一下. 首先, 你是代表用户做出这个选择的, 而用户无法选择不使用动态分发. 如果你知道你要应用动态分发的代码永远不会对性能敏感, 这可能是好的. 但如果有用户想在他们的高性能应用中使用你的库, 那么在热循环中调用的函数中的动态分发可能会成为一个问题. 其次, 在写这篇文章的时候, 只有当你有一个简单的<code>trait</code>约束时, 使用动态分发才能发挥作用, 比如<code>T:AsRef&lt;str&gt;</code>或<code>impl AsRef&lt;str&gt;</code>. 对于更复杂的约束, <code>Rust</code>不知道如何构造动态分发<code>vtable</code>, 所以你不能采取例如<code>&amp;dyn Hash + Eq</code>. 最后, 请记住, 对于泛型, 调用者总是可以通过传入一个<code>trait</code>对象来选择动态分发. 反之则不然: 如果你带了一个<code>trait</code>对象, 那就是调用者必须提供该对象.</p>
+<p>我们可能一开始使用具体类型的接口, 然后随着时间的推移再将它们变成泛型. 这种做法值得尝试, 这可能行的通, 但请你记住, 这种变化并不一定向后兼容, 了解其原因, 想象一下将<code>fn foo(v: &amp;Vec&lt;usize&gt;)</code>改为<code>fn foo(v: impl AsRef&lt;[usize]&gt;)</code>. 虽然每个<code>&amp;Vec&lt;usize&gt;</code>都实现了<code>AsRef&lt;[usize]&gt;</code>, 但类型推断仍然会给用户带来问题. 考虑一下如果调用者用<code>foo(&amp;iter.collect())</code>来调用<code>foo</code>会发生什么. 在最初的版本中, 编译器可以确定它应该收集到一个<code>Vec</code>, 但现在只知道它需要收集到某个实现<code>AsRef&lt;[usize]&gt;</code>的类型. 而且可能有多个这样的类型, 所以有了这个改变, 调用者的代码就不会再能编译了!</p>
+<h3 id="对象安全"><a class="header" href="#对象安全">对象安全</a></h3>
+<p>当你定义一个新的<code>trait</code>时, 该<code>trait</code>是否是对象安全的(见第2章"编译和分发"的结尾)是<code>trait</code>契约的一个不成文的部分. 如果<code>trait</code>是对象安全的, 用户可以使用<code>dyn Trait</code>将实现你的<code>trait</code>的不同类型视为单一的通用类型. 如果不是, 编译器将不允许该<code>trait</code>的<code>dyn Trait</code>. 你应该倾向于你的<code>trait</code>是对象安全的, 即使这对使用它们的人机工程学来说有一点代价(比如使用<code>impl AsRef&lt;str&gt;</code>而不是<code>&amp;str</code>), 因为对象安全可以使你的<code>trait</code>有新的使用方法. 如果你的<code>trait</code>必须有一个泛型方法, 考虑它的泛型参数是否可以<code>trait</code>本身, 或者它的泛型参数是否也可以使用动态分发来保持<code>trait</code>的对象安全. 另外, 你可以添加一个与该方法约束的<code>where Self: Sized trait</code>, 这样就可以只用该<code>trait</code>的具体实例来调用该方法(而不是通过<code>dyn Trait</code>). 你可以在<code>Iterator</code>和<code>Read trait</code>中看到这种模式的例子, 它们是对象安全的, 但在具体实例上提供了一些额外的方便方法.</p>
+<p>你应该愿意做出多少牺牲来保护对象的安全, 这个问题没有唯一的答案. 我的建议是, 你要考虑你的<code>trait</code>将如何被使用, 以及用户想把它作为一个<code>trait</code>对象使用是否有意义. 如果你认为用户可能希望使用你的<code>trait</code>的许多不同的实例放在一起使用, 你应该更努力地提供对象安全. 例如, 动态分发对于<code>FromIterator``trait</code>来说是没有用的, 因为它的一个方法不接受<code>self</code>, 所以你首先就不能构造一个<code>trait</code>对象. 同样, <code>std::io::Seek</code> 作为一个<code>trait</code>对象本身是相当无用的, 因为你能用这样一个<code>trait</code>对象做的唯一事情就是探索, 而无法读写.</p>
+<blockquote>
+<p><code>Drop trait</code>对象
+你可能认为<code>Drop trait</code>作为一个<code>trait</code>对象也是无用的, 因为作为一个<code>trait</code>对象, 你能用<code>Drop</code>做的就是析构它. 但事实证明, 有一些库特别希望能够丢弃任意类型. 例如, 一个提供延迟丢弃值的库, 用于并发垃圾收集或只是延迟清理, 只关心值是否可以被丢弃, 而不关心其他. 有趣的是, <code>Drop</code>的故事并没有结束; 因为<code>Rust</code>也需要能够丢弃<code>trait</code>对象, 每个 <code>vtable</code> 都包含<code>drop</code>方法. 实际上, 每个<code>dyn Trait</code>也是一个<code>dyn Drop</code>.</p>
+</blockquote>
+<p>请记住, 对象安全是你的公共接口的一部分, 如果你以一种向后兼容的方式修改了一个<code>trait</code>, 比如增加了一个带有默认实现的方法, 但这使得该<code>trait</code>不再是对象安全的, 你需要提升你的主要语义版本号.</p>
+<h3 id="借用-vs-所有权"><a class="header" href="#借用-vs-所有权">借用 vs 所有权</a></h3>
+<p>对于在<code>Rust</code>中定义的几乎每一个函数、<code>trait</code>和类型, 你必须决定它是否应该拥有数据的所有权, 或者只是持有对其数据的引用. 无论你做出什么样的决定, 都会对界面的人体工程学和性能产生深远影响, 幸运的是, 这些决定往往是自己做出的.</p>
+<p>如果你写的代码需要数据的所有权, 比如调用带有<code>self</code> 的方法或将数据转移到另一个线程, 它必须存储所有权数据. 当你的代码必须拥有数据时, 一般也应该让调用者提供拥有的数据, 而不是通过引用取值并克隆它们. 这使得, 调用者可以控制分配, 并且可以预先了解使用相关接口的成本.</p>
+<p>另一方面, 如果你的代码不需要拥有这些数据, 它应该使用引用进行操作. 这个规则的一个常见例外是像<code>i32</code>、<code>bool</code>或<code>f64</code>这样的小类型, 它们直接存储和复制与通过引用存储一样便宜. 不过, 不要以为这条规则适用所有的<code>Copy</code>类型都是正确的; <code>[u8; 8192]</code>是<code>Copy</code>, 但如果到处存储和复制它的成本会很昂贵.</p>
+<p>当然, 在现实世界中, 事情往往没有那么一目了然. 有时, 你事先并不知道你的代码是否需要拥有数据. 例如, <code>String::from_utf8_lossy</code>需要拥有传递给它的字节序列的所有权中包含无效的<code>UTF-8</code>序列时, 才需要获得该序列的所有权. 在这种情况下, <code>Cow</code>类型是你的朋友: 如果数据允许, 它可以让你对引用进行操作, 如果需要, 它可以让你产生一个拥有所有权的值.</p>
+<p>其他时候, 引用的生命周期会使接口复杂化, 以至于使用起来很麻烦. 如果你的用户在使用你的接口后代码编译时很费劲, 那就说明你可能要(甚至不必要地)对某些数据块拥有所有权. 如果你这样做, 在你决定对可能是一大块字节的数据进行堆分配之前, 先从那些克隆成本低或者对性能不敏感的数据开始.</p>
+<h3 id="易出错的和阻塞的析构函数"><a class="header" href="#易出错的和阻塞的析构函数">易出错的和阻塞的析构函数</a></h3>
+<p>以I/O为中心的类型在析构时往往需要进行清理. 这可能包括刷新写入磁盘的数据, 关闭文件, 或优雅地终止与远程主机的连接. 执行这种清理的自然地方是类型的<code>Drop</code>实现. 不幸的是, 一旦一个值被丢弃, 除了<code>panic</code>之外, 我们没有办法向用户传达错误了. 异步代码中也会出现类似的问题, 我们希望在有工作未完成时就结束工作. 当<code>drop</code>被调用时, 执行器可能已经关闭了, 我们没有办法做更多的工作. 我们可以尝试启动另一个执行器, 但这也会带来一系列的问题, 比如异步代码中的阻塞, 我们将在第8章看到.</p>
+<p>这些问题没有完美的解决方案, 无论我们做什么, 一些应用程序将不可避免地回落到我们的<code>Drop</code>实现. 出于这个原因, 我们需要通过<code>Drop</code>提供尽力而为的清理. 如果清理出错, 至少我们尝试过--吞下错误并继续前进. 如果一个执行器仍然可用, 我们可能会生成一个<code>future</code>来进行清理, 但如果它永远不会运行, 我们也已经尽力了.</p>
+<p>不过, 我们应该为那些希望不留下线程的用户提供更好的选择. 我们可以通过提供一个显式的析构器来做到这一点. 这通常以一个方法的形式出现, 该方法拥有<code>self</code>的所有权, 并暴露销毁过程中固有的任何错误(使用<code>-&gt; Result&lt;_, _&gt;</code>)或异步(使用<code>async fn</code>). 细心的用户可以使用该方法来优雅地销毁任何相关的资源.</p>
+<blockquote>
+<p>NOTE: 一定要在文档中显示突出析构函数!</p>
+</blockquote>
+<p>像往常一样, 这需要权衡利弊. 一旦添加了显式析构函数, 就会遇到两个问题. 首先, 由于你的类型实现了<code>Drop</code>, 你不能再在析构函数中移出该类型的任何字段. 这是因为在你的显式析构器运行后<code>Drop::drop</code>仍然会被调用, 而且它需要<code>&amp;mut self</code>, 这要求<code>self</code>的任何部分都没有被移动. 其次, <code>drop</code> 接收的是<code>&amp;mut self</code>, 而不是<code>self</code>, 所以你的<code>Drop</code> 实现不能简单地调用你的显式析构函数并忽略其结果(因为它并不拥有<code>self</code>). 有几个方法可以解决这些问题, 但都不完美.</p>
+<p>第一个方法是是顶层类型成为一个包裹在<code>Option</code>里的新类型, 而这个新类型又持有一些持有该类型所有字段的内部类型. 然后你可以在两个析构函数中使用<code>Option::take</code>, 并且只在内部类型还没有被占用时才调用内部类型的显式析构函数. 因为内层类型没有实现<code>Drop</code>, 所以你可以拥有那里的所有字段的所有权. 这种方法的缺点是, 你想在顶层类型上提供的所有方法现在必须包括通过<code>Option</code>(你知道它总是<code>Some</code>, 因为<code>Drop</code>还没有被调用)到内部类型上的字段的代码.</p>
+<p>第二个解决方法是使你的每个字段都能被取走. 你可以通过用<code>None</code>替换<code>Option</code>来"取走"它(这就是<code>Option::take</code>的作用), 但你也可以对许多其他类型的字段这样做.  例如, 你可以通过简单地用它们廉价的构造默认值替换<code>Vec</code>或<code>HashMap</code>来取走它们--<code>std::mem::take</code>是你的朋友. 如果你的类型有合理的"空"值, 这种方法就很好用, 但如果你必须用<code>Option</code>包裹几乎所有的字段, 然后用一个匹配的<code>unwrap</code>来修改这些字段的每一次访问, 就会变得很乏味.</p>
+<p>第三种选择是在<code>ManuallyDrop</code>类型中保存数据, 它可以解引用到内部类型, 所以无需解包. 你也可以在<code>drop</code>中使用<code>ManuallyDrop::take</code>来在销毁时取得所有权. 这种方法的主要缺点是<code>ManuallyDrop::take</code>是不安全的. 没有任何安全机制来确保你在调用<code>take</code>后不会尝试使用<code>ManuallyDrop</code>中的值, 或者不会多次调用<code>take</code>. 如果你这样做了, 你的程序就会默默地表现出未定义的行为, 并会发生不好的事情.</p>
+<p>最终, 你应该选择这些方法中最适合你应用的方法. 我倾向于选择第二种方案, 只有当你发现自己处于<code>Option</code>中时才会切换到其他方法. 如果代码足够简单, 你可以很容易地检查你的代码的安全性, 而且你对自己的能力有信心, 那么<code>ManuallyDrop</code>解决方案是非常好的.</p>
+<h2 id="易理解的"><a class="header" href="#易理解的">易理解的</a></h2>
+<p>虽然有些用户可能熟悉支撑接口的实现的某些方面, 但他们不可能理解所有的规则和限制. 他们不会知道在调用<code>bar</code>之后再调用<code>foo</code>是绝对不行的, 也不会知道只有在月亮呈47度角且过去18秒内没有人打喷嚏的情况下, 调用不安全方法<code>baz</code>才是安全的. 只有当接口清楚地表明发生了一些奇怪的事情, 他们才会去查阅文档或仔细阅读类型签名. 因此, 对你来说, 让用户尽可能容易地理解你的接口, 并让他们尽可能难以错误地使用你的接口是至关重要的. 在这方面, 你所掌握的两个主要技术是你的文档和类型系统, 所以让我们依次看一下这两个技术.</p>
+<blockquote>
+<p>NOTE: 你也可以利用命名来向用户暗示, 一个接口的内容不只是看起来那么简单. 如果用户看到一个名为<code>dangerous</code>的方法, 他们很有可能会阅读其文档.</p>
+</blockquote>
+<h3 id="文档"><a class="header" href="#文档">文档</a></h3>
+<p>让接口透明化的第一步是写好文档. 我可以写一整本书来介绍如何编写文档, 但在这里我们还是专注于针对<code>Rust</code>的建议.</p>
+<p>首先, 清楚地记录代码可能执行意外操作的情况, 或者它依赖于用户执行超出类型签名规定的事情. <code>panic</code>是这两种情况的一个很好的例子: 如果你的代码可能会恐慌, 请记录这一事实, 以及它可能恐慌的情况. 同样地, 如果你的代码可能会返回一个错误, 请记录它在哪些情况下会返回错误. 对于不安全的函数, 记录调用者必须保证什么才能使调用安全.</p>
+<p>其次, 在<code>crate</code>和模块层面上为你的代码提供端到端的使用范例. 这些示例比特定类型或方法的示例更重要, 因为它们让用户感觉到所有东西是如何结合在一起的. 有了对接口结构的高层次理解后, 开发者可能很快就会意识到特定的方法和类型的作用, 以及它们应该在何处使用. 端到端示例也给用户一个自定义使用的起点, 他们可以, 而且经常会复制粘贴这个示例, 然后根据他们的需要进行修改. 这种"边做边学"的方式往往比让他们尝试从组件中拼凑出一些东西更有效.</p>
+<blockquote>
+<p>NOTE: 特定于方法的示例表明, 是的, <code>len</code>方法确实返回了长度, 不太可能让用户对你的代码有什么新的了解.</p>
+</blockquote>
+<p>第三, 组织文档. 把所有的类型、<code>trait</code>和函数放在一个顶层的模块中, 会让用户感到不知从何下手. 利用模块的优势, 将语义相关的项目组合在一起. 然后, 使用文档内的链接来相互连接项目. 如果类型A的文档谈到了B <code>trait</code>, 那么就应该在这里链接到该<code>trait</code>. 如果能让用户更容易地探索你的接口, 他们就不太会错过重要的联系或依赖关系. 也可以考虑用<code>#[doc(hidden)]</code> 来标记你的接口中那些不打算公开但由于历史遗留原因需要的部分, 这样就不会使文档变得杂乱无章.</p>
+<p>最后, 尽可能丰富你的文档. 链接到解释概念、数据结构、算法或接口的其他方面的外部资源, 这些资源可能在其他地方有很好的解释. <code>RFCs</code>、博客文章和白皮书都是很好的选择, 如果有相关的话. 使用<code>#[doc(cfg(..))]</code> 来强调只在特定配置下才可用的项目, 这样用户就能很快意识到文档中列出的某些方法是不可用的. 使用<code>#[doc(alias = "...")]</code> 以其它名称显示类型和方法, 以便用户搜索. 在顶层文档中, 指出用户常用的模块、特性、类型、<code>trait</code>和方法.</p>
+<h3 id="类型系统指导"><a class="header" href="#类型系统指导">类型系统指导</a></h3>
+<p>类型系统是确保你的接口是明显的、自动文档化和防误用的绝佳工具. 你可以利用几种技术使你的接口很难被误用, 从而使它们更有可能被正确使用.</p>
+<p>第一种是语义类型, 即添加类型来表示值的含义, 而不仅仅是其原始类型. 最典型的例子是布尔运算: 如果函数需要三个布尔参数, 那么很有可能一些用户会弄乱这些值的顺序, 并在出了大问题之后才意识到这一点. 另一方面, 如果提供三个不同的双变量枚举类型的参数, 编译器没报错那么用户就不会获得错误的顺序: 如果他们试图将 <code>DryRun::Yes</code>传递给<code>overwrite</code>参数, 这将根本不起作用, 将<code>overwrite::No</code>作为<code>dry_run</code>参数也不行. 除了布尔类型, 我还可以应用语义类型. 例如, 围绕数字类型的<code>newtype</code>可以为所包含的值提供一个单位, 或者它可以将原始指针参数限制在仅由另一个方法返回的参数上.</p>
+<p>一个密切相关的技术是使用零大小的类型来表示类型实例的某一个特定的事实为真. 例如, 考虑一个叫做<code>Rocket</code>的类型, 它代表真正的火箭的状态. 无论火箭处于什么状态, 火箭上的一些操作(方法)都应该是可用的, 但有些操作只有在特殊情况下才有意义. 例如, 如果火箭已经被发射了, 就不可能再发射. 同样的, 如果火箭还没有发射, 也不可能分离燃料箱. 我们可以将这些建模为枚举变体, 但是这样一来, 所有的方法在每个阶段都是可用的, 我们就需要引入可能的恐慌了.</p>
+<p>相反, 如清单3-2所示, 我们可以在<code>Rocket</code>上引入一个通用参数<code>Stage</code>, 并用它来限制什么情况下可以使用什么方法.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Grounded;   // (1)
+struct Launched;
+// and so on
+struct Rocket&lt;Stage = Grounded&gt; {
+    stage: std::marker::PhantomData&lt;Stage&gt;, // (2)
+}
+impl Default for Rocket&lt;Grounded&gt; {}    // (3)
+impl Rocket&lt;Grounded&gt; {
+    pub fn launch(self) -&gt; Rocket&lt;Launched&gt; { }
+}
+impl Rocket&lt;Launched&gt; { // (4)
+    pub fn accelerate(&amp;mut self) { }
+    pub fn decelerate(&amp;mut self) { }
+}
+impl&lt;Stage&gt; Rocket&lt;Stage&gt; { // (5)
+    pub fn color(&amp;self) -&gt; Color { }
+    pub fn weight(&amp;self) -&gt; Kilograms { }
+}
+
+// 第 3-2 项: 使用标记类型来限制实现的方法
+<span class="boring">}</span></code></pre></pre>
+<p>我们引入单元类型来表示火箭的每个阶段(1). 我们实际上不需要存储阶段--只需要存储它提供的元信息--所以我们把它存储在<code>PhantomData</code>(2) 后面, 以保证它在编译时将其消除. 然后, 我们只在<code>Rocket</code>持有特定类型的参数时为其编写实现块. 你只能在地面上建造一个火箭(目前), 而且你只能从地面上发射它(3). 只有当火箭发射后, 你才能控制它的速度(4). 无论火箭处于什么状态, 你都可以对它做一些事情, 这些事情我们放在一个通用的实现块中(5).  你会注意到, 以这种方式设计的接口, 用户根本不可能在错误的时间调用方法, 我们已经将使用规则编码在类型本身中, 并使非法状态无法表示.</p>
+<p>这个概念也延伸到许多其他领域; 如果函数忽略了指针参数, 除非给定的布尔参数为真, 那么最好把这两个参数结合起来. 有了一个枚举类型, 其中一个变体代表<code>false</code>(没有指针), 一个变体代表 <code>true</code>, 持有一个指针, 无论是调用者还是实现者都不会误解这两者之间的关系. 这是一个强大的想法, 我强烈建议你加以利用.</p>
+<p>另一个让接口显而易见的小工具是<code>#[must_use]</code>注解. 把它添加到任何类型、<code>trait</code>或函数中, 如果用户的代码接收到该类型或<code>trait</code>的元素, 或调用该函数, 而没有显示地处理它, 编译器就会发出警告. 你可能已经在<code>Result</code>的上下文中看到了这一点: 如果一个函数返回<code>Result</code>, 而你没有把它的返回值赋值给某个地方, 你会得到一个编译器警告. 请注意不要过度使用这个注解--只有在用户不使用返回值时很可能会犯错时才会添加它.</p>
+<h2 id="受约束的"><a class="header" href="#受约束的">受约束的</a></h2>
+<p>随着时间的推移, 一些用户会依赖你的接口的每一个属性, 无论是错误还是功能. 这对于公开的库来说尤其如此, 因为你无法控制你的用户. 因此, 在进行用户可见的改变之前, 你应该仔细考虑. 无论你是添加新的类型、字段、方法或<code>trait</code>实现, 还是更改现有的实现, 你都要确保这个改变不会破坏现有用户的代码, 而且你打算将这个变更保留一段时间. 频繁的向后不兼容的变更(语义版本中的主要版本增加)肯定会引起用户的不满.</p>
+<p>许多向后不兼容的变更是显而易见的, 比如重命名一个公共类型或删除一个公共方法, 但有些更改更为微妙, 与<code>Rust</code>的工作方式有很大关系. 在这里, 我们将介绍一些比较棘手的微妙变化, 以及如何为它们规划变化. 你会发现, 你需要在其中一些变化与你希望你的接口灵活性之间取得平衡--有时候, 有些东西必须要让步.</p>
+<h3 id="类型修改"><a class="header" href="#类型修改">类型修改</a></h3>
+<p>删除或重命名公共类型几乎肯定会破坏某些用户的代码. 为了解决这个问题, 你要尽可能地利用<code>Rust</code>的可见性修改器, 比如<code>pub(crate)</code>和<code>pub(in path)</code>. 你拥有的公有类型越少, 以后更改的自由度就越大, 而不会破坏现有的代码.</p>
+<p>不过, 用户代码可以在更多的方面依赖你的类型, 而不仅仅是名称. 请看清单3-3中的公共类型和该代码的给定代码.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// 在你的接口
+pub struct Unit;
+// 在用户的代码
+let u = lib::Unit;
+
+// 清单 3-3: 一个看起来无辜的公共类型
+<span class="boring">}</span></code></pre></pre>
+<p>现在想想如果你给<code>Unit</code>添加一个私有字段会发生什么. 即使添加的字段是私有的, 但这个更改仍然会破坏用户的代码, 因为他们所依赖的构造函数已经消失了. 类似地, 请看清单3-4中的代码和用法.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// 你的接口
+pub struct Unit { pub field: bool };
+// 用户代码
+fn is_true(u: lib::Unit) -&gt; bool {
+    matches!(u, Unit { field: true })
+}
+
+// 清单 3-4: 访问单个公共字段的用户代码
+<span class="boring">}</span></code></pre></pre>
+<p>在这里, 给<code>Unit</code>添加一个私有字段也会破坏用户代码, 这次是因为<code>Rust</code>的穷举模式匹配检查逻辑能够看到用户看不到的接口部分. 编译器发现有更多的字段, 尽管用户代码无法访问它们, 并以不完整为由拒绝用户的模式匹配. 如果我们将元组结构构变成带有命名字段的普通结构, 也会出现类似的问题: 即使字段本身完全相同, 但旧的模式对新的类型定义也不再有效.</p>
+<p><code>Rust</code>提供了<code>#[non_exhaustive]</code>属性来帮助缓解这些问题. 你可以把它添加到任何类型的定义中, 编译器将不允许在该类型上使用隐式构造函数(如<code>lib::Unit { field1: true }</code>)和非穷举模式匹配(即没有尾巴的模式, <code>..</code>). 如果你怀疑自己将来可能会修改某个特定的类型, 这是一个很好的属性. 但它确实限制了用户的代码, 例如剥夺了用户依赖穷举模式匹配的能力, 所以如果你认为给定的类型可能会保持稳定, 请避免添加该属性.</p>
+<h3 id="trait实现"><a class="header" href="#trait实现"><code>trait</code>实现</a></h3>
+<p>正如第2章中所述, <code>Rust</code>的一致性规则不允许对给定类型的多个<code>trait</code>的实现. 由于我们不知道下游代码可能添加了哪些实现, 所以添加一个现有<code>trait</code>的通用实现通常是一种破坏性的改变. 同样的道理也适用于为一个现有类型实现一个外来<code>trait</code>, 或者为一个外来类型实现一个现有<code>trait</code>--在这两种情况下, 外来<code>trait</code>或类型的所有者可能同时添加一个冲突的实现, 所以这一定是一个破坏性的变更.</p>
+<p>删除<code>trait</code>的实现是一种破坏性的变更, 但为新的类型实现<code>trait</code>从来都不是问题, 因为任何<code>crate</code>都不能有与该类型冲突的实现.</p>
+<p>也许与直觉相反, 在为现有的类型实现任何<code>trait</code>也要小心谨慎. 请看清单 3-5 中的代码, 就会明白其中的原因.</p>
+<pre><pre class="playground"><code class="language-rust edition2021">// crate1 1.0
+pub struct Unit;
+pub trait Foo1 { fn foo(&amp;self) }
+// note that Foo1 is not implemented for Unit
+
+// crate2; depends on crate1 1.0
+use crate1::{Unit, Foo1};
+trait Foo2 { fn foo(&amp;self) }
+impl Foo2 for Unit { .. }
+fn main() {
+    Unit.foo();
+}
+
+// 清单 3-5: 为一个现有的类型实现一个`trait`可能会引起问题. </code></pre></pre>
+<p>如果你在<code>crate1</code>中添加了<code>impl Foo1 for Unit</code>, 而没有将其标记为破坏性变更, 那么下游的代码会突然停止编译, 因为现在对<code>foo</code>的调用是不明确的. 这甚至可以适用于新的公共<code>trait</code>的实现, 如果下游的包使用通配符导入(使用<code>cate1::*</code>). 如果你提供了一个<code>prelude</code>模块, 并指示用户使用通配符导入, 你将特别需要记住这一点.</p>
+<p>对现有<code>trait</code>的大多数改变也是破坏性的改变, 例如改变方法签名或添加新方法. 改变方法的签名会破坏该<code>trait</code>的所有实现, 可能还会破坏很多使用, 而添加一个新的方法"只是"破坏所有的实现. 不过, 添加一个带有默认实现的新方法并没有问题, 因为现有的实现将继续适用.</p>
+<p>我在这里说 "一般 "和 "大多数", 是因为作为接口作者, 我们有一个工具可以让我们绕过其中的一些规则: 密封的<code>trait</code>. 一个密封的<code>trait</code>是一个只能由其他包使用, 而不能实现的<code>trait</code>. 这立即使一些破坏性的变化变得不那么破坏. 例如, 你可以为一个密封的<code>trait</code>添加一个新的方法, 因为你知道在当前的包之外没有任何实现需要考虑. 同样地, 你可以为新的外部类型实现一个密封的<code>trait</code>, 因为你知道定义该类型的外部包不可能添加一个冲突的实现.</p>
+<p>密封<code>trait</code>最常用于派生<code>trait</code>--为实现特定其他<code>trait</code>的类型提供通用实现的<code>trait</code>. 只有当外部的包实现你的<code>trait</code>没有意义时, 你才应该密封<code>trait</code>; 这严重限制了该<code>trait</code>的实用性, 因为下游的<code>crate</code>将不再能够为他们自己的类型实现该<code>trait</code>. 你也可以使用密封的<code>trait</code>来限制哪些类型可以被用作类型参数, 比如在清单3-2中的火箭例子中, 将<code>Stage</code>类型限制为只有<code>Grounded</code>和<code>Launched</code>的类型.</p>
+<p>清单 3-6 显示了如何封存一个<code>trait</code>, 以及如何在定义箱中为它添加实现.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait CanUseCannotImplement: sealed::Sealed /* (1)  */ { .. }
+mod sealed {
+    pub trait Sealed {}
+    impl&lt;T&gt; Sealed for T where T: TraitBounds {} // (2)
+}
+impl&lt;T&gt; CanUseCannotImplement for T where T: TraitBounds {}
+
+// 清单 3-6: 如何密封一个`trait`并为其添加实现
+<span class="boring">}</span></code></pre></pre>
+<p>诀窍是添加一个私有的、空的<code>trait</code>, 作为你希望密封(1)的<code>trait</code>的一个父<code>trait</code>. 由于父<code>trait</code>在一个私有模块中, 其他的<code>crate</code>无法访问它, 因此也无法实现它. 封闭的<code>trait</code>要求底层类型实现<code>Sealed</code>, 所以只有我们明确允许的类型(2)才能最终实现该<code>trait</code>.</p>
+<blockquote>
+<p>NOTE: 如果你确实以这种方式密封了<code>trait</code>, 请确保你记录了这一事实, 这样用户在试图自己实现<code>trait</code>时就不会感到沮丧了.</p>
+</blockquote>
+<h3 id="隐性契约"><a class="header" href="#隐性契约">隐性契约</a></h3>
+<p>有时, 对代码某一部分所做的更改会以微妙的方式影响接口中其他部分的契约. 发生这种情况的两种主要方式是通过重导出和自动<code>trait</code>.</p>
+<h4 id="重导出"><a class="header" href="#重导出">重导出</a></h4>
+<p>如果你的接口的任何部分暴露外部类型, 那么对这些外部类型的任何改变也是对你接口的改变. 例如, 考虑一下如果你迁移到一个新的依赖关系的主要版本, 并将该依赖关系中的一个类型作为你的接口中的一个迭代器类型公开, 会发生什么. 依赖于你的接口的用户可能也会直接依赖该依赖关系, 并期望你的接口提供的类型与该依赖关系中的同名类型相同. 但是你更改了依赖项的主要版本, 即使类型的名称是相同, 这也不再是真的相同了. 清单3-7显示了一个这样的例子.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// your crate: bestiter
+pub fn iter&lt;T&gt;() -&gt; itercrate::Empty&lt;T&gt; { .. }
+// their crate
+struct EmptyIterator { it: itercrate::Empty&lt;()&gt; }
+EmptyIterator { it: bestiter::iter() }
+
+// 清单 3-7: 重新导出使外部的包成为接口契约的一部分. 
+<span class="boring">}</span></code></pre></pre>
+<p>如果你的<code>crate</code>从<code>itercrate 1.0</code>移到<code>itercrate 2.0</code>, 但其他方面没有变化, 那么本列表中的代码将不再被编译. 尽管类型没有改变, 编译器认为(正确地)<code>itercrate1.0::Empty</code>和<code>itercrate2.0::Empty</code>是不同的类型. 因此, 你不能将后者赋值给前者, 这将破坏您的接口.</p>
+<p>为了减少类似的问题, 通常最好使用<code>newtype</code>模式来包装外部类型, 然后只公开外部类型中你认为有用的部分. 在很多情况下, 你可以通过使用<code>impl Trait</code>来避免<code>newtype</code>包装器, 只向调用者提供非常小的契约. 通过较少的承诺, 就可以减少破坏性的改动.</p>
+<blockquote>
+<p>SEMVER 的诀窍
+<code>itercrate</code>的示例可能让你产生误解. 如果<code>Empty</code>类型没有改变, 那么为什么编译器不允许任何使用它的代码继续工作, 而不管代码是使用它的1.0还是2.0版本？答案是很..... 复杂. 归根结底: <code>Rust</code>编译器并不会因为两个类型字段相同, 就认为它们是相同的. 举个简单的例子, 想象一下<code>itercrate 2.0</code>为<code>Empty</code>增加了一个<code>#[derive(Copy)]</code>. 现在, 这个类型突然有了不同的移动语义, 这取决于你使用的是1.0还是2.0! 而用其中一个类型编写的代码在另一个类型中就无法运行了.</p>
+<p>这个问题往往会出现在大型的、广泛使用的库中, 随着时间的推移, <code>crate</code>中的某个地方很有可能发生破坏性的改动. 不幸的是, 语义上的版本控制是在<code>crate</code>层面上进行的, 而不是在类型层面上, 因此, 任何地方的破坏性改变都是一种破坏性改变.</p>
+<p>一切并没有结束. 几年前, David Tolnay(<code>serde</code>的作者, 还有其他大量的<code>Rust</code>贡献者)想出了一个巧妙的技巧来处理这种情况. 他称其为"semver技巧". 这个想法很简单: 如果某个类型的<code>T</code>在破坏性变改中保持不变(比如从1.0到2.0), 那么在发布2.0之后, 你可以发布一个新的1.0次要版本, 该版本依赖于2.0, 并且用2.0中的<code>T</code>的重导出替换<code>T</code>.</p>
+<p>这样做可以确保两个主要版本中都只有一个单一的<code>T</code>类型. 这反过来又意味着任何依赖于<code>1.0</code>的板块都可以使用<code>2.0</code>的 T, 反之亦然. 因为这只发生在你明确选择的类型上, 因此那些实际上会破坏的变更将继续存在.</p>
+</blockquote>
+<h4 id="自动-traitsauto-traits"><a class="header" href="#自动-traitsauto-traits">自动 traits(Auto-Traits)</a></h4>
+<p><code>Rust</code>有一些<code>trait</code>, 会根据每个类型所包含的内容自动实现. 其中与本讨论最相关的是<code>Send</code>和<code>Sync</code>, 尽管<code>Unpin</code>、<code>Sized</code>和<code>UnwindSafe trait</code>也有类似的问题. 就其本质而言, 这些<code>trait</code>为你接口中的几乎所有类型添加了一个隐藏的承诺. 这些<code>trait</code>甚至可以通过其他类型的消除类型传播, 比如<code>impl Trait</code>.</p>
+<p>这些<code>trait</code>的实现(通常)是由编译器自动添加的, 但这也意味着, 如果这些实现不再适用, 也不会自动添加. 所以, 如果你有一个包含私有类型<code>B</code>的公共类型<code>A</code>, 而你改变了<code>B</code>, 使其不再是<code>Send</code>, 那么<code>A</code>现在也不再是<code>Send</code>了. 这就是一个破坏性的变更!</p>
+<p>这些变更可能很难被跟踪, 通常直到接口的用户抱怨他们的代码不再工作时才会被发现. 为了在这些情况发生之前捕捉到它们, 在你的测试套件中加入一些简单的测试是个不错的做法, 以检查你的所有类型是否以你期望的方式实现了这些<code>trait</code>.  清单3-8给出了这样一个测试的例子.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn is_normal&lt;T: Sized + Send + Sync + Unpin&gt;() {}
+#[test]
+fn normal_types() {
+    is_normal::&lt;MyType&gt;();
+}
+
+// 清单 3-8: 测试一个类型是否实现了一组特征
+<span class="boring">}</span></code></pre></pre>
+<p>注意, 该测试并不运行任何代码, 只是测试代码的编译情况. 如果<code>MyType</code>不再实现<code>Sync</code>, 测试代码将不能编译, 你将知道你刚才的改变破坏了自动<code>traits</code>的实现.</p>
+<blockquote>
+<p>从文档中隐藏项目
+通过<code>#[doc(hidden)]</code>属性可以让你在文档中隐藏一个公共项目, 而不会让碰巧知道它存在的代码无法访问. 这通常被用来公开宏所需要的方法和类型, 且用户代码不需要的. 这种隐藏如何与你的接口契约互动还存在一些争议. 一般来说, 标记为<code>#[doc(hidden)]</code>的项目只在其公共效应范围内才被视为契约的一部分; 例如, 如果用户代码最终可能包含一个隐藏的类型, 那么该类型是<code>Send</code>是契约的一部分, 而其名称则不是. 隐藏的固有方法和隐藏在密封<code>trait</code>上的方法通常不是你的接口契约的一部分, 尽管你应该确保在这些方法的文档中明确说明这一点. 是的, 隐藏的项目仍然应该被记录下来!</p>
+</blockquote>
+<h2 id="总结-2"><a class="header" href="#总结-2">总结</a></h2>
+<p>在本章中, 我们探讨了设计<code>Rust</code>接口的许多方面, 无论是供外部使用, 还是仅仅作为<code>crate</code>中不同模块之间的一个抽象边界. 我们介绍了很多具体的陷阱和技巧, 但最终, 高层次的原则应该指导你的思考方向: 你的接口应该是不令人意外的、灵活的、明显的和受约束的. 在下一章中, 我们将深入探讨如何表述和处理<code>Rust</code>代码中的错误.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第四章-错误处理"><a class="header" href="#第四章-错误处理">第四章 错误处理</a></h1>
+<p>除了最简单的程序外, 方法都有可能会调用失败. 在本章中, 我们将探讨表述、处理和传播这些失败的不同方法, 以及它们各自的优缺点. 我们将从不同的错误表述方式开始, 包括枚举和擦除, 然后研究一些需要特殊表述技术的错误情况. 接下来, 我们将探讨处理错误的各种方式, 以及错误处理机制在未来的发展趋势.</p>
+<p>值得注意的是, <code>Rust</code>中错误处理的最佳实践仍然是一个活跃的话题, 在撰写本文的时候, <code>Rust</code>生态系统还没有确定一种统一的处理方法.因此, 本章将重点讨论底层原理和技术手段, 而不是推荐特定的<code>crate</code>或<code>patterns</code>.</p>
+<h2 id="表述错误"><a class="header" href="#表述错误">表述错误</a></h2>
+<p>在编写可能失败的代码时, 最重要的问题是用户将如何与这些错误交互. 用户是否需要确切地知道发生了什么错误, 以及错误的细节, 还是只需要记录错误发生了, 然后继续执行? 要了解这一点, 我们需要研究错误的性质是否影响到调用者在收到错误后的行为. 这将决定我们该如何表述不同的错误类型.</p>
+<p>表述错误有两种主要的方式: 枚举和擦除. 也就是说, 你可以让你的错误类型枚举可能的错误情况, 以便调用者能够区分它们, 或者你也可以只向调用者提供一个单一的、不透明的错误. 让我们依次讨论这两种方式.</p>
+<h3 id="枚举"><a class="header" href="#枚举">枚举</a></h3>
+<p>在这个示例中, 我们将使用一个库函数, 将字节从某个输入流复制到某个输出流中, 很和<code>std::io::copy</code>的行为很相似. 用户会提供两个流, 一个用于读, 一个用于写, 然后你将字节从一个流复制到另一个流. 在这个过程中, 任何一个流都有可能错误, 这时复制必须停止, 并向用户返回错误. 在这种情况下, 用户很可能希户知道是输入流还是输出流出现了问题. 例如, 在一个web服务中, 如果在向客户端传输文件的过程中, 输入流发生了错误, 可能是因为磁盘被弹出, 而如果输出流发生错误, 那有可能是客户端断开了连接. 后者可能是服务器可以忽略的错误, 因为对新的连接仍然可以完成文件复制, 而前者可能需要关闭整个服务器.</p>
+<p>这例子中我们需要枚举错误. 用户需要能够区分不同的错误情况, 以便做出恰当的响应, 所以我们使用一个名为<code>CopyError</code>的枚举类型, 每个变体代表一个错误的根本原因, 就像清单5-1中那样.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum CopyError {
+    In(std::io::Error),
+    Out(std::io::Error)
+}
+
+// 清单 5-1: 枚举错误类型
+<span class="boring">}</span></code></pre></pre>
+<p>每个变量还包括实际遇到的错误, 以便向调用者提供尽可能多的出错信息.</p>
+<p>当你创建自定义错误类型时, 需要采取一些步骤, 使该错误类型能够很好地融入<code>Rust</code>的生态系统中. 首先, 你的错误类型应该实现<code>std::error::Error trait</code>, 它为调用者提供了内部错误类型的常用方法. 其中主要的方法是<code>Error::source</code>, 它提供了一种机制来查找错误的根本原因. 最常用于打印错误回溯信息, 显示错误从根源一路传播的过程. 对于我们的<code>CopyError</code>类型, <code>source</code>的实现非常简单: 我们在<code>self</code>上进行匹配并提取并返回内部的<code>std::io::Error</code>.</p>
+<p>其中, 你的类型应该同时实现<code>Display</code>和<code>Debug</code>, 以便调用者可以有意义地打印错误信息. 如果你实现了<code>Error trait</code>, 这是必须的. 一般来说, <code>Display</code>的实现应提供出错原因的简洁描述, 并能很容易地嵌入到更大的错误消息中. 显示的格式应使用小写字母, 并且末尾不加标点符号, 以便在更长的错误信息自然嵌入. <code>Debug</code>应该提供更详细的错误描述, 包括可能有助于追踪错误原因的附加信息, 如端口号、请求ID、文件路径等, 通常使用<code>#[derive(Debug)]</code>足以满足这些要求.</p>
+<blockquote>
+<p>NOTE: 在旧版本的<code>Rust</code>代码中, 你可能会看到对<code>Error::description</code>方法, 但该方法已被弃用, 改用 <code>Display</code>.</p>
+</blockquote>
+<p>第三, 如果可能的话, 你的类型应该同时实现<code>Send</code>和<code>Sync</code>, 这样用户才能在跨线程时共享错误. 如果你的错误类型不是线程安全的, 那么在多线程环境中无法使用你的<code>crate</code>. 实现<code>Send</code>和<code>Sync</code>的错误类型也更容易与常见的<code>std::io::Error</code>错误类型配合使用, 后者实现<code>Error</code>、<code>Send</code> 和 <code>Sync</code>. 当然, 并不是所有的错误类型都合理地实现<code>Send</code>和<code>Sync</code>, 比如它们可能依赖于特定的线程本地资源, 这种情况下不支持也是可以接受的. 毕竟你很可能不会跨越线程发送这些错误. 不过, 在错误中使用 <code>Rc&lt;String&gt;</code>和 <code>RefCell&lt;bool&gt;</code>类型之前, 还是要注意这一点.</p>
+<p>最后, 如果可能的话, 你的错误类型应该是<code>'static</code>生命周期的. 这样做最直接的好处是, 调用者更容易地在调用堆栈中传播你的错误, 而不会遇到生命周期的问题. 此外, 这还使得你的错误类型更容易与类型擦除的错误类型一起使用, 我们很快就会看到这一点</p>
+<h3 id="不透明的错误"><a class="header" href="#不透明的错误">不透明的错误</a></h3>
+<p>现在让我们考虑另一个例子: 一个图像解码库. 你将一堆字节传给这个库进行解码, 它就会为你提供各种图像处理方法. 如果解码失败, 用户需要知道如何解决问题, 因此必须了解其原因. 重要是引起的原因, 是图像标头中的大小字段无效, 还是压缩算法中解压块问题, 这很重要吗? 也许不重要, 即使应用程序知道确切的原因, 也无法从这两种情况下进行有意义地恢复. 在这样的情况下, 作为库的作者, 你可能更希望提供一种单一的、不透明的错误类型. 这也会使你的库更容易使用, 因为整个库中只使用一个错误类型. 这个错误类型应该实现<code>Send</code>、<code>Debug</code>、<code>Display</code>和<code>Error</code>(在合适的情况下也包括<code>source</code>方法), 除此之外, 调用者无需了解更多的细节. 你可以在库内部表述更细致的错误状态, 但没有必要将这些暴露给使用者. 这样做减少你的<code>API</code>的体积和复杂性.</p>
+<p>不透明的错误类型到底应该是什么, 主要取决于你. 它可以是一个具有所有私有字段的类型, 只对外公开有限的方法来显示和检查错误的方法, 也可能是一个类型擦除的错误类型, 如<code>Box&lt;dyn Error + Send + Sync + 'static&gt;</code>, 它只表明这是一个错误之外, 不会向使用者透露任何信息, 也通常不允许用户进行深入查看. 决定错误类型透明的程度, 主要取决于这个错误除了描述之外是否还有值得用户了解的内容. 如果使用<code>Box&lt;dyn Error&gt;</code>, 用户别无选择, 只能把你的错误向上传播. 如果该错误确实没有任何有价值的信息提供给用户(例如, 如果它只是一个动态的错误信息, 或者是来自你程序深处的某些完全无关错误之一), 这样做也许没什么问题. 但如果这个错误有一些有意义的细节, 例如行号或状态代码, 你可能会想通过一个具体但不透明的类型来暴露它.</p>
+<blockquote>
+<p>NOTE: 一般来说, 社区的共识是错误应该是罕见的, 因此不应该增加太多"正常路径"的成本. 因此, 错误通常被放置在一个指针类型的后面, 比如<code>Box</code>或<code>Arc</code>. 这样一来, 错误就不太可能增加所包含的整个<code>Result</code>类型的大小.</p>
+</blockquote>
+<p>使用类型消除的错误的一个好处是, 它可以让你轻松地将不同来源的错误合并, 而无需引入额外的错误类型. 也就是说, 基于类型的错误通常可以很好地组合, 并允许你表达一个开放式的错误集. 如果你编写了一个返回类型为<code>Box&lt;dyn Error + ...&gt;</code>的函数, 那么你可以在该函数内部使用<code>?</code>来处理不同的错误类型, 它们都会被转化为那个共同的错误类型.</p>
+<p><code>Box&lt;dyn Error + Send + Sync + 'static&gt;</code>上的<code>'static</code>约束值得多花一点时间来研究. 我在上一节中提到, 它可以让调用者传播错误, 而不用担心失败的方法的生存期约束, 但它有一个更大的目的: 提供访问向下转型. 向下转型是指将一种类型的项转换为一种更具体的类型的过程. 这是少数几个<code>Rust</code>在运行时能让你访问类型信息的情况之一; 它是动态语言经常提供的更通用的类型反射的一个有限案例. 在错误的上下文中, 当<code>dyn Error</code>原本是一个具体的底层错误类型时, 向下转换允许用户将该错误转为该类型. 例如, 如果用户收到的错误是<code>std::io::Error</code>的类型<code>std::io::ErrorKind::WouldBlock</code>, 用户可能想采取一个特定的操作, 但在其他情况下他们不会采取相同的操作. 如果用户得到一个<code>dyn Error</code>, 他们可以使用<code>Error::downcast_ref</code>来尝试将这个错误向下转换到<code>std::io::Error</code>. <code>downcast_ref</code>方法返回一个<code>Option</code>, 它告诉用户向下转换是否成功. 这里有一个关键的观察点: <code>downcast_ref</code>只有在参数是<code>'static</code> 时才起作用. 如果我们返回一个不透明的、非<code>'static</code> 的<code>Error</code>, 用户就无法按自己的意愿对错误进行检查.</p>
+<p>在生态系统中, 对于库的类型擦的错误(或者更广泛地说, 它的类型擦除类型)是否属于公共且稳定<code>API</code>的一部分, 这里存在一些争议. 也就是说, 如果你的库中的方法<code>foo</code>将<code>lib::MyError</code>作为<code>Box&lt;dyn Error&gt;</code>返回, 将<code>foo</code>改为返回不同的错误类型是否是一种破坏性的变更? 类型签名并没有改变, 但是用户可能写了一些代码, 认为他们可以使用向下转型来把这个错误转回<code>lib::MyError</code>. 我对此事的看法是, 你选择返回<code>Box&lt;dyn Error&gt;</code>(而不是 <code>lib::MyError</code>)是有原因的, 除非有明确的文档说明, 否则这并不能保证向下转换有特别之处.</p>
+<blockquote>
+<p>注意: 虽然<code>Box&lt;dyn Error + ...&gt;</code>是一个有吸引力的类型擦除的错误类型, 但它本身并没有实现<code>Error</code>, 这与直觉相反. 因此, 请考虑添加自己的<code>BoxError</code>类型, 以实现<code>Error</code>的库中来进行类型擦除。</p>
+</blockquote>
+<p>你可能想知道<code>Error::downcast_ref</code>是如何做到安全. 也就是说, 它如何知道提供的<code>dyn Error</code>参数是否确实属于给定的类型<code>T</code>? 标准库中甚至有一个名为<code>Any</code> 的<code>trait</code>, 它是为任何类型实现的, 也可以为<code>dyn Any</code>实现了<code>downcast_ref</code>, 这怎么能行? 答案在于编译器支持的类型<code>std::any::TypeId</code>, 它允许你为任何类型获得一个唯一的标识符.<code>Error trait</code> 有一个隐藏提供的方法, 叫做<code>type_id</code>, 它的默认实现是返回<code>TypeId::of::&lt;Self&gt;()</code>. 类似地, <code>Any</code>有一个对<code>T</code>的<code>impl Any</code>的通用实现, 在该实现中, 其<code>type_id</code>返回相同的内容. 在这些<code>impl</code>块的上下文中, <code>Self</code>的具体类型是已知的, 所以这个<code>type_id</code> 是真实类型的类型标识符. <code>downcast_ref</code>调用<code>self.type_id</code>, 它通过动态大小类型的<code>vtable</code>(见第3章)向下转到底层类型的实现, 并将其与提供的<code>downcast</code>类型的类型标识符进行比较. 如果它们匹配, 那么<code>dyn Error</code> 或<code>dyn Any</code>背后的类型就真的是<code>T</code>, 并且从一个类型的引用到另一个类型的引用是安全的.</p>
+<h3 id="特殊错误案例"><a class="header" href="#特殊错误案例">特殊错误案例</a></h3>
+<p>有些函数是易错的, 但一旦失败也不能返回任何有意义的错误. 从概念上讲, 这些函数的返回类型是<code>Result&lt;T, ()&gt;</code>. 在一些代码库中, 你可能会看到它被表述为 <code>Option&lt;T&gt;</code>. 虽然这两个函数的返回类型都是合法的选择, 但它们表达了不同的语义, 你通常应该避免将<code>Result&lt;T, ()&gt;</code>"简化"为<code>Option&lt;T&gt;</code>. <code>Err(())</code>表述一个操作失败了, 应该重试、报告或以其他特殊处理. 另一方面, <code>None</code>只表达了函数没有任何内容; 它通常不被认为是一个特殊情况或应该被处理的东西. 你可以在<code>Result</code>类型的<code>#[must_use]</code>注解中看到这一点--当你得到一个<code>Result</code>时, 语言认为处理这两种情况是很重要的, 而对于一个<code>Option</code>, 两种情况实际上都不需要处理.</p>
+<blockquote>
+<p>NOTE: 你还应该记住, <code>()</code>并没有实现 <code>Error</code> 特性. 这意味着它不能被类型化为<code>Box&lt;dyn Error&gt;</code>, 并且在使用时<code>?</code>可能会有点麻烦. 出于这个原因, 在这些情况下, 定义你自己的单元结构类型, 为其实现 <code>Error</code>, 并将其作为错误, 而不是<code>()</code>.</p>
+</blockquote>
+<p>有些函数, 比如那些启动持续运行的服务器循环的函数, 只返回错误; 除非发生错误, 否则它们永远运行. 其他函数永远不会出错, 但仍然需要返回<code>Result</code>, 例如, 为了匹配<code>trait</code>签名. 对于这样的函数, <code>Rust</code>提供了<code>never</code>类型, 用<code>!</code>的语法编写. <code>never</code>类型表述一个永远无法生成的值. 你不能自己构造一个这个类型的实例, 唯一的方法是进入一个无限循环或<code>panic</code>, 或者通过其他编译器知道永远不会返回的特殊操作. 对于<code>Result</code>, 当你有一个你知道<code>Ok</code>或<code>Err</code>永远不会被使用时, 你可以把它设置为<code>!</code>类型. 如果你写了一个返回<code>Result&lt;T, !&gt;</code>的函数, 你将永远无法返回<code>Err</code>, 因为唯一的返回方式是进入永远不会返回的代码. 因为编译器知道任何带有<code>!</code>的变体都不会被产生, 它还可以在此基础上优化你的代码, 比如不生成<code>Result&lt;T, !&gt;</code>上<code>unwrap</code>的<code>panic</code>代码. 而当你进行模式匹配时, 编译器知道任何包含<code>!</code>的变量甚至不需要被列出. 挺酷的!</p>
+<p>最后一个奇怪的错误情况是错误类型<code>std::thread::Result</code>. 这里是它的定义.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>type Result&lt;T&gt; = Result&lt;T, Box&lt;dyn Any + Send + 'static&gt;&gt;;
+<span class="boring">}</span></code></pre></pre>
+<p>错误类型是类型擦除的, 但它并没有像我们之前看到的那样被擦除为<code>dyn Error</code>. 取而代之的是<code>dyn Any</code>, 它只保证错误是某种类型, 仅此而已...这几乎没有什么保证. 出现这种奇怪的错误类型的原因是<code>std::thread::Result</code>的错误变量只有在<code>panic</code>时才会产生; 具体来说, 如果你试图加入一个已经<code>panic</code>的线程. 在这种情况下, 加入的线程除了忽略错误或使用<code>unwrap</code>使自己<code>panic</code>外, 还能做什么呢? 从本质上讲, 错误类型是"一个panic", 其值是传递给 <code>panic!</code> 的任何参数, 它确实可以是任何类型(尽管它通常是一个格式化的字符串).</p>
+<h2 id="传播错误"><a class="header" href="#传播错误">传播错误</a></h2>
+<p><code>Rust</code>的 <code>?</code> 操作符是<code>unwrap</code>或提前返回的简写, 用于轻松处理错误. 但它还有一些其他的技巧值得了解. 首先, <code>?</code>通过<code>From trait</code>执行类型转换. 在一个返回<code>Result&lt;T, E&gt;</code>的函数中, 你可以在任何<code>Result&lt;T, X&gt;</code>上使用<code>?</code> , 其中<code>E: From&lt;X&gt;</code>. 这就是通过<code>Box&lt;dyn Error&gt;</code>擦除错误的特点; 你可以在任何地方使用<code>?</code>而不用担心特定的错误类型, 而且通常会"正常工作".</p>
+<blockquote>
+<p><code>FROM</code> 和 <code>INTO</code></p>
+<p>标准库有许多转换特性, 但其中两个核心特性是<code>From</code>和<code>Into</code>. 你可能会觉得有两个很奇怪: 如果我们有<code>From</code>, 为什么还需要<code>Into</code>, 反之亦然? 有几个原因, 但让我们从历史原因开始: 在 <code>Rust</code>的早期, 由于第三章中讨论的一致性规则, 不可能只有一个. 或者, 更确切地说, 曾经的一致性规则是什么.</p>
+<p>假设你想在你的<code>crate</code>中定义的某个本地类型和标准库中的某个类型之间实现双向转换. 你可以很容易的写<code>impl&lt;T&gt; From&lt;Vec&lt;T&gt;&gt; for MyType&lt;T&gt;</code>和 <code>impl&lt;T&gt; Into&lt;Vec&lt;T&gt;&gt; for MyType&lt;T&gt;</code>, 但是如果你只有<code>From</code>或<code>Into</code>, 你必须写<code>impl&lt;T&gt; From&lt;MyType&lt;T&gt;&gt; for Vec&lt;T&gt;</code> 或 <code>impl&lt;T&gt; Into&lt;MyType&lt;T&gt;&gt; for Vec&lt;T&gt;</code>.然而, 编译器曾经拒绝了这些实现! 只有从<code>Rust</code>1.41.0开始, 当覆盖类型的例外被添加到一致性规则中时, 它们才合法.在那之前, 有必要同时拥有这两个特性. 由于很多 <code>Rust</code>代码是在<code>Rust</code>1.41.0 之前写的, 所以现在这两个特征都不能被删除.</p>
+<p>然而, 除了这一历史事实之外, 即使我们今天可以从头开始, 也有很好的人体工程学理由来拥有这两个特征. 在不同的情况下, 使用其中一个或另一个通常会容易得多. 例如, 如果你正在写一个方法, 该方法接收一个可以变成 <code>Foo</code> 的类型, 你是想写<code>fn(impl Into&lt;Foo&gt;)</code> 还是 <code>fn&lt;T&gt;(T) where Foo: From&lt;T&gt;</code>? 反过来说, 要把一个字符串变成一个语法标识符, 你是愿意写 <code>Ident::from("foo")</code> 还是 <code>&lt;_ as Into&lt;Ident&gt;&gt;::into("foo")</code>? 这两个特性都有其用途, 我们最好同时拥有它们.</p>
+<p>鉴于我们确实有这两种东西, 你可能想知道今天应该在代码中使用哪一个. 答案是非常简单的: 实现<code>From</code>, 并在约束使用<code>Into</code>. 原因是<code>Into</code>对任何实现了 <code>From</code>的<code>T</code>都有一个通用实现, 所以不管一个类型是明确地实现了<code>From</code>还是 <code>Into</code>, 它都实现了<code>Into</code>!</p>
+<p>当然, 正如简单的事情一样, 故事并没有就此结束. 因为当<code>Into</code>被用作绑定时, 编译器经常要"通过"通用实现, 所以推断一个类型是否实现了<code>Into</code>的推断比它是否实现了<code>From</code>更复杂. 而且在某些情况下, 编译器还没有聪明到可以解决这个难题. 由于这个原因, 在编写本文时, <code>?</code> 操作符使用<code>From</code>, 而不是<code>Into</code>. 大多数时候, 这并没有什么区别, 因为大多数类型都实现了<code>From</code>, 但这也意味着旧库中实现<code>Into</code>的错误类型可能无法与<code>?</code>运算, 随着编译器越来越聪明, <code>?</code>可能会被"升级"为了能使用<code>Into</code>, 到那时这个问题就会消失, 但这也是我们目前所面临的问题.</p>
+</blockquote>
+<p>第二个方面需要注意是, <code>?</code>这个操作符实际上只是一个称为<code>Try</code>的特性的语法糖. 在写这篇文章的时候, <code>Try</code>特性还没有稳定下来, 但是当你读到这篇文章的时候, 它或者类似的东西很可能已经被确定下来. 由于细节还没有全部弄清楚, 我将只给你一个<code>Try</code>工作原理的大纲, 而不是完整的方法特征.在其核心部分, <code>Try</code>定义了一个封装类型, 其状态要么是进一步计算是有用的(快乐路径), 要么是无用的. 你们中的一些人会正确地想到单体(<code>monads</code>), 尽管我们不会在这里探讨这种联系. 例如, 在<code>Result&lt;T, E&gt;</code>的情况下, 如果你有一个<code>Ok(t)</code>, 你可以通过解开<code>t</code>来继续在快乐的路径上运行. 另一方面, 如果你有一个<code>Err(e)</code>, 你想立即停止执行并产生错误值, 因为你没有<code>t</code>, 所以不可能进一步计算.</p>
+<p><code>Try</code> 的有趣之处, 它不仅适用于<code>Result</code>类型, 还适用于更多的类型. 例如, <code>Option&lt;T&gt;</code>遵循同样的模式--如果你有一个<code>Some(t)</code>, 你可以在快乐路径上继续下去, 而如果你有一个<code>None</code>, 就会产生<code>None</code>而不是继续. 这种模式延伸到了更复杂的类型, 比如<code>Poll&lt;Result&lt;T, E&gt;&gt;</code>, 它的快乐路径类型是 <code>Poll&lt;T&gt;</code>, 这使得<code>?</code>适用的情况远比你想象的多. 当<code>Try</code>稳定下来后, 我们可能会看到<code>?</code>开始与各种类型一起工作, 使我们的快乐路径代码更漂亮.</p>
+<p><code>?</code>操作符已经可以在易错函数、<code>doctests</code>和<code>fn main</code>中使用了. 不过, 为了充分发挥它的潜力, 我们还需要一种方法来对这种错误进行范围处理. 例如, 考虑清单5-2中的函数.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn do_the_thing() -&gt; Result&lt;(), Error&gt; {
+    let thing = Thing::setup()?;
+    // .. code that uses thing and ? ..
+    thing.cleanup();
+    Ok(())
+}
+
+// 清单 5-2: 使用"? "运算符的多步骤易错函数.
+<span class="boring">}</span></code></pre></pre>
+<p>这并不完全符合预期. 在<code>setup</code>和<code>cleanup</code>之间的任何问题都会导致整个函数的提前返回, 从而跳过<code>cleanup</code>的代码! 这就是<code>try</code>块要解决的问题. 一个尝试块的行为就像一个单次迭代的循环, 其中<code>?</code>使用<code>break</code>而不是<code>return</code>, 并且该块的最后表达式有一个隐含的<code>break</code>. 我们现在可以修改清单5-2中的代码, 使其总是执行清理, 如清单5-3所示</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn do_the_thing() -&gt; Result&lt;(), Error&gt; {
+    let thing = Thing::setup()?;
+    let r = try {
+    // .. code that uses thing and ? ..
+    };
+    thing.cleanup();
+    r
+}
+
+// 清单 5-3: 一个多步骤的易错函数, 总是自己清理.
+<span class="boring">}</span></code></pre></pre>
+<p>在写这篇文章时, <code>try</code>代码块也不稳定, 但对其有用性有足够的共识, 它们很可能以类似于这里描述的形式出现.</p>
+<h2 id="总结-3"><a class="header" href="#总结-3">总结</a></h2>
+<p>本章介绍了在<code>Rust</code>中构造错误类型的两种主要方法: 枚举和擦除. 我们研究了在何时使用哪一种方式, 以及它们各自的优缺点. 我们还了解了一些<code>?</code>操作符的背后的机制, 并考虑了<code>?</code>如何在未来变得更加实用. 在下一章中, 我们将从代码中抽身出来, 看看你是如何组织一个<code>Rust</code>项目的. 我们将研究特性标志、依赖管理和版本管理, 以及如何使用工作区和子包管理更复杂的<code>crate</code>. 下一页见!</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第五章-项目结构"><a class="header" href="#第五章-项目结构">第五章 项目结构</a></h1>
+<p>本章提供了一些关于如何构建<code>Rust</code>项目的思路. 对于简单的项目来说, 通过<code>cargo new</code>创建的项目结构通常不需要太多关注. 你可能会添加一些模块来拆分代码, 增加一些依赖来扩展功能, 也就仅此而已. 然而, 随着项目规模和复杂度的增加, 你会发现你需要超越这些结构. 也许你的<code>crate</code>的编译时间已经失控了, 或者你需要条件性依赖, 或者你需要一个更好的持续集成策略. 在这一章中, 我们将探讨<code>Rust</code>语言以及特别是<code>Cargo</code>提供的一些工具, 它们能帮助你更轻松管理这些东西.</p>
+<h2 id="特性features"><a class="header" href="#特性features">特性(Features)</a></h2>
+<p><code>features</code>是<code>Rust</code>定制项目的主要工具. 从本质上讲, <code>feature</code>只是一个构建标志, <code>crate</code>可以传递给依赖项, 以增加可选功能. <code>features</code>本身并没有任何语义--你可以自行决定某个<code>feature</code>对你的<code>crate</code>意味着什么.</p>
+<p>通常我们通过三种方式使用<code>features</code>: 启用可选依赖, 有条件地包含<code>crate</code>的额外组件, 以及增强代码的行为. 请注意, 这些用途都是"增量式"的; <code>features</code>可以扩展<code>crate</code>的功能, 但它们通常不应用于删除模块, 替换类型或函数签名的操作. 这源于一个原则: 如果开发者仅在<code>Cargo.toml</code>做了一个简单的修改, 比如添加一个新的依赖关系或启用一个<code>feature</code>, <code>crate</code>不应该因此而无法编译. 如果一个<code>crate</code>有互斥的<code>features</code>, 那么这个原则很快就会失效, 如果<em>crate A</em>依赖于<em>crate C</em>的一个<code>features</code>, 而<em>crate B</em>依赖于C的另一个互斥的<code>features</code>, 那么增加对<em>crate B</em>的依赖就会破坏<em>crate A</em>! 因此我们通常遵循这样的原则: 如果<em>crate A</em>能在某些<code>features</code>成功编译<em>crate C</em>, 那么当<em>crate C</em>上启用所有<code>features</code>时, 它也应能成功编译.</p>
+<p><code>Cargo</code>在这一原则上执行得非常严格. 例如, 如果两个<em>crates</em>(A 和 B) 都依赖于<em>crate C</em>, 但它们各自在C上启用不同的<code>features</code>, <code>Cargo</code>将只会编译 <em>crate C</em>一次, 并启用A或B所需要的所有<code>features</code>. 也就是说, 它会取A和B对C所请求<code>features</code>的并集. 因此, 通常在<code>Rust</code>的<code>crate</code>中添加互斥的<code>features</code>是困难的; 因为很有可能某两个依赖项会将依赖于具有不同<code>features</code>的同一个<code>crate</code>, 如果这些功能是互斥的, 最终下游<code>crate</code>就会构建失败.</p>
+<blockquote>
+<p>注意: 我强烈建议你在持续集成系统中配置检查, 以确保您的<code>crate</code>在任意<code>features</code>组合下都能成功编译. 有一个可以帮助你完成这项工作的工具<code>cargo-hack</code>, 你可以在 <code>https://github.com/taiki-e/cargo-hack</code> 上找到它</p>
+</blockquote>
+<h3 id="定义和包含features"><a class="header" href="#定义和包含features">定义和包含<code>features</code></a></h3>
+<p><code>features</code>在<code>Cargo.toml</code>中定义. 清单5-1展示了一个名为<code>foo</code>的<code>crate</code>示例, 它包含一个简单的<code>feature</code>, 启用可选依赖项<code>syn</code>.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[package]
+name = "foo"
+...
+[features]
+derive = ["syn"]
+[dependencies]
+syn = { version = "1", optional = true }
+
+// 清单 5-1: 启用可选依赖项的`features`
+<span class="boring">}</span></code></pre></pre>
+<p>当<code>Cargo</code>编译这个<code>crate</code>时, 默认情况下它不会编译<code>syn crate</code>, 从而减少了编译时间(通常是显著的). 只有当下游的组件需要使用<code>derive</code>特性所启用的API, 并显式选择使用时, 才会编译<code>syn</code>. 清单5-2显示了这样一个下游<code>crate</code>如何启用<code>derive</code>特性, 从而引入<code>syn</code>依赖.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[package]
+name = "bar"
+...
+[dependencies]
+foo = { version = "1",features = ["derive"] }
+
+// 清单 5-2: 启用依赖项的`features`
+<span class="boring">}</span></code></pre></pre>
+<p>有些<code>features</code>使用得非常频繁, 因此<code>crate</code>默认启用它们会更合理(而不是显式启用). 因此, <code>Cargo</code>允许你为<code>crate</code>定义一组默认启用的<code>features</code>. 同样, 它也允许你禁用默认<code>features</code>. 清单5-3显示了<code>foo</code>如何使其<code>derive</code>设为默认启用, 同时禁用<code>syn</code>的一些默认<code>features</code>, 仅启用<code>derive</code>所需的<code>features</code>.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[package]
+name = "foo"
+...
+[features]
+derive = ["syn"]
+default = ["derive"]
+[dependencies.syn]
+version = "1"
+default-features = false
+features = ["derive", "parsing", "printing"]
+optional = true
+
+// 清单 5-3: 添加和选择默认`features`, 以及可选的依赖项
+<span class="boring">}</span></code></pre></pre>
+<p>在这里, 如果某个<code>crate</code>依赖于<code>foo</code>, 并且没有显式禁用默认<code>features</code>, 那么它会编译<code>foo</code>的<code>syn</code>依赖. 接着, <code>syn</code>只会启用列出的那三个<code>features</code>, 其它<code>features</code>都不会启用. 通过这种方式禁用默认<code>features</code>, 只启用真正需要的部分, 是减少编译时间的绝佳手段!</p>
+<blockquote>
+<p>作为<code>features</code>的可选依赖项</p>
+<p>当你定义一个<code>feature</code>时, 等号后面的列表本身就是一个<code>features</code>列表. 这听起来可能有点奇怪, 在清单5-3中, <code>syn</code>是一个依赖项, 而不是一个<code>features</code>. 事实证明, <code>Cargo</code>将每个可选的依赖关系都变成了与该依赖同名的<code>features</code>. 如果你试图添加一个与可选依赖同名的<code>feature</code>, 你会发现这一点; <code>Cargo</code>不允许这样做. <code>Cargo</code>正在为<code>features</code>和依赖提供不同的命名空间支持, 但在撰写本文时还没有稳定下来. 同时, 如果你想让一个<code>features</code>以依赖命名, 你可以用<code>package = ""</code> 来重命名依赖, 以避免名称冲突. 一个<code>feature</code>启用的<code>features</code>列表也可以包括依赖的<code>features</code>. 例如, 你可以写 <code>derive = ["syn/derive"]</code> 来让你的<code>derive</code>特性启用<code>syn</code> 依赖关系的 <code>derive feature</code>.</p>
+</blockquote>
+<h3 id="在你的代码中使用features"><a class="header" href="#在你的代码中使用features">在你的代码中使用<code>features</code></a></h3>
+<p>当使用<code>features</code>时, 你需要确保你的代码只在依赖可用的情况下使用它. 如果你的<code>feature</code>启用了一个特定的组件, 你需要确保如果该<code>feature</code>未被启用, 该组件就不会被包括在内.</p>
+<p>你可以使用条件编译来实现这一点, 它允许你使用注解来给出某段代码应该或不应该被编译的条件. 条件性编译主要通过<code>#[cfg]</code>属性来表达. 还有一个密切相关的<code>cfg!</code>宏, 它可以让你根据类似的条件改变运行时行为. 你可以用条件编译做很多巧妙的事情, 我们在本章后面会看到, 但最基本的形式是<code>#[cfg(feature = "some-feature")]</code>, 它表示: 只有启用<code>some-feature</code>特性时, 紧接着的代码才会被编译. 类似地, <code>if cfg!(feature = "some-feature")</code>等同于<code>if true</code>只有在启用 <code>derive</code>时才会被编译(否则为<code>false</code>).</p>
+<p><code>#[cfg]</code>属性比<code>cfg!</code>宏更常被使用, 因为<code>cfg!</code>宏会根据<code>feature</code>修改运行时行为, 这就很难保证<code>features</code>是相加的. 你可以把<code>#[cfg]</code>放在某些<code>Rust</code>项目的前面--比如函数和类型定义、<code>impl</code>块、模块和<code>use</code>语句--也可以放在某些其他结构体字段、函数参数和语句前面. 但是<code>#[cfg]</code>属性并不是哪里都能用; <code>Rust</code>语言团队对它的使用位置进行了严格限制, 以防止条件编译带来过于奇怪且难以调试的情况.</p>
+<p>记住, 修改API的某些公共部分可能会无意间使某个<code>feature</code>变得不可叠加, 从而导致部分用户无法编译你的<code>crate</code>. 你通常可以使用向后兼容的修改规则作为经验法则--例如, 如果你使一个枚举变量或一个公共结构字段成为某个<code>feature</code>的条件, 那么该类型也必须用<code>#[non_exhaustive]</code>来注解. 否则, 如果由于依赖关系树中的某个<code>crate</code>添加了该<code>feature</code>, 那么没有启用该<code>feature</code> 的依赖<code>crate</code>可能就无法再进行编译.</p>
+<blockquote>
+<p>注意: 如果你正在编写一个大的<code>crate</code>, 你期望用户只需要其中的一部分功能, 那你应该考虑用<code>features</code>来保护较大的组件(通常是模块). 这样, 用户只会选择启用他们真正需要的部分, 也只会为这些部分付出编译成本.</p>
+</blockquote>
+<h2 id="工作区workspaces"><a class="header" href="#工作区workspaces">工作区(Workspaces)</a></h2>
+<p>在<code>Rust</code>中, <code>Crates</code>扮演着多种角色--它们是依赖关系图中的节点, 是<code>trait</code>一致性的边界, 也是编译<code>features</code> 的作用域. 因此, 每个<code>crate</code>都被当作一个单独的编译单元来管理; <code>Rust</code>编译器基本上把<code>crate</code>当作一个大的源文件来编译, 一次性编译, 最终生成一个单一的二进制输出(可以是二进制或库).</p>
+<p>虽然这简化了编译器的许多方面, 但它也意味着大的<code>crate</code>在工作时可能会很痛苦. 如果你在应用程序的某个部分修改了一个单元测试、一个注释或一个类型, 编译器必须重新评估整个<code>crate</code>, 以判断是否有实际变动. 在内部, 编译器实现了一些机制来加速这一过程, 如增量重新编译和并行代码生成, 但归根结底, <code>crate</code>的大小仍然是影响项目编译时间的一个重要因素.</p>
+<p>正因如此, 随着项目规模的扩大, 你可能希望将其拆分为多个内部相互依赖的<code>crate</code>. <code>Cargo</code>提供了正好适用于这种情况的机制: 工作区(<code>workspace</code>).  工作区是一组<code>crate</code>(通常称为子<code>crate</code>)的集合, 由一个顶级的<code>Cargo.toml</code>文件组织起来, 如清单 5-4 所示.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[workspace]
+members = [
+    "foo",
+    "bar/one",
+    "bar/two",
+]
+
+// 清单 5-4: 工作空间
+<span class="boring">}</span></code></pre></pre>
+<p><code>members</code>数组是一个目录列表, 每个目录都包含工作区中的<code>crate</code>. 这些<code>crate</code>都在各自的子目录中都有独立的<code>Cargo.toml</code>文件, 但它们共享一个<code>Cargo.lock</code>文件和一个输出目录. <code>crate</code>的名字不需要与<code>member</code>中的条目完全一致. 虽然不是强制要求, 一个工作区中的<code>crate</code>共享一个名称前缀是很常见的, 但不是必须的, 这个前缀通常选择主<code>crate</code>的名称. 例如, 在<code>tokio</code>这个<code>crate</code>中, 成员被称为<code>tokio</code>、<code>tokio-test</code>、<code>tokio-macros</code>等.</p>
+<p>工作区最重要的特性之一是: 你可以在工作区的根目录下调用<code>Cargo</code>来操作工作区的所有成员<code>crate</code>. 想检查它们是否都能编译, <code>Cargo check</code>会检查它们. 想运行所有的测试? <code>cargo test</code>会对它们进行测试. 这并不像把所有东西都放在一个<code>crate</code>里那么方便, 所以不建议将项目拆得过于细碎, 但工作区已经是一个非常不错的折中方案了.</p>
+<blockquote>
+<p>注意: <code>Cargo</code>命令通常会在工作区执行"正确的操作". 如果你需要手动消除歧义(比如工作区的<code>crate</code>都有一个同名的二进制文件), 请使用<code>-p</code>标志(指明具体<code>package</code>). 如果你在一个特定工作区的子目录中, 你可以通过<code>--workspace</code>来执行整个工作区的命令.</p>
+</blockquote>
+<p>一旦你有了工作区级别的<code>Cargo.toml</code>和<code>members</code>数组, 你就可以使用路径依赖来设置你的<code>crate</code>依赖关系, 如清单5-5所示.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">bar/two/Cargo.toml
+</span>[dependencies]
+one = { path = "../one" }
+<span class="boring">bar/one/Cargo.toml
+</span>[dependencies]
+foo = { path = "../../foo" }
+
+// 清单 5-5: 工作区`crate`之间的`crate`依赖关系
+<span class="boring">}</span></code></pre></pre>
+<p>现在, 如果你对<code>bar/two</code>中的<code>crate</code>做了改变, 那么只有这个<code>crate</code>会被重新编译, 因为<code>foo</code>和<code>bar/one</code>并没有改变. 甚至从头开始编译整个项目可能会更快, 因为编译器不需要为了优化机会而评估整个项目的源代码.</p>
+<blockquote>
+<p>指定工作区内部的依赖关系</p>
+<p>在工作区中的一个<code>crate</code>依赖于另一个<code>crate</code>, 最直接的方法是使用<code>path</code>路径指定器, 如清单5-5所示. 然而, 如果你的<code>crate</code>是打算公开发布供他人使用的, 你可能更倾向于使用版本来指定依赖关系.</p>
+<p>假设你有一个<code>crate</code>, 它通过<code>one = { git = "..." }</code>依赖了<code>bar</code>工作区中的<code>one crate</code> (见示例 5-5), 同时又通过 <code>foo = "1.0.0"</code> 依赖了已经发布的 <code>foo crate</code>(同样来自<code>bar</code>). <code>Cargo</code>按规则获拉取包含整个<code>bar</code>工作区的Git仓库, 并看到该仓库又依赖于工作区中位于 <code>.../../foo</code> 的<code>foo</code>. 但<code>Cargo</code>不知道发布的版本<code>foo = "1.0.0"</code>和Git仓库中的<code>foo</code>是同一个<code>crate</code>! 它会把它们当成两个完全不同的依赖.</p>
+<p>你可能已经猜到接下来会发生什么了. 如果你尝试将来自<code>foo</code>(1.0.0)的某个类型, 用在<code>one</code>的某个API上, 而该API接受的是来自<code>foo</code>的同名类型, 编译器会拒绝编译你的代码. 即使这些类型有名字一样, 编译器也不能知道它们是同一个底层类型. 而用户会被彻底搞糊涂, 因为编译器会报错类似: "expected <code>foo::Type</code>, got <code>foo::Type</code>".</p>
+<p>解决这个问题的最佳方式是: 只有在子<code>crate</code>依赖未发布的更改时才使用路径依赖. 只要<code>one</code>与<code>foo</code>(1.0.0)一起工作, 它的依赖项中就应该写<code>foo = "1.0.0"</code>. 只有当你对<code>foo</code>做了<code>one</code>需要的修改时, 才应该让<code>one</code>改为使用路径依赖. 一旦你发布了<code>one</code>可以依赖的新版本的<code>foo</code>, 你就应该将路径依赖移除, 恢复为正常的版本依赖.</p>
+<p>这种方法也有其不足之处. 现在, 如果你改变了<code>foo</code>, 然后运行<code>one</code>的测试, 你会看到一个将使用旧的<code>foo</code>进行测试, 这可能不是你所期望的. 你可能想配置你的持续集成基础设施, 使其在以下两种场景下分别测试每个子 <code>crate</code>: 一种是使用其他子<code>crate</code>的最新发布版本, 另一种是将所有子<code>crate</code>配置为使用路径依赖.</p>
+</blockquote>
+<h2 id="项目配置"><a class="header" href="#项目配置">项目配置</a></h2>
+<p>运行<code>cargo new</code>后, 你会得到一个最小的<code>Cargo.toml</code>, 其中有<code>crate</code>的名称、版本号、一些作者信息和一个空的依赖列表. 这已经能满足大多数基本需求, 但随着项目的发展, 你可能想在<code>Cargo.toml</code>中添加一些有用的配置项.</p>
+<h3 id="包元数据crate-metadata"><a class="header" href="#包元数据crate-metadata">包元数据(Crate Metadata)</a></h3>
+<p>首先要添加到<code>Cargo.toml</code>中基础的内容, 就是<code>Cargo</code>支持的元数据指令. 除了<code>description</code>和<code>homepage</code>等字段外, 还可以包括一些额外信息, 如<code>crate</code>的<code>README</code>文件路径、用<code>cargo run</code>时默认运行的二进制文件(通过<code>default-run</code>指定), 以及用于帮助<code>cates.io</code>对<code>crate</code>进行分类的额外关键词(<code>keywords</code>)和类别(<code>categories</code>).</p>
+<p>对于项目结构更复杂的<code>crate</code>, 设置<code>include</code>和<code>exclude</code>这些元数据字段也非常有用. 它们决定了哪些文件会被包含进最终发布的包中. 默认情况下, <code>Cargo</code>会包含<code>crate</code>目录下的所有文件, 除了你的<code>.gitignore</code>文件中列出的文件, 但如果你在目录下还有大型测试数据、无关脚本或其他辅助数据, 而你又希望它们处于版本控制之下, 这种默认行为可能并不是你想要的. 顾名思义, <code>include</code>允许你仅包含特定文件集合, 而<code>exclude</code>允许你排除符合特定模式的文件.</p>
+<blockquote>
+<p>注意: 如果你有一个<code>crate</code>不应该被发布, 或者只应该被发布到某些替代的注册中心(也就是说, 不是发布到<code>crates.io</code>), 你可以将<code>publish</code>指令设置为<code>false</code>或者允许的注册中心列表.</p>
+</blockquote>
+<p>你可以使用的元数据指令的列表在不断增加, 所以请定期查看<code>Cargo</code>参考资料中的清单格式页面<code>(https://doc.rustlang.org/cargo/reference/manifest.html)</code>.</p>
+<h3 id="构建配置build-configuration"><a class="header" href="#构建配置build-configuration">构建配置(Build Configuration)</a></h3>
+<p><code>Cargo.toml</code>还可以让你控制<code>Cargo</code>如何构建你的<code>crate</code>. 最常用的工具是<code>build</code>参数, 它允许你为<code>crate</code>编写一个完全自定义的构建程序(我们将在第11章再次讨论这个问题). 然而, <code>Cargo</code>还提供了两个较小但非常实用的机制, 我们将在这里探讨: <code>patches</code>和<code>profiles</code>.</p>
+<h4 id="patch"><a class="header" href="#patch"><code>[patch]</code></a></h4>
+<p><code>Cargo.toml</code>的 <code>[patch]</code> 部分允许你为某个依赖临时指定一个不同的来源, 无论这个被修补的依赖出现在你的依赖中的哪个位置. 当你需要针对某个经过修改的传递依赖版本来编译你的<code>crate</code>, 以测试BUG修复、性能改进或即将发布的新次版本时, 这种功能非常宝贵. 清单5-6展示了一个如何临时使用一组依赖关系的变体的标例子.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[patch.crates-io]
+<span class="boring">use a local (presumably modified) source
+</span>regex = { path = "/home/jon/regex" }
+<span class="boring">use a modification on a git branch
+</span>serde = { git = "https://github.com/serde-rs/serde.git", branch = "faster" }
+<span class="boring">patch a git dependency
+</span>[patch.'https://github.com/jonhoo/project.git']
+project = { path = "/home/jon/project" }
+
+// 清单 5-6: 使用 `[patch]` 重写`Cargo.toml`中的依赖源
+<span class="boring">}</span></code></pre></pre>
+<p>即使你对某个依赖进行了<code>patch</code>, <code>Cargo</code>也会注意检查<code>crate</code>的版本, 避免你不小心<code>patch</code>到错误的主版本. 如果出于某种原因, 你通过传递依赖使用了同一个<code>crate</code>的多个主版本, 你可以通过为每个版本指定不同的标识符来分别<code>patch</code>它们, 如清单5-7中所示.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[patch.crates-io]
+nom4 = { path = "/home/jon/nom4", package = "nom" }
+nom5 = { path = "/home/jon/nom5", package = "nom" }
+
+// 清单 5-7: 使用 `[patch]` 在`Cargo.toml`中重写同一`crate`的多个版本
+<span class="boring">}</span></code></pre></pre>
+<p><code>Cargo</code>会查看每个路径中的<code>Cargo.toml</code>, 意识到<code>/nom4</code>包含主版本4, <code>/nom5</code> 包含主版本5, 并相应地对这两个版本进行<code>patch</code>. <code>package</code>关键字告诉<code>Cargo</code>在这两种情况下以<code>nom</code>的名字来寻找一个<code>crate</code>, 而不是像默认情况下那样使用依赖标识符(即等号左边的部分). 你在常规依赖中也可以用这种方式使用<code>package</code>来为依赖重命名.</p>
+<p>请记住, 当你发布一个<code>crate</code>时, <code>patch</code>不会被包含在上传文件包中. 依赖于你的<code>crate</code>的<code>crate</code>将只使用它自己的<code>[patch]</code>部分(即使是空的), 而不是你的<code>crate</code>的<code>[patch]</code>部分.</p>
+<blockquote>
+<p>crates VS. packages</p>
+<p>你可能想知道<code>package</code>和<code>crate</code>的区别是什么. 这两个术语在非正式场合经常交替使用. 这取决于你是在谈论<code>Rust</code>编译器、<code>Cargo</code>、<code>crates.io</code>还是其他什么内容, 它们有着特定的定义. 我个人认为, <code>crate</code>是一个<code>Rust</code>模块的层次结构, 从一个根<code>.rs</code>文件开始(在这个文件中你可以使用<code>crate</code>级别的属性, 如<code>#![feature]</code>)--通常是<code>lib.rs</code>或<code>main.rs</code>这样的文件. 相比之下, <code>package</code>是一个包含多个<code>crate</code>和元数据的集合, 本质上就是由<code>Cargo.toml</code>文件描述的所有内容. 这可能包括一个库<code>crate</code>、多个二进制<code>crate</code>、一些集成测试<code>crate</code>, 甚至可能包含多个拥有自己<code>Cargo.toml</code>文件的<code>workspace</code>成员.</p>
+</blockquote>
+<h4 id="profile"><a class="header" href="#profile"><code>[profile]</code></a></h4>
+<p><code>[profile]</code>配置段允许你向<code>Rust</code>编译器传递额外的选项, 以改变<code>crate</code>编译方式. 这些选项主要分为三类: 性能选项、调试选项, 以及以用户定义的方式改变代码行为的选项. 这些选项在调试模式(debug mode)或发布模式(release mode)有不同的默认值(其他模式也存在).</p>
+<p>三个主要的性能选项是<code>opt-level</code>、<code>codegen-units</code>和<code>lto</code>. <code>opt-level</code>选项通过告诉编译器优化你的程序来调整运行时的性能(0表示"不优化", 3表示"尽可能优化"). 设置越高, 代码优化程度越高, 可能会使代码运行得更快. 但是, 额外的优化会增加编译时间, 这就是为什么优化通常只在发布版本中启用.</p>
+<blockquote>
+<p>注意: 你也可以将<code>opt-level</code>设置为"s", 以优化二进制大小, 这在嵌入式平台上可能很重要.</p>
+</blockquote>
+<p><code>codegen-units</code>选项涉及的是编译时性能. 它告诉编译器可以将单个<code>crate</code>的编译分成多少个独立的编译任务(即代码生成单元). 一个大型<code>crate</code>的编译被分割成越多的部分, 编译就越快, 因为可以有更多的线程平行编译<code>crate</code>. 不幸的是, 为了实现这种加速, 这些线程大致都是独立工作, 这意味着代码优化受到影响. 例如, 想象一下, 在一个线程中编译的<code>crate</code>时, 可能会受益于将另一个<code>crate</code>中的一些代码的内联进来--因为这两个<code>crate</code>是独立的, 所以内联就无法发生! 那么, 这个设置在编译时间性能和运行时性能之间做出了权衡. 默认情况下, <code>Rust</code>在调试模式下使用无限制数量的<code>codegen</code>单元(基本上就是"尽快编译"), 在发布模式下使用较少的数量(在撰写本文时为16).</p>
+<p><code>lto</code> 设置开启了链接时优化(LTO), 它允许编译器(或者更准确地说, 是链接器)对原本是分开编译的程序部分(称为编译单元)进行联合优化. LTO的具体细节超出了本书的范围, 但其基本思想是, 每个编译单元的输出会包含关于其源代码的额外信息. 在所有单元被编译完成后, 链接器会再次遍历它们, 并使用这些附加信息对整个合并后的可执行代码进行优化. 这个额外的过程会增加编译时间, 但可以回收因为拆分编译单元而损失的大部分运行时性能. 特别是, LTO可以为那些对性能敏感的程序提供显著的性能提升, 尤其是在能从跨<code>crate</code>情况下的优化中获益. 不过要注意的是, 跨<code>crate</code>的LTO可能会大大增加编译时间.</p>
+<p><code>Rust</code>默认会在每个<code>crate</code>内的所有编码单元中执行LTO, 试图弥补因使用多个编码单元而造成的优化损失. 由于LTO仅限单个<code>crate</code>内执行, 而不是跨<code>crate</code>, 所以这个额外的过程并不繁琐, 而且增加的编译时间应该低于使用大量编码单元所节省的时间. <code>Rust</code>还提供了一种被称为"thin LTO"的技术, 它的优势是LTO优化过程大部分可以并行执行, 缺点是会漏掉一些完整LTO能捕捉到的优化机会.</p>
+<blockquote>
+<p>注意:  LTO 在很多情况下也可以用来跨越外部函数接口的边界进行优化. 参见 <code>linker-plugin-lto rustc</code> 标志以了解更多细节.</p>
+</blockquote>
+<p><code>[profile]</code>配置段还支持一些有助于调试的标志, 如<code>debug</code>, <code>debug-assertions</code>和<code>overflow-checks</code>.</p>
+<ul>
+<li><code>debug</code>标志告诉编译器在编译的二进制文件中包含调试符号. 这增加了二进制文件的体积, 但这意味着在栈回溯或性能分析中, 你能看到函数名称等信息, 而不仅仅是指令地址.</li>
+<li><code>debug-assertions</code>标志启用了<code>debug_assert!</code>宏和其他相关的调试代码, 否则不会被编译(通过<code>cfg(debug_assertions)</code>). 这样的代码可能会使你的程序运行变慢, 但在运行时更容易捕捉到可疑行为.</li>
+<li>溢出检查(<code>overflow-checks</code>)标志, 顾名思义, 用于启用整数运算的溢出检查. 这会让整数运算变慢(注意到一个趋势了吗?), 但能帮助你更早地发现棘手的 bug.</li>
+</ul>
+<p>默认情况下, 这些都是在调试模式下启用, 在发布模式下禁用.</p>
+<h4 id="profilepanic"><a class="header" href="#profilepanic"><code>[profile.*.panic]</code></a></h4>
+<p><code>[profile]</code>配置段还有一个值得单独讨论的标志: <code>panic</code>. 这个选项决定了当你的程序中的代码调用<code>panic</code>(无论是直接调用还是通过类似<code>unwrap</code>的方式间接触发)时会发生什么. 你可以将<code>panic</code>设置为<code>unwind</code>(大多数平台上的默认值)或<code>abort</code>. 我们将在第9章中更多地讨论<code>panic</code>和<code>unwinding</code>, 但我将在这里做一个简单的概述.</p>
+<p>通常在<code>Rust</code>中, 当你的程序发生<code>panic</code>时, 解发<code>panic</code>的线程开始展开(<code>unwinding</code>)它的调用栈. 你可以将展开堆栈理解为: 从当前函数开始, 一层层强制返回, 一直到该线程调用栈的底部. 也就是说, 如果<code>main</code>调用了<code>foo</code>, <code>foo</code>调用了<code>bar</code>, 而<code>bar</code>调用了<code>baz</code>, 那么<code>baz</code> 中的<code>panic</code>将强行从<code>baz</code>返回, 然后是<code>bar</code>, 然后是<code>foo</code>, 最后是<code>main</code>, 最终程序退出. 展开调用栈的线程会按照正常方式销毁堆栈上的所有值, 这样它们就有机会清理资源、报告错误等. 这种机制使得即使发生<code>panic</code>, 系统仍有机会优雅地退出.</p>
+<p>当某个线程发生<code>panic</code>并展开调用栈时, 其他线程不会受到影响, 会继续运行. 只有当(并且仅当)运行<code>main</code>的线程退出时, 整个程序才会终止. 也就是说, <code>panic</code>通常只影响发生<code>panic</code>的线程.</p>
+<p>这意味着栈展开(unwinding)是一把双刃剑; 程序可能会在某些组件失败的情况下继续运行, 从而引发各种奇怪的行为. 举个例子, 一个线程在更新<code>Mutex</code>中的状态到一半时发生了<code>panic</code>. 接下来任意获得该<code>Mutex</code>的线程都必须准备好处理这一个"部分更新、不一致"的状态. 因此, 一些同步原语(如<code>Mutex</code>)会记住它们上次访问时是否发生过<code>panic</code>, 并在之后有线程尝试访问时将这个信息传达出去. 如果某个线程遇到了这样的状态, 它通常也会发生<code>panic</code>, 这将导致一连串的<code>panic</code>, 最终导致整个程序终止. 但这通常比在损坏的状态下继续运行要好!</p>
+<p>支持栈展开(<code>unwinding</code>)所需的"账日管理"(bookkeeping)并不是免费的, 通常还需要编译器和目标平台的特别支持. 例如, 许多嵌入式平台根本无法高效地进行栈展开操作. 因此, <code>Rust</code>支持另一种<code>panic</code>模式: <code>abort</code>, 它确保当<code>panic</code>发生时, 整个程序立即退出. 在这种模式下, 没有任何线程能够进行清理操作. 这看起来很严重, 而且确实如此, 但它确保了程序永远不会在"半工作"状态下运行, 而且同时也能立即暴露错误.</p>
+<blockquote>
+<p>警告
+<code>panic</code> 设置是全局性的--如果你把它设置为<code>abort</code>, 你所有的依赖也会被编译成<code>abort</code>.</p>
+</blockquote>
+<p>你可能已经注意到, 当一个线程<code>panic</code>时, 它往往会打印一个回溯: 及导致<code>panic</code>发生的函数调用轨迹. 这也是一种栈展开(unwinding)的形式, 尽管它与我们之前讨论的<code>panic</code>行为中的栈展开是两个不同的机制. 你可以通过给<code>rustc</code>传递<code>-Cforce-unwind-tables</code>即使在<code>panic=abort</code> 情况下也可以获取回溯信息, 这样会让<code>rustc</code>在生成代码时包含必要的栈信息, 从而支持栈回溯, 即便程序仍然会在<code>panic</code>时直接终止.</p>
+<blockquote>
+<p>配置文件覆盖(PROFILE OVERRIDES)</p>
+<p>你可以使用配置覆盖(profile overrides)机制, 为特定的依赖关系或特定的<code>profile</code>设置<code>profile</code>选项. 例如, 清单5-8显示了如何使用 <code>[profile.&lt;profile-name&gt;.package.&lt;crate-name&gt;]</code> 语法, 在调试模式下为<code>serde crate</code>启用积极的优化, 为所有其他<code>crate</code>启用适度的优化.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[profile.dev.package.serde]
+opt-level = 3
+[profile.dev.package."*"]
+opt-level = 2
+
+// 清单 5-8: 覆盖特定依赖关系或特定模式的配置文件选项
+<span class="boring">}</span></code></pre></pre>
+<p>如果某些依赖在调试模式下运行非常慢, 比如解压缩或视频编码, 而你可能需要对其进行优化, 以便你的测试套件不至于花上几天时间来完成, 那么这种优化覆盖机制就非常有用. 你也可以在<code>~/.cargo/config</code>的<code>Cargo</code>配置文件中使用 <code>[profile.dev]</code> (或类似)部分来指定全局配置文件的默认值.</p>
+<p>当你为一个特定的依赖关系设置优化参数时, 请记住, 这些参数只适用于作为该<code>crate</code>的一部分被编译的代码; 例如, 如果本例中的<code>serde</code>有一个通用的方法或类型被你的<code>crate</code>中使用, 该方法或类型的代码将在你的<code>crate</code>中被单态化和优化, 此时生效的是你自己<code>crate</code>的构建配置, 而不是<code>serde</code>的构建配置覆盖项.</p>
+</blockquote>
+<h2 id="条件编译"><a class="header" href="#条件编译">条件编译</a></h2>
+<p>你写的大多数<code>Rust</code>代码都是通用的--无论运行在哪种CPU或操作系统上, 它们的行为都是一致的. 但有时你必须做一些特殊处理, 让代码能在Windows、ARM芯片等平台上正常运行, 或者在针对特定平台的应用二进制接口(ABI)进行编译时也需如此. 或者你想在某个CPU指令可用时, 编写该函数的优化版本, 或者在持续集成(CI)环境中禁用某些缓慢但无关紧要的初始化代码. 为了应对这些情况, <code>Rust</code>提供了条件编译机制, 即只有在编译环境的某些条件为真时, 才会编译一个特定的代码段.</p>
+<p>我们用<code>cfg</code>关键字来表示有条件的编译, 你在本章前面的"在你的<code>crate</code>中使用<code>features</code>"中已经见过. 它通常以<code>#[cfg(condition)]</code>属性的形式出现, 意思是: 只有在<code>condition</code>为真时, 才会编译紧随其后的代码项. <code>Rust</code>还提供了<code>#[cfg_attr(condition, attribute)]</code>, 如果<code>condition</code>成立, 则编译为 <code>#[attribute]</code>, 否则什么也不做. 你也可以使用<code>cfg!(condition)</code>宏将<code>cfg</code>条件作为布尔表达式求值.</p>
+<p>每个<code>cfg</code> 构造都接受一个由选项组成的条件, 比如<code>feature = "some-feature"</code>, 还可以使用组合器<code>all</code>、<code>any</code>和<code>not</code>, 它们的行为与你所期望的类似. 选项要么是简单的名字, 比如<code>unix</code>, 要么是键/值对, 比如<code>feature = "some-feature"</code>, 后者在<code>features</code>条件中常见.</p>
+<p>你可以依据很多有趣的选项来控制代码是否被编译. 下面我们将按使用频率从高到低一一介绍这些选项:</p>
+<h3 id="feature选项"><a class="header" href="#feature选项">Feature选项</a></h3>
+<p>你已经看过这些示例了. <code>Feature</code>选项的形式是<code>feature = "name-of-feature"</code>, 如果指定的特性被启用, 该条件就会被视为为真. 你可以通过组合器在一个条件中检查多个<code>feature</code>. 例如, <code>any(feature = "f1", feature = "f2")</code>表示只要功能<code>f1</code>或<code>f2</code>中有一个被启用, 该条件就为真。</p>
+<h3 id="操作系统选项"><a class="header" href="#操作系统选项">操作系统选项</a></h3>
+<p>这些使用键值对语法, 键为<code>target_os</code>, 值为<code>windows</code>、<code>macos</code>和<code>linux</code>. 你也可以用<code>target_family</code>指定一个操作系统系列, 它的值是<code>windows</code>或<code>unix</code>. 这些都很常见, 以至于有了简写形式, 因此你可以直接使用<code>cfg(windows)</code>和<code>cfg(unix)</code>. 例如, 如果你想让一个特定的代码段只在<code>macOS</code>和<code>Windows</code>上编译, 你可以这样写: <code>#[cfg(any(windows, target_os = "macos"))]</code>.</p>
+<h3 id="上下文选项"><a class="header" href="#上下文选项">上下文选项</a></h3>
+<p>这些选项可以让你根据特定的编译上下文来调整代码. 其中最常见的是<code>test</code>选项, 只有当<code>crate</code>使用测试配置文件, 编译时才为true. 请记住, <code>test</code>仅对当前正在测试的<code>crate</code>生效, 而不包括它的任何依赖项. 这也意味着, 在运行集成测试时, <code>test</code>不会在你的<code>crate</code>中被设置; 是那些集成测试文件在使用测试配置文件编译, 而你的实际<code>crate</code>按正常方式编译(也就是没有设置<code>test</code>). 这同样适用于<code>doc</code>和<code>doctest</code>选项, 它们仅在生成文档或编译文档中的测试代码(<code>doctest</code>)时才被设置. 还有<code>debug_assertions</code>选项, 它在调试模式(debug mode)下默认被启用.</p>
+<h3 id="tool-选项"><a class="header" href="#tool-选项">Tool 选项</a></h3>
+<p>一些工具, 比如<code>clippy</code>和<code>Miri</code>, 会设置自定义选项(稍后会详细介绍), 你可以借助这些选项在工具运行时自定义编译行为. 通常, 这些选项是以相关的工具命名的. 例如, 如果你希望某个计算密集型的测试在<code>Miri</code>下不运行, 你可以给它一个属性<code>#[cfg_attr(miri, ignore)]</code>.</p>
+<h3 id="架构选项"><a class="header" href="#架构选项">架构选项</a></h3>
+<p>这些选项允许你根据编译器所针对的CPU指令集来进行编译. 你可以用<code>target_arch</code>来指定一个特定的架构, 它的值是<code>x86</code>、<code>mips</code>和<code>arch64</code>, 或者你可以用<code>target_feature</code>来指定一个特定的平台特性, 它的值是<code>avx</code>或<code>sse2</code>. 对于非常低层的代码, 你可能还会发现<code>target_endian</code>和<code>target_pointer_width</code>选项很有用.</p>
+<h3 id="编译器选项"><a class="header" href="#编译器选项">编译器选项</a></h3>
+<p>这些选项允许你根据所编译的平台ABI调整代码, 并且可以通过<code>target_env</code>的值(如<code>gnu</code>、<code>msvc</code>和<code>musl</code>)获得. 由于历史原因, 这个值通常是空的, 尤其是在<code>GNU</code>平台上. 通常只有在你需要直接与环境ABI交互时才会用到这个选项, 例如当使用<code>#[link]</code>与ABI特定的符号名链接时.</p>
+<p>虽然<code>cfg</code>条件通常是用来自定义代码的, 但有些也可以用来自定义依赖关系. 例如, 依赖关系<code>winrt</code>通常只在Windows上有意义, 而<code>nix crate</code>可能只在基于Unix的平台上有用. 清单5-9给出了一个如何使用<code>cfg</code>条件的例子.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[target.'cfg(windows)'.dependencies]
+winrt = "0.7"
+[target.'cfg(unix)'.dependencies]
+nix = "0.17"
+
+// 清单 5-9: 条件性依赖
+<span class="boring">}</span></code></pre></pre>
+<p>在这里, 我们指定只有在<code>cfg(windows)</code>(在Windows上)条件下<code>winrt</code>版本0.7才会被视为依赖项, 而只有在<code>cfg(unix)</code>(在Linux、macOS和其他基于Unix的平台上)条件下<code>nix</code>版本0.17才会被视为依赖. 需要注意的一点是, <code>[dependencies]</code>部分是在构建过程的早期就被评估, 此时只有某些<code>cfg</code>选项可用. 特别是, <code>feature</code>和上下文选项在这个时候还不能用, 因此无法使用此语法根据<code>feature</code>和上下文拉取依赖项. 然而, 你可以使用仅依赖于目标或架构的任何<code>cfg</code>, 以及由调用<code>rustc</code>的工具显式设置的任何选项(如<code>cfg(miri)</code>).</p>
+<blockquote>
+<p>注意: 在我们讨论依赖性规范的时候, 我强烈建议你的CI基础设施, 使用<code>cargo-deny</code>和<code>cargo-audit</code>等工具对你的依赖性进行基本审计. 这些工具可以检测到以下情况: 你间接依赖某个依赖项的多个主版本, 你依赖了已经无人维护或有已知安全漏洞的<code>crate</code>, 或者你使用了可能不希望采用的许可证, 使用此类工具是一种自动化地提升代码质量的绝佳方式.</p>
+</blockquote>
+<p>添加自定义条件编译选项也非常简单. 你只需要确保当<code>rustc</code>编译你的<code>crate</code>时, 传递了<code>--cfg=myoption</code>参数即可. 最简单的方法是将你的<code>--cfg</code>添加到<code>RUSTFLAGS</code>环境变量中. 这在CI中很有用, 你可能想根据你的测试套件是在CI上还是在开发机器上运行来定制测试行为: 在你的CI设置中把<code>--cfg=ci</code>添加到 <code>RUSTFLAGS</code>, 然后在你的代码中使用<code>cfg(ci)</code>和 <code>cfg(not(ci))</code>. 这样设置的选项也可以在<code>Cargo.toml</code>的依赖关系中使用.</p>
+<h2 id="版本控制versioning"><a class="header" href="#版本控制versioning">版本控制(Versioning)</a></h2>
+<p>所有的<code>Rust</code>的<code>crates</code>都是有版本的, 并应遵循<code>Cargo</code>对语义化版本控制的实现方式. 语义化版本控制定义了不同类型的变更需要如何对应版本增长, 以及哪些版本之间是兼容的, 以何种方式兼容. <code>RFC 1105</code>标准本身非常值得一读(并不晦涩难懂), 但总结起来, 它将更改分为三类: 破坏性更改, 需要增加主版本号; 功能新增, 需要增加次版本号; 以及BUG修复, 只需要增加补丁版本. <code>RFC 1105</code>很好地概述了什么是<code>Rust</code>中的破坏性更改进行了清晰的界定, 本书其他部分也涉及了一些相关内容.</p>
+<p>这里我不会详细讲解各种变更类型的具体语义. 我想强调的是, 在<code>Rust</code>生态系统中, 版本号出现的一些不那么直观的情况, 这些情况在你给自己的<code>crate</code>决定版本号时需要牢记在心.</p>
+<h3 id="最小支持的rust版本"><a class="header" href="#最小支持的rust版本">最小支持的<code>Rust</code>版本</a></h3>
+<p>第一个<code>Rust</code>特有的问题是最小支持的<code>Rust</code>版本(<code>MSRV</code>). 关于项目在<code>MSRV</code>和版本控制方面应遵循什么策略, <code>Rust</code>社区内部有很多争议, 而且没有真正"完美"的答案. 问题的核心在于, 一些<code>Rust</code>用户只能使用旧版本的编译器, 通常是在企业环境中, 他们往往没有升级的选择权. 如果我们持续使用新稳定下来的API, 这些用户将无法编译我们的<code>crates</code>, 从而被迫"掉队".</p>
+<p><code>crate</code>作者可以使用两种技术, 来让处于这种情况的用户的生活稍微轻松一些. 第一种是建立一个<code>MSRV</code>策略, 承诺<code>crate</code>的新版本始终能够与过去X个月的任一稳定版本一起编译. 具体的时间跨度因项目而异, 但通常是6或12个月. 鉴于<code>Rust</code>每六周发布一个稳定版本, 这相当于支持最近的4或8个稳定版本. 项目中引入的任何新代码都必须能用<code>MSRV</code>编译器成功编译(通常由CI检查), 否则就需要推迟合并, 直到<code>MSRV</code>策略允许其合并为止. 这有时确实会很麻烦, 因为这意味着这些<code>crates</code>无法利用语言中最新和最强大的特性, 但这确实能给你的用户带来更多便利.</p>
+<p>第二个做法是: 确保在<code>MSRV</code>发生变化时, 增加你的<code>crate</code>的次要版本号. 因此, 如果你发布了<code>crate</code>的2.7.0版本, 并将你的MSRV从<code>Rust 1.44</code>提升到<code>Rust 1.45</code>, 那么一个受限于<code>Rust 1.44</code>的项目就可以通过使用依赖版本规范<code>version = "2, &lt;2.7"</code>来继续使用你旧版本的<code>crate</code>, 这样该项目就能继续正常工作, 直到它有机会升级到<code>Rust 1.45</code>上. 重要的是, 你要增加次版本号, 而不仅仅是补丁版本号, 这样, 如果有必要, 你仍然可以为旧的<code>MSRV</code>版本发布新的补丁版本, 以修复关键的安全问题.</p>
+<p>有些项目对<code>MSRV</code>(最低支持的<code>Rust</code>版本)的支持非常严肃, 以至于他们把<code>MSRV</code>的变化是视为破坏性的变更, 并相应的提升主版本号. 这意味着下游项目必须主动选择接收<code>MSRV</code>变化, 而不是默认接受然后再想办法"退出", 但这也意味着那些 对<code>MSRV</code>没有严格要求的用户, 如果不升级依赖, 就无法获得未来的bug修复, 这可能需要他们也发布一个破坏性的变化. 正如我所说, 没有一种方案是完全没有缺点的.</p>
+<p>在当前的<code>Rust</code>生态系统中, 强制执行<code>MSRV</code>是一项挑战. 只有少部分<code>crate</code>提供了<code>MSRV</code>保证, 即使你的依赖项做到了, 你也需要不断监控它们何时提升了自己的<code>MSRV</code>. 一旦发生这种情况, 你就必须发布你自己的<code>crate</code>的新版本, 用之前提到的方式来限制依赖的版本范围, 以确保你的<code>MSRV</code>不会因此间接发生变化. 这反过来可能迫使你放弃一些依赖库的安全性或性能更新, 因为你必须继续使用旧版本, 直到你的<code>MSRV</code>策略允许升级为止. 而且这个决定还会传导到依赖你<code>crate</code>的下游项目. 社区已经提出将<code>MSRV</code>检查机制直接集成到<code>Cargo</code>中, 但截至目前, 还没有稳定的、可用的实现.</p>
+<h3 id="最小的依赖版本"><a class="header" href="#最小的依赖版本">最小的依赖版本</a></h3>
+<p>当你第一次添加依赖时, 通常很难判断应该为该依赖指定什么样的版本号. 程序员通常会选择最新的版本, 或者只选择当前的主版本号, 但很可能这两种选择都是不合适的. 我所说的"错误"并不是指你的<code>crate</code>不能编译, 而是说这种选择在未来可能会给使用你<code>crate</code>的用户带来麻烦. 我们来看一下, 这两种做法各自存在什么问题.</p>
+<p>首先, 考虑这样一种情况: 你添加了<code>hugs = "1.7.3"</code>的依赖, 这是当前最新发布的版本. 现在, 假设有另一个开发者依赖了你的<code>crate</code>, 但他们也依赖于另一个<code>crate foo</code>, 而<code>foo</code>本身也依赖于<code>hugs</code>. 再进一步设想, <code>foo</code>的作者非常严格的遵循<code>MSRV</code>策略, 因此他们的依赖<code>hugs = "1, &lt;1.6"</code>. 这时你就会遇到问题了. <code>Cargo</code>在处理依赖时, 看到你的声明的是<code>hugs = "1.7.3"</code>时, 它只考虑<code>&gt;=1.7</code>的版本. 但是它又发现<code>foo</code>对<code>hugs</code>的依赖要求<code>&lt;1.6</code>, 于是<code>Cargo</code>会放弃并报错, 并报告说没有哪个<code>hugs</code>版本可以同时满足所有依赖的需求.</p>
+<blockquote>
+<p>注意: 实际上, 有很多原因会导致某个<code>crate</code>明确不希望使用某个依赖的较新版本. 最常见的原因是为了执行<code>MSRV</code>策略, 另一个是满足企业审计要求(较新的版本将包含未被审计的代码), 还包括确保可重现构建(即始终使用精确列出的依赖版本).</p>
+</blockquote>
+<p>这就很不幸了, 因为你的<code>crate</code>可能实际上在<code>hugs 1.5.6</code>中能正常编译. 甚至可能在任何1.X版本中都能正常工作. 但如果你使用的是某个最新的小版本号, 你就相当于告诉<code>Cargo</code>: 只考虑该小版本及其之后的版本. 那是不是说, 应该改用<code>hugs = "1"</code>来解决呢? 不, 这也不完全正确. 你的代码确实依赖于<code>hugs 1.6</code>中添加的东西, 因此虽然<code>1.6.2</code>没有问题, 但<code>1.5.6</code>就不行了. 如果你一直在一个能使用新版本<code>hugs</code>的环境中编译你的<code>crate</code>, 你可能完全不会注意到这个问题, 但如果依赖图中的某个<code>crate</code>指定<code>hugs = "1, &lt;1.5"</code>, 你的<code>crate</code>就无法编译了.</p>
+<p>正确的策略是列出包含你<code>crate</code>所依赖所有功能的最早版本, 并且在你不断为<code>crate</code>添加新代码时, 也要确保这个前提仍然成立. 但除了翻<code>changelog</code>或者靠试错法, 你怎么确定这个最小版本呢? 你最好的办法是使用<code>Cargo</code>的不稳定的功能<code>-Zminimal-versions</code>参数, 这个参数让<code>Cargo</code>使用所有依赖项的最小可接受版本, 而不是最大版本. 接着, 把你的所有依赖项都设置为只指定最新的主版本号, 尝试编译, 对那些无法编译通过的依赖项添加具体的小版本号, 重复这个过程, 直到所有依赖都能顺利编译, 你现在有了最低版本要求.</p>
+<p>值得注意的是, 就像<code>MSRV</code>一样, 最小的版本检查也面临着一个生态系统的采用纳的问题. 即使你已经正确设置了所有版本号约束, 你依赖的那些项目可能并没有这么做. 这导致<code>Cargo</code>的最小版本检查功能在实践中难以使用(这也是为什么它至今仍是不稳定功能的原因). 如果你依赖<code>foo</code>, 而<code>foo</code>依赖<code>bar</code>, 并指定<code>bar="1"</code>, 而实际上它需要<code>bar="1.4"</code>, 那么无论你怎么指定 <code>foo</code>, <code>Cargo</code>都会报告编译<code>foo</code>失败, 因为<code>-Zminimal-versions</code>标志会让<code>Cargo</code>总是选择最小可接受版本. 你可以通过在你的依赖列表中显式添加<code>bar</code>, 并指定正确的版本来解决这个问题, 但这种变通方式设置起来很麻烦, 维护起来也痛苦. 你可能不得不显式列出大量仅通过间接依赖引入的库, 而且你还得不断维护更新这些版本信息.</p>
+<blockquote>
+<p>注意: 目前有一个提义: 引入一个标志, 即对当前的<code>crate</code>倾向于使用最小的版本, 但对依赖项倾向于使用最大的版本, 这个方案似乎看起来非常有前景.</p>
+</blockquote>
+<h3 id="变更记录changelogs"><a class="header" href="#变更记录changelogs">变更记录(Changelogs)</a></h3>
+<p>除了最简单的<code>crate</code>, 我强烈建议你维护一份变更日志. 没有什么比看到某个依赖升级了主版本, 然后还得翻Git提交日志来搞清楚到底改了什么、你的代码要怎么改更让人沮丧的了. 我建议你不要只是把Git提交日志原封不动地塞进一个叫<code>changelog</code>的文件里, 而是手动维护一份变更日志. 这样写出来的<code>changelog</code>才更可能对用户真正有用.</p>
+<p>一个简单但很不错的<code>changelog</code>格式是<em>Keep a Changelog</em>上推荐的格式, 该格式记录在 <code>https://keepachangelog.com</code>.</p>
+<h3 id="未发布的版本"><a class="header" href="#未发布的版本">未发布的版本</a></h3>
+<p>即使依赖的来源是本地目录或Git仓库, <code>Rust</code>也会考虑它的版本号. 这意味着, 即使你还没有把<code>crate</code>发布到<code>crates.io</code>发布版本, 语义版本管理依然很重要; 在不同的版本之间, 你的<code>Cargo.toml</code>里的版本号是依然是有意义的. 语义化版本规范并没有规定在这种情况下该怎么做, 但我会提供一个还算不错、负担不大的工作流程供你参考.</p>
+<p>在你发布了一个版本后, 立即将<code>Cargo.toml</code>中的版本号更新为下一个补丁版本, 并加上类似后缀为<code>-alpha.1</code>. 如果你刚刚发布了<code>2.0.3</code>, 就把新版本定为<code>2.0.4-alpha.1</code>. 如果你发布的是一个<code>alpha</code>版本, 那就把<code>alpha</code>的编号递增, 比如从<code>2.0.4-alpha.1</code>到<code>2.0.4-alpha.2</code>.</p>
+<p>当两个版本发布之间对代码进行修改时, 要注意是否有新加功能或破坏性的变更. 如果发生了这样的更改, 并且对应的版本号自上次发布后还没有变动, 那么就应当更新版本号. 例如, 如果上一个正式发布的版本是<code>2.0.3</code>, 而当前的开发版本是<code>2.0.4-alpha.2</code>, 此时你进行了新增功能的修改, 那么就应该把新版本改为<code>2.1.0-alpha.1</code>, 如果你做了一个破坏性的修改, 就变成<code>3.0.0-alpha.1</code>. 如果相应的版本号已经增加过了, 那就只需要递增<code>alpha</code>的编号即可.</p>
+<p>当你发布正式版本时, 移除版本号中的后缀(除非你想发布的是预发布版本), 然后发布这个版本, 并从头开始新的迭代.</p>
+<p>这个流程之所以有效, 是因为它让两个常见的工作流程更加流畅. 首先, 想象一下, 一个开发者依赖于你的<code>crate</code>的主要版本2, 但他们需要一个目前只在Git中提供的功能. 然后你提交了一个破坏性的修改. 如果你没有同时增加主版本, 他们的代码就可能会以意想不到的方式突然出错--要么无法编译, 要么在运行时出现奇怪的问题. 但如果你按照本文介绍的流程操作, <code>Cargo</code>会在他们使用你的<code>crate</code>的时间发出提醒, 指出发生了破坏性变更, 这样他们就必须要么解决这个问题, 要么将依赖锁定到某个特定提交.</p>
+<p>接下来, 想象一位开发者需要使用他们刚刚为你的<code>crate</code>贡献的一个功能, 但这个功能尚未发布在任何一个正式版本中. 他们已经通过Git依赖的方式使用你的<code>crate</code>一段时间了, 所以他们项目中的其他开发者本地保存的仍是你<code>crate</code>仓库的旧版本. 如果你没有在Git中更新主版本号, 该开发者就无法向其它人传达他们的项目现在依赖了那个刚合并的新功能. 如果他们把变更推送到项目中, 其他开发者会发现项目不再能编译了, 因为<code>Cargo</code>会继续使用本地旧版本的仓库副本. 而如果该开发者可以为Git依赖更新次版本号, <code>Cargo</code>就会意识到旧的仓库副本已经过时.</p>
+<p>这个工作流程并不完美. 它无法很好地传达在两个版本发布之间发生的多个次版本或主版本变更, 并且你仍然需要花些精力来跟踪版本变化. 不过, 它确实解决了<code>Rust</code>开发者在使用Git依赖时最常遇到的两个问题, 而且即便你在发布版本之间做了多次这样的更改, 这个工作流程仍能帮助你避免许多问题.</p>
+<p>如果你不太在意发布版本中版本号变得不够小或连续, 你可以通过在每次变更时始终递增相应的版本号部分, 来改进上述建议的工作流程. 但要注意, 具体取决于你变更的频率, 这可能会让你的版本号变得非常大.</p>
+<h2 id="总结-4"><a class="header" href="#总结-4">总结</a></h2>
+<p>在本章中, 我们探讨了多种用于配置、组织和发布<code>crate</code>的机制, 这些机制既能让你自己受益, 也有助于他人使用你的<code>crate</code>. 我们还回顾了在使用<code>Cargo</code>的依赖和<code>features</code>时一些常见的坑, 希望你以后不会再被这些问题困扰. 在下一章中, 我们将转向测试主题, 深入探讨如何超越我们所熟知和喜爱的<code>Rust</code>的简单<code>#[test]</code>测试函数.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第七章-宏"><a class="header" href="#第七章-宏">第七章 宏</a></h1>
+<p>宏在本质上是一种让编译器为你生成代码的工具. 你向编译器提供一套根据输入参数生成代码的规则, 编译器会将每次宏调用替换为应用该规则后生成的代码, 宏可以被看作一种由你定义替换规则的自动代码替换机制.</p>
+<p><code>Rust</code>的宏具有多种形式和结构, 使实现各种类型的代码生成变得更容易. 主要有两种宏: 声明性宏和过程宏, 本章将对它们逐一进行探讨. 我们还将介绍宏在日常编码中的常见用途, 以及在更高级用法中可能遇到的一些陷阱.</p>
+<p>来自C系语言的程序员可能习惯于<code>C</code>和<code>C++</code>的那片"混乱之地", 在那里你可以用<code>#define</code>将每个<code>true</code>改为<code>false</code>, 甚至移除所有的<code>else</code>关键字. 如果你也是如此, 就需要摆脱"宏等于不良实践"的刻板印象. <code>Rust</code>中的宏远不如<code>C</code>的宏那般"狂野失控". 它们遵循(大多)定义明确的规则, 并且对误用具有较强的防护性.</p>
+<h2 id="声明宏declarative-macros"><a class="header" href="#声明宏declarative-macros">声明宏(Declarative Macros)</a></h2>
+<p>声明式宏是使用<code>macro_rules!</code>语法定义的, 它允许你方便地定义类似函数的宏, 而无需像过程宏那样编写一个专用的<code>crate</code>. 定义好声明式宏后, 可以通过宏名加感叹号来调用它. 我更倾向于将这种宏看作一种由编译器辅助完成的查找替换工具: 它适用于许多规律明确、结构良好的转换任务, 并能有效消除重复样板代码. 到目前为止, 你在<code>Rust</code>中遇到的大多数宏都可能是声明性宏. 但请注意, 并非所有函数形式的宏都是声明性宏; <code>macro_rules!</code> 本身就是一个例外, <code>format_args!</code>也是如此. <code>!</code>仅表示该宏调用会在编译时被替换为不同的源代码.</p>
+<blockquote>
+<p>注意: 由于<code>Rust</code>的解析器专门识别和解析带有<code>!</code>的宏调用, 因此它们只允许用于解析器允许的位置. 它们在大多数常见场景中都可以使用, 比如在表达式位置或<code>impl</code>块中, 但并非适用于所有地方. 例如(截至目前), 在需要标识符或<code>match</code>分支的位置无法调用函数形式的宏.</p>
+</blockquote>
+<p>声明式宏为何被称为声明式, 这一点可能并不直观. 毕竟, 在程序中你不是一直都在"声明"各种内容吗? 在这里, "声明式"指的是: 你并不指定输入应如何被转换为输出, 而只是声明"当输入是B时, 输出应为A". 你只需声明它应该如此, 编译器会负责实现背后所有的解析和转换逻辑. 这使得声明式宏简洁而富有表现力, 但也容易显得晦涩, 因为你只能使用一套有限的语法来表达这些声明.</p>
+<h3 id="什么时候使用它们"><a class="header" href="#什么时候使用它们">什么时候使用它们</a></h3>
+<p>当你发现自己在重复编写相同的代码, 而又希望避免这样做时, 声明式宏就特别有用. 它们最适合用于结构固定的代码替换--如果你打算进行复杂的代码转换或大规模的代码生成, 那过程宏可能会更合适.</p>
+<p>我最常在编写重复且结构相似的代码时使用声明式宏, 例如测试代码和<code>trait</code>实现中. 在测试中, 我经常希望多次运行相同的测试逻辑, 但配置略有不同. 这时我可能会写出类似于代码清单7-1中所示的东西.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn test_inner&lt;T&gt;(init: T, frobnify: bool) { ... }
+#[test]
+fn test_1u8_frobnified() {
+    test_inner(1u8, true);
+}
+// ...
+#[test]
+fn test_1i128_not_frobnified() {
+    test_inner(1i128, false);
+}
+
+// 第 7-1 项: 重复测试代码
+<span class="boring">}</span></code></pre></pre>
+<p>虽然这种写法可以工作, 但它过于冗长、重复, 且容易出错. 使用宏可以大大优化这一过程, 如清单7-2所示.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! test_battery {
+    ($($t:ty as $name:ident),*) =&gt; {$(
+        mod $name {
+                #[test]
+                fn frobnified() { test_inner::&lt;$t&gt;(1, true) }
+                #[test]
+                fn unfrobnified() { test_inner::&lt;$t&gt;(1, false) }
+            })*
+        }
+}
+test_battery! {
+    u8 as u8_tests,
+    // ...
+    i128 as i128_tests
+);
+
+// 清单 7-2: 让一个宏为你重复. 
+<span class="boring">}</span></code></pre></pre>
+<p>这个宏将每个以逗号分隔的指令扩展成一个独立的模块, 它包含两个测试, 一个是以<code>true</code>调用<code>test_inner</code>, 另一个是以<code>false</code>调用. 虽然宏的定义并不简单, 但它显著简化了添加新测试的过程. 在调用<code>test_battery!</code>时, 每种类型只需占一行, 宏会自动为<code>true</code>和<code>false</code>两种参数生成测试. 我们还可以扩展它, 使其为不同的<code>init</code>值生成测试. 这样一来, 就大大降低了遗漏某个配置项测试的风险.</p>
+<p>在<code>Trait</code>实现方面的情况也类似. 如果你定义了一个自定义的<code>trait</code>, 通常会希望为标准库中的多个类型实现它, 即使这些实现非常简单. 假设你发明了一个名为<code>Clone</code>的<code>trait</code>, 并希望为标准库中所有实现了<code>Copy</code>的类型都实现它. 你可以使用一个类似代码清单7-3中的宏, 避免手动为每个类型编写实现.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! clone_from_copy {
+    ($($t:ty),*) =&gt; {
+        $(impl Clone for $t {
+            fn clone(&amp;self) -&gt; Self { *self }
+        })*
+    }
+}
+clone_from_copy![bool, f32, f64, u8, i8, /* ... */];
+
+// 清单 7-3: 使用宏来实现许多类似类型的特质, 一举两得
+<span class="boring">}</span></code></pre></pre>
+<p>在这里, 我们为每个提供的类型生成一个<code>Clone</code>的实现, 具体实现就是通过<code>*</code>从<code>&amp;self</code>中复制值. 你可能会好奇, 为什么我们不直接为所有满足<code>T:Copy</code>的类型添加一个通用的<code>Clone</code>的实现. 我们当然可以这么做, 但主要原因之一是, 这样会强制其他<code>crate</code>中那些恰好是<code>Copy</code>的类型也使用这个统一的<code>Clone</code>实现. 编译器中有一个叫做<code>specialization</code>(特化)的实验性<code>feature</code>提供一个解决方法, 但截至目前, 这个<code>trait</code>仍未稳定. 所以, 在当前阶段, 手动枚举具体类型会更合适. 这种模式不仅适用于简单的转发实现, 例如, 你也可以轻松地修改清单7-3中的代码, 对所有整数类型实现<code>AddOne trait</code>.</p>
+<blockquote>
+<p>注意: 如果你在犹豫该使用泛型还是声明式宏, 那你应该优先选择泛型. 泛型通常比宏更易用, 并且能更好地与语言中的其他结构集成. 记住这个经验法则: 如果代码的变化依赖于类型, 就使用泛型; 否则就使用宏.</p>
+</blockquote>
+<h3 id="他们如何工作的"><a class="header" href="#他们如何工作的">他们如何工作的</a></h3>
+<p>每种编程语言都有自己的语法规则, 规定了如何将源代码中的字符转化为<code>token</code>. <code>token</code>是语言的最底层构建单元, 包括数字、标点符号、字符串和字符字面量, 以及标识符; 在这个层级上, 语言关键字和变量名没有区别. 例如, 在<code>Rust</code>的语法中, 文本<code>(value + 4)</code>在会被表示为五个<code>token</code>: <code>(</code>, <code>value</code>, <code>+</code>, <code>4</code>, <code>)</code>. 将文本转化为<code>token</code>的过程, 为编译器的其余部分与底层繁锁的文本解析细节之间提供了一层抽象. 例如, 在<code>token</code>表示法中, 空白字符是不存在的; <code>/*"foo"*/</code>和<code>"/*foo*/"</code>表达的语义完全不同: 前者不会生成任何<code>token</code>, 后者会生成一个内容为<code>/*foo*/</code>的字符串字面量<code>token</code>.</p>
+<p>一旦源代码被转换为<code>token</code>序列, 编译器会遍历这些<code>token</code>并为它们分配语法意义. 例如, 以<code>()</code>为界限的<code>token</code>构成一个组, <code>!</code>表示宏调用, 等等. 这就是解析的过程, 它最终生成一个抽象语法树(AST), 描述了源代码所代表的结构. 举个例子, 考虑表达式<code>let x = || 4</code>, 它由以下<code>token</code>序列组成: <code>let</code>(关键字)、<code>x</code>(标识符)、<code>=</code>(标点符号)、两个<code>|</code>(标点符号)和<code>4</code>(字面意思). 当编译器将其转化为语法树时, 它表示为一个语句, 其中模式是标识符<code>x</code>, 其右侧表达式是一个闭包, 闭包有一个空参数列表, 且其主体是一个整数<code>4</code>的字面量表达式. 请注意, 语法树的表示方法比<code>token</code>序列要丰富得多, 因为它为符合语言语法的<code>token</code>组合赋予了语法意义.</p>
+<p><code>Rust</code>宏决定了一段特定<code>token</code>序列应被转换为何种语法树, 当编译器在解析过程中遇到一个宏调用时, 它必须先对宏求值, 以确定替换用的<code>token</code>序列, 而这组<code>token</code>最终会构成该宏调用对应的语法树. 然而, 此时编译器仍处于解析<code>token</code>阶段, 尚未准备好对宏进行求值, 因为它此时仅仅解析了宏定义的<code>token</code>. 因此, 编译器会推迟解析宏调用括号内的内容, 并将其中的输入<code>token</code>序列暂存下来. 当编译器准备好对宏进行求值时, 它会以先前暂存的<code>token</code>序列作为输入对宏求值, 解析宏展开所生成的<code>token</code>, 并将得到的语法树插入到原宏调用的位置中.</p>
+<p>从技术上讲, 编译器确实会对宏的输入进行一部分解析. 具体来说, 它会解析出诸如字符串字面量和有界分组等基本结构, 因此生成的是一系列的<code>token</code>树, 而不仅仅是普通的<code>token</code>. 例如, 代码<code>x - (a.b + 4)</code>解析为三个<code>token</code>树的序列. 第一个<code>token</code>树是标识符<code>x</code>, 第二个<code>token</code>树是标点符号<code>-</code>的, 第三个<code>token</code>树是使用括号括起来的分组, 该组本身由五个<code>token</code>树组成: <code>a</code>(一个标识符)、<code>.</code>(标点符号)、<code>b</code>(另一个标识符)、<code>+</code>(另一个标点符号)和 <code>4</code>(字面量). 这意味着宏的输入不一定是合法的<code>Rust</code>语句, 但它必须是<code>Rust</code>编译器可以解析的代码结构. 例如, 在<code>Rust</code>中不能在宏调用之外编写<code>for &lt;- x</code>, 但在宏调用内部可以, 只要宏展一后生成的是合法的语法. 另一方面, 你不能将<code>for{</code>传递给宏, 因为它缺少闭合的右大括号.</p>
+<p>声明式宏总是生成合法有效的<code>Rust</code>代码作为输出. 你不能让一个宏生成函数调用的一半, 或者只生成一个<code>if</code>而不包含随后的代码块. 声明式宏必须生成一个表达式(基本上是任何可以赋值给变量的任何东西), 一个语句, 如<code>let x = 1</code>; 一个条目, 如<code>trait</code>定义或<code>impl</code> 块, 一个类型, 或者一个模式匹配. 这使得<code>Rust</code>的宏机制较强的误用抵抗力: 你根本无法编写出会生成非法<code>Rust</code>代码的声明式宏, 因为宏的定义本身就无法通过编译!</p>
+<p>从宏观层面来看, 声明式宏的机制就是这些--当编译器遇到宏调用时, 它会将调用括号中的<code>token</code>传递给宏, 解析宏展开所产生的<code>token</code>流, 然后用生成的抽象语法树(AST)替换原始的宏调用.</p>
+<h3 id="如何编写声明式宏"><a class="header" href="#如何编写声明式宏">如何编写声明式宏</a></h3>
+<p>要详尽解释声明式宏所支持的全部语法超出了本书的范围. 不过我们会介绍基本语法, 因为其中确实存在一些值得注意的特殊之处.</p>
+<p>声明性宏由两个主要部分组成: 匹配器(matchers)和转换器(transcribers). 一个宏可以包含多个匹配器, 每个匹配器都对应一个转换器. 当编译器遇到一个宏调用时, 它会按顺序依次尝试宏中的每个匹配器, 一旦找到一个能匹配调用中标志的匹配器, 它就会使用相应转换器中的内容替换掉宏调用. 代码清单7-4显示了声明式宏规则的各个部分是如何协同工作的.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! /* macro name */ {
+    (/* 1st matcher */) =&gt; { /* 1st transcriber */ };
+    (/* 2nd matcher */) =&gt; { /* 2nd transcriber */ };
+}
+
+// 清单 7-4: 声明性宏定义组件
+<span class="boring">}</span></code></pre></pre>
+<h4 id="匹配器matchers"><a class="header" href="#匹配器matchers">匹配器(Matchers)</a></h4>
+<p>你可以把宏匹配器看作是一个<code>token</code>树, 编译器会尝试以预定义的方式"扭转"它, 以匹配它在调用地点得到的输入<code>token</code>树. 举个例子, 假设有一个宏匹配器是<code>$a:ident + $b:expr</code>. 这个匹配器会匹配任意标识符(<code>:ident</code>), 后跟一个加号, 再后跟任意<code>Rust</code>表达式(<code>:expr</code>). 如果宏调用传入<code>x + 3 * 5</code>, 编译器会发现这个模式可以匹配, 只要将<code>$a = x</code>和<code>$b = 3 * 5</code>. 尽管<code>*</code>从未出现在匹配器中, 但编译器识别到<code>3 * 5</code>是一个合法的表达式, 因此它可以被匹配为<code>$b:expr</code>, 因为<code>:expr</code>接受所有合法的表达式.</p>
+<p>匹配器可能会变得相当复杂, 但它们拥有极强的表达能力, 类似于正则表达式. 下面是一个不算太复杂的示例, 该匹配器接受一个或多个(<code>+</code>)逗号分割 (<code>),</code>) 的<code>key =&gt; value</code>格式的键/值对序列 (<code>$()</code>):</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>$($key:expr =&gt; $value:expr),+
+<span class="boring">}</span></code></pre></pre>
+<p>关键在于, 调用使用该匹配器的宏时, <code>key</code>或<code>value</code>可以是任意复杂的表达式, 匹配器的魔力将确保键和值表达式被正确地划分开.</p>
+<p>宏支持多种片段类型; 你已经见到用于标识符的<code>:ident</code>和用于表达式的<code>:expr</code>, 但还有用于类型的<code>:ty</code>, 甚至还有表示任意单个<code>token</code>树的<code>:tt</code>, 你可以在<code>Rust</code>语言参考的第三章中找到完整的片段类型列表(<code>https://doc.rust-lang.org/reference/macrosby-example.html</code>). 这些片段类型, 加上重复匹配模式的机制(<code>$()</code>), 可以让你匹配大多数常见的代码模式. 但如果你发现使用匹配器难以表达你想要的模式, 你也许可以尝试使用过程宏, 过程宏不需要遵循<code>macro_rules!</code>所要求的严格语法. 本章稍后我们会更详细地介绍过程宏.</p>
+<h4 id="转换器transcribers"><a class="header" href="#转换器transcribers">转换器(Transcribers)</a></h4>
+<p>一旦编译器匹配了一个声明性的宏匹配器, 它便使用匹配器关联的转换器生成代码. 宏匹配器定义的变量称为元变量, 编译器将在转换器中替换每个元变量的所有出现(如上一节例子中的<code>$key</code>), 用与匹配器部分相符的输入替换它. 如果你的匹配器中有重复(比如同一例子中的<code>$(),+</code>), 你可以在转换器中使用相同的语法, 它将根据输入中的每次匹配重复一次, 每次展开都会持有该迭代中每个元变量的适当替代. 例如, 对于<code>$key</code>和<code>$value</code>匹配器, 我们可以编写以下转录器, 针对每个匹配的<code>$key/$value</code>对生成一个<code>insert</code>调用到插入到<code>map</code>中去.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>(map.insert($key, $value);)+
+<span class="boring">}</span></code></pre></pre>
+<p>请注意, 在这里我们希望每次重复都带有分号, 而不仅仅是用来限定重复的范围, 所以我们将分号放置在重复括号内.</p>
+<blockquote>
+<p>注意: 你必须在转换器中的每次重复中使用一个元变量, 以便编译器知道在匹配器中使用哪个重复项(以防有多个重复项).</p>
+</blockquote>
+<h4 id="卫生性hygiene"><a class="header" href="#卫生性hygiene">卫生性(Hygiene)</a></h4>
+<p>你可能听说过<code>Rust</code>的宏是"卫生的", 并且也许你知道"卫生性"让它们更安全或更易于使用, 但未必理解这意味着什么. 当我们说<code>Rust</code>宏是"卫生的", 我们指的是一个声明式宏(通常)不能影响那些没有明确传递给它的变量. 一个简单的例子是, 如果你声明一个名为<code>foo</code>的变量, 然后调用一个也定义了名为<code>foo</code>的宏, 那么宏中的<code>foo</code>默认在调用点(宏被调用的地方)不可见. 类似的, 宏不能访问在调用点定义的变量(甚至是<code>self</code>), 除非它们被显式传进来.</p>
+<p>大多数情况下, 你可以把宏标识符看作存在于它们自己的命名空间中, 与它们展开后的代码命名空间是分开的. 举个例子, 看看清单7-5中的代码, 其中有一个宏试图(但失败了)在调用点遮蔽一个变量.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! let_foo {
+    ($x:expr) =&gt; {
+        let foo = $x;
+    }
+}
+let foo = 1;
+// expands to let foo = 2;
+let_foo!(2);
+assert_eq!(foo, 1);
+
+// 清单 7-5: 宏存在于他们自己的小宇宙中. 大多数情况下. 
+<span class="boring">}</span></code></pre></pre>
+<p>在编译器展开<code>let_foo!(2)</code>之后, 断言看起来应该会失败. 然而, 原始代码中的<code>foo</code>和宏生成的<code>foo</code>存在于不同的命名空间中, 它们之间没有任何关系, 除了它们恰好共享一个可读的名称. 事实上, 编译器会抱怨说宏中的<code>let foo</code>是一个未使用的变量. 这种卫生机制对于调试宏非常有帮助--你不必担心因为你碰巧选择了相同的变量名就会不小心在宏调用者中遮蔽或覆盖变量!</p>
+<p>然而, 这种卫生机制并不适用于变量标识符之外的内容. 声明性宏确实与调用点共享类型、模块和函数的命名空间. 这意味着你的宏可以定义新的函数, 这些函数可以在调用作用域内被调用, 可以向其他地方定义的类型添加新的实现(而不是传递进来的), 引入新的模块, 并且该模块可以在宏被调用的地方访问, 等等. 这是设计使然--如果宏不能像这样影响更广泛的代码, 使用它们来生成类型、<code>trait</code>实现和函数将会变得更加繁锁, 而这正是它们最有用的地方.</p>
+<p>宏中类型的非卫生性问题在编写你希望从你的<code>crate</code>导出的宏时尤为重要. 为了使宏真正能够被重用, 为了确保宏真正可重用, 你不能假设调用者作用域内会有什么类型. 也许调用你的宏的代码定义了<code>mod std {}</code>或者导入了自己的<code>Result</code>类型. 为了安全起见, 确保你使用完全指定的类型, 比如<code>::core::option::Option</code>或<code>::alloc::boxed::Box</code>. 如果你特别需要引用定义宏的<code>crate</code>中的东西, 使用特殊的元变量<code>$crate</code>.</p>
+<blockquote>
+<p>注意: 尽量避免使用<code>::std</code>路径, 以确保宏在<code>no_std</code>的<code>crate</code>中也能正常工作.</p>
+</blockquote>
+<p>如果你希望宏能够影响调用者作用域中的特定变量, 你可以选择在宏与调用者之间共享标识符. 关键是要记住标识符的来源, 因为它将绑定到其产生的命名空间中. 如果你在宏内部写入<code>let foo = 1</code>, 那么标识符<code>foo</code>来源于宏, 它在调用者的标识符命名空间中是不可见的. 另一方面, 如果宏把<code>$foo:ident</code>作为参数, 然后写上<code>let $foo = 1</code>, 当调用者用<code>!(foo)</code>调用宏时, 标识符将来源于调用者, 因此会绑定到调用者作用域中的<code>foo</code>.</p>
+<p>标识符不一定需要显式地作为参数传入; 只要该标识符出现在源自宏外部的代码中, 它就会引用调用者作用域中的同名标识符. 在清单7-6的例子中, 变量标识符虽然是作为<code>:expr</code>出现的, 但仍然可以访问调用者作用域中的该变量.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! please_set {
+    ($i:ident, $x:expr) =&gt; {
+        $i = $x;
+    }
+}
+let mut x = 1;
+please_set!(x, x + 1);
+assert_eq!(x, 2);
+
+// 清单 7-6: 让宏在调用地点访问标识符
+<span class="boring">}</span></code></pre></pre>
+<p>我们本可以在宏中使用<code>=$i+1</code>, 但我们不能使用<code>=x+1</code>, 因为<code>x</code>这个名称在宏的定义作用域中是不可见的.</p>
+<p>关于声明宏和作用域的最后一点说明: 与<code>Rust</code>中的几乎所有其他东西不同, 声明宏只有在被声明后才能在源代码中使用. 如果你尝试在文件前面使用一个在后面才定义的宏, 这是行不通的! 这个规则是全局适用于你的整个项目的; 如果你在一个模块中定义了一个宏, 想要在另一个模块中使用它. 那么定义宏的模块必须在<code>crate</code>中出现在调用它的模块之前, 而不能在其之后. 如果<code>foo</code>和<code>bar</code>是位于<code>crate</code>根部下的两个模块, 且<code>foo</code>定义了一个<code>bar</code>想要使用的宏, 那么在<code>lib.rs</code>中, <code>mod foo</code>必须出现在<code>mod bar</code>之前。</p>
+<blockquote>
+<p>注意: 这是宏作用域规则(正式称为"文本作用域")有一个例外, 那就是如果你使用了<code>#[macro_export]</code>宏. 这个标注会实质上将宏提升到<code>crate</code>的根作用域, 并将其标志为<code>pub</code>, 这样它就可以在<code>crate</code>的任何地方使用, 甚至可以被依赖这个<code>crate</code>的其他<code>crate</code>使用.</p>
+</blockquote>
+<h2 id="过程宏procedural-macros"><a class="header" href="#过程宏procedural-macros">过程宏(Procedural Macros)</a></h2>
+<p>你可以把过程宏看作是解析器和代码生成的组合, 而你要做的就是写中间的粘合代码. 在宏观上看, 对于过程宏, 编译器收集传递给宏的输入<code>token</code>序列, 然后运行你的程序, 以确定用哪些<code>token</code>来替换它们.</p>
+<p>过程宏之所以被称为"过程宏", 是因为你要定义如何根据输入<code>token</code>来生成代码, 而不是直接写出要生成的代码. 编译器这边并没有太多智能可言--在它看来, 过程宏差不多就是一个可以任意替换代码的源代码预处理器. 唯一的要求是你的输入必须能够被解析为一串合法的<code>Rust token</code>, 但仅此而已!</p>
+<h3 id="过程宏的类型types-of-procedural-macros"><a class="header" href="#过程宏的类型types-of-procedural-macros">过程宏的类型(Types of Procedural Macros)</a></h3>
+<p>过程宏有三种不同的形式, 每种形式都专门针对一个常见的使用场景</p>
+<ul>
+<li>函数宏, 如<code>macro_rules!</code>生成的.</li>
+<li>属性宏, 如<code>#[test]</code>.</li>
+<li>派生宏, 如<code>#[derive(Serialize)]</code>.</li>
+</ul>
+<p>这三种类型都使用相同的底层机制: 编译器会将一串<code>token</code>传递给你的宏, 并期望你返回一串可能与输入语法树相关的<code>token</code>作为输出. 不过, 它们在宏的调用方式以及输出的处理方式上有所不同. 我们将简要地介绍每一种形式.</p>
+<h4 id="函数宏function-like-macros"><a class="header" href="#函数宏function-like-macros">函数宏(Function-Like Macros)</a></h4>
+<p>函数宏是过程宏中最简单的形式. 它与声明宏类似, 只是将调用处的宏代码替换为过程宏生成的代码. 然而, 与声明式宏不同的是, 它不再有任何"护栏"限制: 这些宏(像所有的过程式宏一样)不要求具备"卫生性", 也不会阻止你与调用处周围代码中的标识符产生冲突. 相反, 你需要在宏中显式指定哪些标识符应该与外部代码重叠(使用<code>Span::call_site</code>), 以及哪些标识符应当被视为宏内部私有的(使用<code>Span::mixed_site</code>, 我们稍后会讨论这个).</p>
+<h4 id="属性宏"><a class="header" href="#属性宏">属性宏</a></h4>
+<p>属性宏也会整体替换其所修饰的代码, 但这个宏需要两个输入: 一个是属性中的<code>token</code>树(不包括属性的名字), 另一个是它所修饰的整个项目的<code>token</code>树, 包括该项目可能具有的其他属性. 属性宏允许你轻松地编写一个过程宏来转换某个项, 例如可以为函数定义添加前置或后置代码(像<code>#[test]</code>那样), 或者修改结构体的字段.</p>
+<h4 id="派生宏"><a class="header" href="#派生宏">派生宏</a></h4>
+<p>派生宏与其他两个宏略有不同, 它是对宏的目标进行添加内容, 而不是替换它. 尽管这个限制看起来很严苛, 但派生宏实际上是促使创建过程宏的最初动力之一. 具体来说, <code>Serde</code> crate需要派生宏来实现其现在广为人知的<code>#[derive(Serialize, Deserialize)]</code>魔法.</p>
+<p>派生宏可以说是过程宏中最简单的, 因为它们有如此严格的形式: 你只能在被注解的项之后追加项; 你不能替换被注解的项, 也不能让推导过程接受参数. 派生宏确实允许你定义辅助属性--这些属性可以放在被标注的类型内部中, 以提供线索给派生宏(比如<code>#[serde(skip)]</code>)--但这些属性大多充当标记作用, 不是独立的宏.</p>
+<h3 id="过程宏的成本"><a class="header" href="#过程宏的成本">过程宏的成本</a></h3>
+<p>在我们讨论每种不同的过程宏类型适用的情况之前, 值得讨论的是, 为什么在使用过程宏之前你可能需要三思——也就是编译时间的增加.</p>
+<p>过程宏可能会显著增加编译时间, 主要有两个原因. 首先, 它们往往会带来一些相当重的依赖. 例如, <code>syn crate</code>为 <code>Rust token</code>流解析器, 使得编写过程宏的体验更加容易, 但是启用所有<code>feature</code>时, 它的编译可能需要几十秒. 你可以(并且应该)通过禁用你不需要的<code>feature</code>, 并在调试模式而不是发布模式下编译过程宏来减轻这一问题. 代码在调试模式下的通常编译得更快, 对于大多数过程宏, 你甚至不会注意到执行时间的差异.</p>
+<p>过程宏增加编译时间的第二个原因是, 它们让你很容易生成大量的代码而且没有意识到. 虽然宏可以让你不必实际输入生成的代码, 但它并没有节省编译器的解析、编译和优化这些代码的时间. 随着你使用更多的过程宏, 生成的样板代码会积累起来, 而且可能导致编译时间膨胀.</p>
+<p>这就是说, 过程宏的实际执行时间通常很少会成为整体编译时间的因素. 虽然编译器必须等待过程宏完成其操作后才能继续, 但实际上, 大多数过程宏并不会进行任何复杂的计算. 也就是说, 如果你的过程宏特别复杂, 你可能会发现编译时间的很大一部分被你的程序宏代码所占用, 这是值得注意的.</p>
+<h3 id="所以你认为你想要一个宏"><a class="header" href="#所以你认为你想要一个宏">所以你认为你想要一个宏</a></h3>
+<p>现在让我们看看每种过程宏的一些使用场景. 我们从简单的开始: 派生宏.</p>
+<h4 id="何时使用派生宏"><a class="header" href="#何时使用派生宏">何时使用派生宏</a></h4>
+<p>派生宏只用于一件事: 在可以自动化的情况下, 自动实现某个<code>trait</code>. 并非所有的<code>trait</code>都能轻松自动化实现, 但很多可以. 在实践中, 只有某个<code>trait</code>经常被实现, 并且它对任何给定类型的实现方式都比较明确时, 你才应该考虑为它添加一个派生宏. 第一个条件似乎是常识; 如果你的<code>trait</code>只会被实现一两次, 可能不值得为它编写和维护一个复杂的派生宏.</p>
+<p>不过, 第二个条件可能就没有那么直观了: 所谓"明显"的实现到底是什么意思? 以<code>Debug</code>这样的<code>trait</code>为例. 如果你知道<code>Debug</code>是做什么的, 并且给定一个类型, 你可能会期望<code>Debug</code>的实现会输出每个字段的名字以及该字段值的调试形式.  这就是<code>derive(Debug)</code>的作用. 那么<code>Clone</code>呢? 你大概会希望它对每个字段都执行一次克隆--而<code>derive(Clone)</code>也确实就是这么做的. 对于<code>derive(serde::Serialize)</code>, 我们期望它序列化每个字段及值, 而它也确实照做了. 通常来说, 你希望<code>trait</code>的派生能符合开发者对其功能的直觉理解. 如果某个<code>trait</code>没有明显的派生, 或者更糟的是, 你的派生实现和开发者直觉中的实现方式不一致, 那你最好就不要为它提供派生宏.</p>
+<h4 id="何时使用函数宏"><a class="header" href="#何时使用函数宏">何时使用函数宏</a></h4>
+<p>函数宏比较难给出一条通用的经验法则. 你也许会说, 当你想要一个类似于函数的宏, 但又无法用<code>macro_rules!</code>来表达时, 就该用函数式宏! 但这是一个相当主观的指导原则. 毕竟, 如果你真的用心去做, 声明宏也能实现很多功能.</p>
+<p>不过, 有两个特别好的理由可以让你选择使用函数式宏:</p>
+<ul>
+<li>如果你已经有了一个声明宏了, 而它的定义变得非常复杂, 以至于宏难以维护.</li>
+<li>如果你有一个纯函数需要在编译时执行, 但又无法用<code>const fn</code>来表达, 那么这就是使用函数式宏的一个好理由. 列如<code>phf crate</code>, 当在编译时给定一组键时, 它会使用完美哈希函数来生成一个哈希映射或集合. 另一个例子是<code>hex-literal</code>, 它接收一串十六进制的字符, 并将其替换为对应的字节. 一般来说, 任何不仅仅是在编译时转换输入, 而是真正对其进行计算的操作, 都可能是函数宏的理想候选场景.</li>
+</ul>
+<p>我不建议为了在宏中打破<strong>卫生性</strong>而使用函数宏. 函数宏默认的卫生性是一项有用的特性, 当你有意打坏它之前, 应该非常慎重地考虑.</p>
+<h4 id="何时使用属性宏"><a class="header" href="#何时使用属性宏">何时使用属性宏</a></h4>
+<p>累到讨论属性宏了. 尽管它们可以说是过程宏中最通用的一种, 但也是最难判断何时该使用的一种. 多年来, 一次又一次, 我看到属性宏在四种场景中展现出巨大的价值.</p>
+<h5 id="测试生成test-generation"><a class="header" href="#测试生成test-generation">测试生成(Test generation)</a></h5>
+<p>在多种不同配置下运行同一个测试是非常常见的需求, 或者运行多个具有相同初始化代码的类似测试. 虽然声明宏可能可以表达这种需求, 但你的代码通常更易于阅读和维护, 如果你使用类似<code>#[foo_test]</code>这样的属性, 为每个带注解的测试引入统一的前置和后置代码, 或者使用可重复的属性, 例如<code>#[test_case(1)]</code>, <code>#[test_case(2)]</code>来标记某个测试应该用不同的输入重复运行多次.</p>
+<h5 id="框架注解"><a class="header" href="#框架注解">框架注解</a></h5>
+<p>像<code>rocket</code>这样的库使用属性宏来为函数和类型添加额外的信息, 以便框架在不需要用户做大量手动配置的情况下使用这些信息. 能够写出<code>#[get("/&lt;name&gt;")] fn hello(name: String)</code>要比用函数指针等设置一个配置结构简单得多. 从本质上讲, 这些属性构成了一种微型的特定领域语言(DSL), 隐藏了原本必须编写的大量样板代码. 同样, 异步I/O框架<code>tokio</code>允许你使用<code>#[tokio::main] async fn main()</code>自动设置运行时并执行你的异步代码, 从而让你不需要在每个异步程序的主函数中重复编写相同的运行时初始化代码.</p>
+<h5 id="透明的中间件"><a class="header" href="#透明的中间件">透明的中间件</a></h5>
+<p>有些库希望以某种方式注入到你的应用程序中, 以不引人注意的方式提供附加功能, 而不会改变应用程序的功能. 例如, 像<code>tracing</code>这样的跟踪和日志库以及像<code>metered</code>这样的指标收集库, 允许你通过给函数添加一个属性来透明地插桩该函数, 然后每次调用该函数时都会运行一些额外的代码, 这些代码由库来定义.</p>
+<h5 id="类型转换type-transformers"><a class="header" href="#类型转换type-transformers">类型转换(Type transformers)</a></h5>
+<p>有时修, 你希望做的不仅仅是为一个类型派生<code>trait</code>, 而是从根本上修改类型的定义. 在这种情况下, 属性宏是最合适的方式. <code>pin_project crate</code>就是一个很好的例子: 它的主要目的并不是实现某个特定的<code>trait</code>, 而是确保对某个类型字段的所有<code>pinned</code>访问, 都遵循<code>Rust</code>的<code>Pin</code>类型和<code>Unpin trait</code>所规定的严格规则(我们将在第8章中进一步讨论这些类型). 它通过生成额外的辅助类型, 向被注解的类型添加方法, 以及引入静态安全检查机制来实现这点, 从而确保用户不会因为操作不当而"搬起石头砸自己的脚". 虽然<code>pin_project</code>也可以用派生宏来实现, 但那个派生<code>trait</code>的实现并不直观, 这就违反了我们关于何时使用过程宏的一条规则.</p>
+<h3 id="它们是如何工作的"><a class="header" href="#它们是如何工作的">它们是如何工作的?</a></h3>
+<p>所有过程宏的核心是<code>TokenStream</code>类型, 它可以被迭代以获取构成该<code>token</code>流的各个<code>TokenTree</code>项. 这些<code>TokenTree</code>项要么是单个的<code>token</code>, 例如标识符、标点符号或字面值, 要么是被一个分隔符(<code>()</code>或<code>{}</code>)包裹的另一个<code>TokenStream</code>. 通过遍历<code>TokenStream</code>, 你可以解析出任何你想要的语法, 只要这些单个<code>token</code>是合法的<code>Rust token</code>. 如果你希望将输入明确地作为<code>Rust</code>代码来解析, 你可能需要使用<code>syn crate</code>, 它实现了一个完整的<code>Rust</code>解析器, 可以将<code>TokenStream</code>变成一个易于遍历的<code>Rust</code>抽象语法树(AST).</p>
+<p>对于大多数过程宏, 你不仅要解析<code>TokenStream</code>, 还需要生成要注入到调用该过程宏的程序中的<code>Rust</code>代码. 有两种主要的方法来实现这一点. 第一种是手动构建<code>TokenStream</code>, 并每次添加一个<code>TokenTree</code>. 第二种是使用<code>TokenStream</code>的<code>FromStr</code>实现, 调用<code>"".parse::&lt;TokenStream&gt;()</code>将包含<code>Rust</code>代码的字符串解析到<code>TokenStream</code>. 你也可以混合使用这两种方法; 如果你想在宏的输入前添加一些代码, 只需为前置代码构造一个<code>TokenStream</code>, 然后使用<code>Extend trait</code>来追加原始输入即可.</p>
+<blockquote>
+<p>注意: <code>TokenStream</code>也实现了<code>Display trait</code>, 它可以漂亮地打印出流中的<code>token</code>. 这对于调试来说是非常方便的.</p>
+</blockquote>
+<p><code>token</code>比我到目前描述的要神奇一些, 因为每个<code>token</code>, 甚至每个<code>TokenTree</code>, 都有一个<code>span</code>. <code>span</code>是编译器用来生成的代码与其来源代码关联起来的方式. 每个<code>token</code>的<code>span</code>都标志了该<code>token</code>的来源. 例如, 考虑一个类似标列7-7中的(声明)宏, 它为给定的类型生成了一个简单的Debug实现.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! name_as_debug {
+    ($t:ty) =&gt; {
+        impl ::core::fmt::Debug for $t {
+            fn fmt(&amp;self, f: &amp;mut ::core::fmt::Formatter&lt;'_&gt;) -&gt; ::core::fmt::Result
+            { ::core::write!(f, ::core::stringify!($t)) }
+} }; }
+
+// 清单 7-7: 实现 Debug 的一个非常简单的宏
+<span class="boring">}</span></code></pre></pre>
+<p>现在假设有人使用<code>name_as_debug!(u31)</code>来调用这个宏. 技术上讲, 编译器错误发生在宏内部, 具体是在我们写<code>for $t</code>的地方(而<code>$t</code> 的另一个用法可以处理无效的类型). 但我们希望编译器能够把错误指向用户代码中的<code>u31</code>--而这正是<code>span</code>所能做到的.</p>
+<p>生成的代码中<code>$t</code>的<code>span</code>是在宏调用中映射到<code>$t</code>的代码. 这条信息会在编译器中传递下去, 并与最终的编译器错误关联起来. 当该编译器最终被打印出来时, 编译器会打印宏内部的错误, 指出<code>u31</code>类型不存在, 它会高亮宏调用中作为参数的<code>u31</code>, 因为那才是该错误所关联的<code>span</code>.</p>
+<p><code>span</code>是非常灵活的, 如果你使用<code>compile_error!</code>宏, 它们可以让你编写出能够生成复杂错误信息的过程宏. 顾名思义, <code>compile_error!</code>会在其所在位置让编译器抛出错误, 并使用所提供的字符串作为错误信息. 这看起来可能没什么用, 直到你将它与<code>span</code>配合使用. 通过将你为<code>compile_error!</code>所生成的<code>TokenTree</code>的<code>span</code>设置为输入的一部份代码的<code>span</code>, 你实际上是在告诉编译器: 抛出这个错误, 并指向源代码中的这部分位置. 这两种机制结合使用, 可以让宏生成的错误看起来就像来自代码中相关部分, 即便实际的编译器错误其实发生在用户根本看不到的生成代码中.</p>
+<blockquote>
+<p>注意: 如果你曾好奇<code>syn</code>的错误处理是如何工作的, 它的<code>Error</code>类型实现了一个<code>Error::to_compile_error</code>方法, 这个方法将其转化为一个只包含<code>compile_error!</code>指令的<code>TokenStream</code>. <code>syn</code>的<code>Error</code>类型的特别巧妙之处在于, 它内部保存了一个错误集合, 每个错误都会产生一个独立的<code>compile_error!</code>指令, 并有自己的<code>span</code>, 这样你就可以轻松地从过程宏中生成多个独立的错误.</p>
+</blockquote>
+<p><code>span</code>的强大功能不仅于此; 它们还是<code>Rust</code>宏卫生实现的关键. 当你构造一个<code>Ident token</code>时, 你还需要为该标识符指定一个<code>span</code>, 而这个<code>span</code>决定了该标识符的作用域. 如果你将标识符的<code>span</code>设置为<code>Span::call_site()</code>, 那么该标识符将在宏被调用的地方被解析, 因此不会与周围的作用域隔离开. 另一方面, 如果你把它设置为<code>Span::mixed_site()</code>, 那么(变量)标识符就会在宏的定义处被解析, 这样就能确保宏与调用站点的同名变量完全遵循宏卫生规则. <code>Span::mixed_site</code>之所以如此命名, 是因为它符合<code>macro_rules!</code>中标识符卫生规则! 正如我们之前讨论的, 它在解析标识符时, 将宏定义站点用于变量, 而调用站点用于类型、模块以及其他所有内容.</p>
+<h2 id="总结-5"><a class="header" href="#总结-5">总结</a></h2>
+<p>在本章中, 我们介绍了声明宏和过程宏, 并讨论了在何种情况下你可能会在自己的代码中使用它们. 我们还深入探讨了支撑每种类型宏的机制, 以及在编写自己宏时需要注意的一些特性和陷阱. 在下一章中, 我们将开始探索异步编程和<code>Future</code>特性. 我保证--它就在下一页.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="editor.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

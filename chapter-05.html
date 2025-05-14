@@ -1,0 +1,480 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第5章-项目结构 - Rust For Rustaceans 阅读和翻译</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust For Rustaceans 阅读和翻译</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/thinkgos/Rust-For-Rustaceans" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="第五章-项目结构"><a class="header" href="#第五章-项目结构">第五章 项目结构</a></h1>
+<p>本章提供了一些关于如何构建<code>Rust</code>项目的思路. 对于简单的项目来说, 通过<code>cargo new</code>创建的项目结构通常不需要太多关注. 你可能会添加一些模块来拆分代码, 增加一些依赖来扩展功能, 也就仅此而已. 然而, 随着项目规模和复杂度的增加, 你会发现你需要超越这些结构. 也许你的<code>crate</code>的编译时间已经失控了, 或者你需要条件性依赖, 或者你需要一个更好的持续集成策略. 在这一章中, 我们将探讨<code>Rust</code>语言以及特别是<code>Cargo</code>提供的一些工具, 它们能帮助你更轻松管理这些东西.</p>
+<h2 id="特性features"><a class="header" href="#特性features">特性(Features)</a></h2>
+<p><code>features</code>是<code>Rust</code>定制项目的主要工具. 从本质上讲, <code>feature</code>只是一个构建标志, <code>crate</code>可以传递给依赖项, 以增加可选功能. <code>features</code>本身并没有任何语义--你可以自行决定某个<code>feature</code>对你的<code>crate</code>意味着什么.</p>
+<p>通常我们通过三种方式使用<code>features</code>: 启用可选依赖, 有条件地包含<code>crate</code>的额外组件, 以及增强代码的行为. 请注意, 这些用途都是"增量式"的; <code>features</code>可以扩展<code>crate</code>的功能, 但它们通常不应用于删除模块, 替换类型或函数签名的操作. 这源于一个原则: 如果开发者仅在<code>Cargo.toml</code>做了一个简单的修改, 比如添加一个新的依赖关系或启用一个<code>feature</code>, <code>crate</code>不应该因此而无法编译. 如果一个<code>crate</code>有互斥的<code>features</code>, 那么这个原则很快就会失效, 如果<em>crate A</em>依赖于<em>crate C</em>的一个<code>features</code>, 而<em>crate B</em>依赖于C的另一个互斥的<code>features</code>, 那么增加对<em>crate B</em>的依赖就会破坏<em>crate A</em>! 因此我们通常遵循这样的原则: 如果<em>crate A</em>能在某些<code>features</code>成功编译<em>crate C</em>, 那么当<em>crate C</em>上启用所有<code>features</code>时, 它也应能成功编译.</p>
+<p><code>Cargo</code>在这一原则上执行得非常严格. 例如, 如果两个<em>crates</em>(A 和 B) 都依赖于<em>crate C</em>, 但它们各自在C上启用不同的<code>features</code>, <code>Cargo</code>将只会编译 <em>crate C</em>一次, 并启用A或B所需要的所有<code>features</code>. 也就是说, 它会取A和B对C所请求<code>features</code>的并集. 因此, 通常在<code>Rust</code>的<code>crate</code>中添加互斥的<code>features</code>是困难的; 因为很有可能某两个依赖项会将依赖于具有不同<code>features</code>的同一个<code>crate</code>, 如果这些功能是互斥的, 最终下游<code>crate</code>就会构建失败.</p>
+<blockquote>
+<p>注意: 我强烈建议你在持续集成系统中配置检查, 以确保您的<code>crate</code>在任意<code>features</code>组合下都能成功编译. 有一个可以帮助你完成这项工作的工具<code>cargo-hack</code>, 你可以在 <code>https://github.com/taiki-e/cargo-hack</code> 上找到它</p>
+</blockquote>
+<h3 id="定义和包含features"><a class="header" href="#定义和包含features">定义和包含<code>features</code></a></h3>
+<p><code>features</code>在<code>Cargo.toml</code>中定义. 清单5-1展示了一个名为<code>foo</code>的<code>crate</code>示例, 它包含一个简单的<code>feature</code>, 启用可选依赖项<code>syn</code>.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[package]
+name = "foo"
+...
+[features]
+derive = ["syn"]
+[dependencies]
+syn = { version = "1", optional = true }
+
+// 清单 5-1: 启用可选依赖项的`features`
+<span class="boring">}</span></code></pre></pre>
+<p>当<code>Cargo</code>编译这个<code>crate</code>时, 默认情况下它不会编译<code>syn crate</code>, 从而减少了编译时间(通常是显著的). 只有当下游的组件需要使用<code>derive</code>特性所启用的API, 并显式选择使用时, 才会编译<code>syn</code>. 清单5-2显示了这样一个下游<code>crate</code>如何启用<code>derive</code>特性, 从而引入<code>syn</code>依赖.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[package]
+name = "bar"
+...
+[dependencies]
+foo = { version = "1",features = ["derive"] }
+
+// 清单 5-2: 启用依赖项的`features`
+<span class="boring">}</span></code></pre></pre>
+<p>有些<code>features</code>使用得非常频繁, 因此<code>crate</code>默认启用它们会更合理(而不是显式启用). 因此, <code>Cargo</code>允许你为<code>crate</code>定义一组默认启用的<code>features</code>. 同样, 它也允许你禁用默认<code>features</code>. 清单5-3显示了<code>foo</code>如何使其<code>derive</code>设为默认启用, 同时禁用<code>syn</code>的一些默认<code>features</code>, 仅启用<code>derive</code>所需的<code>features</code>.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[package]
+name = "foo"
+...
+[features]
+derive = ["syn"]
+default = ["derive"]
+[dependencies.syn]
+version = "1"
+default-features = false
+features = ["derive", "parsing", "printing"]
+optional = true
+
+// 清单 5-3: 添加和选择默认`features`, 以及可选的依赖项
+<span class="boring">}</span></code></pre></pre>
+<p>在这里, 如果某个<code>crate</code>依赖于<code>foo</code>, 并且没有显式禁用默认<code>features</code>, 那么它会编译<code>foo</code>的<code>syn</code>依赖. 接着, <code>syn</code>只会启用列出的那三个<code>features</code>, 其它<code>features</code>都不会启用. 通过这种方式禁用默认<code>features</code>, 只启用真正需要的部分, 是减少编译时间的绝佳手段!</p>
+<blockquote>
+<p>作为<code>features</code>的可选依赖项</p>
+<p>当你定义一个<code>feature</code>时, 等号后面的列表本身就是一个<code>features</code>列表. 这听起来可能有点奇怪, 在清单5-3中, <code>syn</code>是一个依赖项, 而不是一个<code>features</code>. 事实证明, <code>Cargo</code>将每个可选的依赖关系都变成了与该依赖同名的<code>features</code>. 如果你试图添加一个与可选依赖同名的<code>feature</code>, 你会发现这一点; <code>Cargo</code>不允许这样做. <code>Cargo</code>正在为<code>features</code>和依赖提供不同的命名空间支持, 但在撰写本文时还没有稳定下来. 同时, 如果你想让一个<code>features</code>以依赖命名, 你可以用<code>package = ""</code> 来重命名依赖, 以避免名称冲突. 一个<code>feature</code>启用的<code>features</code>列表也可以包括依赖的<code>features</code>. 例如, 你可以写 <code>derive = ["syn/derive"]</code> 来让你的<code>derive</code>特性启用<code>syn</code> 依赖关系的 <code>derive feature</code>.</p>
+</blockquote>
+<h3 id="在你的代码中使用features"><a class="header" href="#在你的代码中使用features">在你的代码中使用<code>features</code></a></h3>
+<p>当使用<code>features</code>时, 你需要确保你的代码只在依赖可用的情况下使用它. 如果你的<code>feature</code>启用了一个特定的组件, 你需要确保如果该<code>feature</code>未被启用, 该组件就不会被包括在内.</p>
+<p>你可以使用条件编译来实现这一点, 它允许你使用注解来给出某段代码应该或不应该被编译的条件. 条件性编译主要通过<code>#[cfg]</code>属性来表达. 还有一个密切相关的<code>cfg!</code>宏, 它可以让你根据类似的条件改变运行时行为. 你可以用条件编译做很多巧妙的事情, 我们在本章后面会看到, 但最基本的形式是<code>#[cfg(feature = "some-feature")]</code>, 它表示: 只有启用<code>some-feature</code>特性时, 紧接着的代码才会被编译. 类似地, <code>if cfg!(feature = "some-feature")</code>等同于<code>if true</code>只有在启用 <code>derive</code>时才会被编译(否则为<code>false</code>).</p>
+<p><code>#[cfg]</code>属性比<code>cfg!</code>宏更常被使用, 因为<code>cfg!</code>宏会根据<code>feature</code>修改运行时行为, 这就很难保证<code>features</code>是相加的. 你可以把<code>#[cfg]</code>放在某些<code>Rust</code>项目的前面--比如函数和类型定义、<code>impl</code>块、模块和<code>use</code>语句--也可以放在某些其他结构体字段、函数参数和语句前面. 但是<code>#[cfg]</code>属性并不是哪里都能用; <code>Rust</code>语言团队对它的使用位置进行了严格限制, 以防止条件编译带来过于奇怪且难以调试的情况.</p>
+<p>记住, 修改API的某些公共部分可能会无意间使某个<code>feature</code>变得不可叠加, 从而导致部分用户无法编译你的<code>crate</code>. 你通常可以使用向后兼容的修改规则作为经验法则--例如, 如果你使一个枚举变量或一个公共结构字段成为某个<code>feature</code>的条件, 那么该类型也必须用<code>#[non_exhaustive]</code>来注解. 否则, 如果由于依赖关系树中的某个<code>crate</code>添加了该<code>feature</code>, 那么没有启用该<code>feature</code> 的依赖<code>crate</code>可能就无法再进行编译.</p>
+<blockquote>
+<p>注意: 如果你正在编写一个大的<code>crate</code>, 你期望用户只需要其中的一部分功能, 那你应该考虑用<code>features</code>来保护较大的组件(通常是模块). 这样, 用户只会选择启用他们真正需要的部分, 也只会为这些部分付出编译成本.</p>
+</blockquote>
+<h2 id="工作区workspaces"><a class="header" href="#工作区workspaces">工作区(Workspaces)</a></h2>
+<p>在<code>Rust</code>中, <code>Crates</code>扮演着多种角色--它们是依赖关系图中的节点, 是<code>trait</code>一致性的边界, 也是编译<code>features</code> 的作用域. 因此, 每个<code>crate</code>都被当作一个单独的编译单元来管理; <code>Rust</code>编译器基本上把<code>crate</code>当作一个大的源文件来编译, 一次性编译, 最终生成一个单一的二进制输出(可以是二进制或库).</p>
+<p>虽然这简化了编译器的许多方面, 但它也意味着大的<code>crate</code>在工作时可能会很痛苦. 如果你在应用程序的某个部分修改了一个单元测试、一个注释或一个类型, 编译器必须重新评估整个<code>crate</code>, 以判断是否有实际变动. 在内部, 编译器实现了一些机制来加速这一过程, 如增量重新编译和并行代码生成, 但归根结底, <code>crate</code>的大小仍然是影响项目编译时间的一个重要因素.</p>
+<p>正因如此, 随着项目规模的扩大, 你可能希望将其拆分为多个内部相互依赖的<code>crate</code>. <code>Cargo</code>提供了正好适用于这种情况的机制: 工作区(<code>workspace</code>).  工作区是一组<code>crate</code>(通常称为子<code>crate</code>)的集合, 由一个顶级的<code>Cargo.toml</code>文件组织起来, 如清单 5-4 所示.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[workspace]
+members = [
+    "foo",
+    "bar/one",
+    "bar/two",
+]
+
+// 清单 5-4: 工作空间
+<span class="boring">}</span></code></pre></pre>
+<p><code>members</code>数组是一个目录列表, 每个目录都包含工作区中的<code>crate</code>. 这些<code>crate</code>都在各自的子目录中都有独立的<code>Cargo.toml</code>文件, 但它们共享一个<code>Cargo.lock</code>文件和一个输出目录. <code>crate</code>的名字不需要与<code>member</code>中的条目完全一致. 虽然不是强制要求, 一个工作区中的<code>crate</code>共享一个名称前缀是很常见的, 但不是必须的, 这个前缀通常选择主<code>crate</code>的名称. 例如, 在<code>tokio</code>这个<code>crate</code>中, 成员被称为<code>tokio</code>、<code>tokio-test</code>、<code>tokio-macros</code>等.</p>
+<p>工作区最重要的特性之一是: 你可以在工作区的根目录下调用<code>Cargo</code>来操作工作区的所有成员<code>crate</code>. 想检查它们是否都能编译, <code>Cargo check</code>会检查它们. 想运行所有的测试? <code>cargo test</code>会对它们进行测试. 这并不像把所有东西都放在一个<code>crate</code>里那么方便, 所以不建议将项目拆得过于细碎, 但工作区已经是一个非常不错的折中方案了.</p>
+<blockquote>
+<p>注意: <code>Cargo</code>命令通常会在工作区执行"正确的操作". 如果你需要手动消除歧义(比如工作区的<code>crate</code>都有一个同名的二进制文件), 请使用<code>-p</code>标志(指明具体<code>package</code>). 如果你在一个特定工作区的子目录中, 你可以通过<code>--workspace</code>来执行整个工作区的命令.</p>
+</blockquote>
+<p>一旦你有了工作区级别的<code>Cargo.toml</code>和<code>members</code>数组, 你就可以使用路径依赖来设置你的<code>crate</code>依赖关系, 如清单5-5所示.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span><span class="boring">bar/two/Cargo.toml
+</span>[dependencies]
+one = { path = "../one" }
+<span class="boring">bar/one/Cargo.toml
+</span>[dependencies]
+foo = { path = "../../foo" }
+
+// 清单 5-5: 工作区`crate`之间的`crate`依赖关系
+<span class="boring">}</span></code></pre></pre>
+<p>现在, 如果你对<code>bar/two</code>中的<code>crate</code>做了改变, 那么只有这个<code>crate</code>会被重新编译, 因为<code>foo</code>和<code>bar/one</code>并没有改变. 甚至从头开始编译整个项目可能会更快, 因为编译器不需要为了优化机会而评估整个项目的源代码.</p>
+<blockquote>
+<p>指定工作区内部的依赖关系</p>
+<p>在工作区中的一个<code>crate</code>依赖于另一个<code>crate</code>, 最直接的方法是使用<code>path</code>路径指定器, 如清单5-5所示. 然而, 如果你的<code>crate</code>是打算公开发布供他人使用的, 你可能更倾向于使用版本来指定依赖关系.</p>
+<p>假设你有一个<code>crate</code>, 它通过<code>one = { git = "..." }</code>依赖了<code>bar</code>工作区中的<code>one crate</code> (见示例 5-5), 同时又通过 <code>foo = "1.0.0"</code> 依赖了已经发布的 <code>foo crate</code>(同样来自<code>bar</code>). <code>Cargo</code>按规则获拉取包含整个<code>bar</code>工作区的Git仓库, 并看到该仓库又依赖于工作区中位于 <code>.../../foo</code> 的<code>foo</code>. 但<code>Cargo</code>不知道发布的版本<code>foo = "1.0.0"</code>和Git仓库中的<code>foo</code>是同一个<code>crate</code>! 它会把它们当成两个完全不同的依赖.</p>
+<p>你可能已经猜到接下来会发生什么了. 如果你尝试将来自<code>foo</code>(1.0.0)的某个类型, 用在<code>one</code>的某个API上, 而该API接受的是来自<code>foo</code>的同名类型, 编译器会拒绝编译你的代码. 即使这些类型有名字一样, 编译器也不能知道它们是同一个底层类型. 而用户会被彻底搞糊涂, 因为编译器会报错类似: "expected <code>foo::Type</code>, got <code>foo::Type</code>".</p>
+<p>解决这个问题的最佳方式是: 只有在子<code>crate</code>依赖未发布的更改时才使用路径依赖. 只要<code>one</code>与<code>foo</code>(1.0.0)一起工作, 它的依赖项中就应该写<code>foo = "1.0.0"</code>. 只有当你对<code>foo</code>做了<code>one</code>需要的修改时, 才应该让<code>one</code>改为使用路径依赖. 一旦你发布了<code>one</code>可以依赖的新版本的<code>foo</code>, 你就应该将路径依赖移除, 恢复为正常的版本依赖.</p>
+<p>这种方法也有其不足之处. 现在, 如果你改变了<code>foo</code>, 然后运行<code>one</code>的测试, 你会看到一个将使用旧的<code>foo</code>进行测试, 这可能不是你所期望的. 你可能想配置你的持续集成基础设施, 使其在以下两种场景下分别测试每个子 <code>crate</code>: 一种是使用其他子<code>crate</code>的最新发布版本, 另一种是将所有子<code>crate</code>配置为使用路径依赖.</p>
+</blockquote>
+<h2 id="项目配置"><a class="header" href="#项目配置">项目配置</a></h2>
+<p>运行<code>cargo new</code>后, 你会得到一个最小的<code>Cargo.toml</code>, 其中有<code>crate</code>的名称、版本号、一些作者信息和一个空的依赖列表. 这已经能满足大多数基本需求, 但随着项目的发展, 你可能想在<code>Cargo.toml</code>中添加一些有用的配置项.</p>
+<h3 id="包元数据crate-metadata"><a class="header" href="#包元数据crate-metadata">包元数据(Crate Metadata)</a></h3>
+<p>首先要添加到<code>Cargo.toml</code>中基础的内容, 就是<code>Cargo</code>支持的元数据指令. 除了<code>description</code>和<code>homepage</code>等字段外, 还可以包括一些额外信息, 如<code>crate</code>的<code>README</code>文件路径、用<code>cargo run</code>时默认运行的二进制文件(通过<code>default-run</code>指定), 以及用于帮助<code>cates.io</code>对<code>crate</code>进行分类的额外关键词(<code>keywords</code>)和类别(<code>categories</code>).</p>
+<p>对于项目结构更复杂的<code>crate</code>, 设置<code>include</code>和<code>exclude</code>这些元数据字段也非常有用. 它们决定了哪些文件会被包含进最终发布的包中. 默认情况下, <code>Cargo</code>会包含<code>crate</code>目录下的所有文件, 除了你的<code>.gitignore</code>文件中列出的文件, 但如果你在目录下还有大型测试数据、无关脚本或其他辅助数据, 而你又希望它们处于版本控制之下, 这种默认行为可能并不是你想要的. 顾名思义, <code>include</code>允许你仅包含特定文件集合, 而<code>exclude</code>允许你排除符合特定模式的文件.</p>
+<blockquote>
+<p>注意: 如果你有一个<code>crate</code>不应该被发布, 或者只应该被发布到某些替代的注册中心(也就是说, 不是发布到<code>crates.io</code>), 你可以将<code>publish</code>指令设置为<code>false</code>或者允许的注册中心列表.</p>
+</blockquote>
+<p>你可以使用的元数据指令的列表在不断增加, 所以请定期查看<code>Cargo</code>参考资料中的清单格式页面<code>(https://doc.rustlang.org/cargo/reference/manifest.html)</code>.</p>
+<h3 id="构建配置build-configuration"><a class="header" href="#构建配置build-configuration">构建配置(Build Configuration)</a></h3>
+<p><code>Cargo.toml</code>还可以让你控制<code>Cargo</code>如何构建你的<code>crate</code>. 最常用的工具是<code>build</code>参数, 它允许你为<code>crate</code>编写一个完全自定义的构建程序(我们将在第11章再次讨论这个问题). 然而, <code>Cargo</code>还提供了两个较小但非常实用的机制, 我们将在这里探讨: <code>patches</code>和<code>profiles</code>.</p>
+<h4 id="patch"><a class="header" href="#patch"><code>[patch]</code></a></h4>
+<p><code>Cargo.toml</code>的 <code>[patch]</code> 部分允许你为某个依赖临时指定一个不同的来源, 无论这个被修补的依赖出现在你的依赖中的哪个位置. 当你需要针对某个经过修改的传递依赖版本来编译你的<code>crate</code>, 以测试BUG修复、性能改进或即将发布的新次版本时, 这种功能非常宝贵. 清单5-6展示了一个如何临时使用一组依赖关系的变体的标例子.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[patch.crates-io]
+<span class="boring">use a local (presumably modified) source
+</span>regex = { path = "/home/jon/regex" }
+<span class="boring">use a modification on a git branch
+</span>serde = { git = "https://github.com/serde-rs/serde.git", branch = "faster" }
+<span class="boring">patch a git dependency
+</span>[patch.'https://github.com/jonhoo/project.git']
+project = { path = "/home/jon/project" }
+
+// 清单 5-6: 使用 `[patch]` 重写`Cargo.toml`中的依赖源
+<span class="boring">}</span></code></pre></pre>
+<p>即使你对某个依赖进行了<code>patch</code>, <code>Cargo</code>也会注意检查<code>crate</code>的版本, 避免你不小心<code>patch</code>到错误的主版本. 如果出于某种原因, 你通过传递依赖使用了同一个<code>crate</code>的多个主版本, 你可以通过为每个版本指定不同的标识符来分别<code>patch</code>它们, 如清单5-7中所示.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[patch.crates-io]
+nom4 = { path = "/home/jon/nom4", package = "nom" }
+nom5 = { path = "/home/jon/nom5", package = "nom" }
+
+// 清单 5-7: 使用 `[patch]` 在`Cargo.toml`中重写同一`crate`的多个版本
+<span class="boring">}</span></code></pre></pre>
+<p><code>Cargo</code>会查看每个路径中的<code>Cargo.toml</code>, 意识到<code>/nom4</code>包含主版本4, <code>/nom5</code> 包含主版本5, 并相应地对这两个版本进行<code>patch</code>. <code>package</code>关键字告诉<code>Cargo</code>在这两种情况下以<code>nom</code>的名字来寻找一个<code>crate</code>, 而不是像默认情况下那样使用依赖标识符(即等号左边的部分). 你在常规依赖中也可以用这种方式使用<code>package</code>来为依赖重命名.</p>
+<p>请记住, 当你发布一个<code>crate</code>时, <code>patch</code>不会被包含在上传文件包中. 依赖于你的<code>crate</code>的<code>crate</code>将只使用它自己的<code>[patch]</code>部分(即使是空的), 而不是你的<code>crate</code>的<code>[patch]</code>部分.</p>
+<blockquote>
+<p>crates VS. packages</p>
+<p>你可能想知道<code>package</code>和<code>crate</code>的区别是什么. 这两个术语在非正式场合经常交替使用. 这取决于你是在谈论<code>Rust</code>编译器、<code>Cargo</code>、<code>crates.io</code>还是其他什么内容, 它们有着特定的定义. 我个人认为, <code>crate</code>是一个<code>Rust</code>模块的层次结构, 从一个根<code>.rs</code>文件开始(在这个文件中你可以使用<code>crate</code>级别的属性, 如<code>#![feature]</code>)--通常是<code>lib.rs</code>或<code>main.rs</code>这样的文件. 相比之下, <code>package</code>是一个包含多个<code>crate</code>和元数据的集合, 本质上就是由<code>Cargo.toml</code>文件描述的所有内容. 这可能包括一个库<code>crate</code>、多个二进制<code>crate</code>、一些集成测试<code>crate</code>, 甚至可能包含多个拥有自己<code>Cargo.toml</code>文件的<code>workspace</code>成员.</p>
+</blockquote>
+<h4 id="profile"><a class="header" href="#profile"><code>[profile]</code></a></h4>
+<p><code>[profile]</code>配置段允许你向<code>Rust</code>编译器传递额外的选项, 以改变<code>crate</code>编译方式. 这些选项主要分为三类: 性能选项、调试选项, 以及以用户定义的方式改变代码行为的选项. 这些选项在调试模式(debug mode)或发布模式(release mode)有不同的默认值(其他模式也存在).</p>
+<p>三个主要的性能选项是<code>opt-level</code>、<code>codegen-units</code>和<code>lto</code>. <code>opt-level</code>选项通过告诉编译器优化你的程序来调整运行时的性能(0表示"不优化", 3表示"尽可能优化"). 设置越高, 代码优化程度越高, 可能会使代码运行得更快. 但是, 额外的优化会增加编译时间, 这就是为什么优化通常只在发布版本中启用.</p>
+<blockquote>
+<p>注意: 你也可以将<code>opt-level</code>设置为"s", 以优化二进制大小, 这在嵌入式平台上可能很重要.</p>
+</blockquote>
+<p><code>codegen-units</code>选项涉及的是编译时性能. 它告诉编译器可以将单个<code>crate</code>的编译分成多少个独立的编译任务(即代码生成单元). 一个大型<code>crate</code>的编译被分割成越多的部分, 编译就越快, 因为可以有更多的线程平行编译<code>crate</code>. 不幸的是, 为了实现这种加速, 这些线程大致都是独立工作, 这意味着代码优化受到影响. 例如, 想象一下, 在一个线程中编译的<code>crate</code>时, 可能会受益于将另一个<code>crate</code>中的一些代码的内联进来--因为这两个<code>crate</code>是独立的, 所以内联就无法发生! 那么, 这个设置在编译时间性能和运行时性能之间做出了权衡. 默认情况下, <code>Rust</code>在调试模式下使用无限制数量的<code>codegen</code>单元(基本上就是"尽快编译"), 在发布模式下使用较少的数量(在撰写本文时为16).</p>
+<p><code>lto</code> 设置开启了链接时优化(LTO), 它允许编译器(或者更准确地说, 是链接器)对原本是分开编译的程序部分(称为编译单元)进行联合优化. LTO的具体细节超出了本书的范围, 但其基本思想是, 每个编译单元的输出会包含关于其源代码的额外信息. 在所有单元被编译完成后, 链接器会再次遍历它们, 并使用这些附加信息对整个合并后的可执行代码进行优化. 这个额外的过程会增加编译时间, 但可以回收因为拆分编译单元而损失的大部分运行时性能. 特别是, LTO可以为那些对性能敏感的程序提供显著的性能提升, 尤其是在能从跨<code>crate</code>情况下的优化中获益. 不过要注意的是, 跨<code>crate</code>的LTO可能会大大增加编译时间.</p>
+<p><code>Rust</code>默认会在每个<code>crate</code>内的所有编码单元中执行LTO, 试图弥补因使用多个编码单元而造成的优化损失. 由于LTO仅限单个<code>crate</code>内执行, 而不是跨<code>crate</code>, 所以这个额外的过程并不繁琐, 而且增加的编译时间应该低于使用大量编码单元所节省的时间. <code>Rust</code>还提供了一种被称为"thin LTO"的技术, 它的优势是LTO优化过程大部分可以并行执行, 缺点是会漏掉一些完整LTO能捕捉到的优化机会.</p>
+<blockquote>
+<p>注意:  LTO 在很多情况下也可以用来跨越外部函数接口的边界进行优化. 参见 <code>linker-plugin-lto rustc</code> 标志以了解更多细节.</p>
+</blockquote>
+<p><code>[profile]</code>配置段还支持一些有助于调试的标志, 如<code>debug</code>, <code>debug-assertions</code>和<code>overflow-checks</code>.</p>
+<ul>
+<li><code>debug</code>标志告诉编译器在编译的二进制文件中包含调试符号. 这增加了二进制文件的体积, 但这意味着在栈回溯或性能分析中, 你能看到函数名称等信息, 而不仅仅是指令地址.</li>
+<li><code>debug-assertions</code>标志启用了<code>debug_assert!</code>宏和其他相关的调试代码, 否则不会被编译(通过<code>cfg(debug_assertions)</code>). 这样的代码可能会使你的程序运行变慢, 但在运行时更容易捕捉到可疑行为.</li>
+<li>溢出检查(<code>overflow-checks</code>)标志, 顾名思义, 用于启用整数运算的溢出检查. 这会让整数运算变慢(注意到一个趋势了吗?), 但能帮助你更早地发现棘手的 bug.</li>
+</ul>
+<p>默认情况下, 这些都是在调试模式下启用, 在发布模式下禁用.</p>
+<h4 id="profilepanic"><a class="header" href="#profilepanic"><code>[profile.*.panic]</code></a></h4>
+<p><code>[profile]</code>配置段还有一个值得单独讨论的标志: <code>panic</code>. 这个选项决定了当你的程序中的代码调用<code>panic</code>(无论是直接调用还是通过类似<code>unwrap</code>的方式间接触发)时会发生什么. 你可以将<code>panic</code>设置为<code>unwind</code>(大多数平台上的默认值)或<code>abort</code>. 我们将在第9章中更多地讨论<code>panic</code>和<code>unwinding</code>, 但我将在这里做一个简单的概述.</p>
+<p>通常在<code>Rust</code>中, 当你的程序发生<code>panic</code>时, 解发<code>panic</code>的线程开始展开(<code>unwinding</code>)它的调用栈. 你可以将展开堆栈理解为: 从当前函数开始, 一层层强制返回, 一直到该线程调用栈的底部. 也就是说, 如果<code>main</code>调用了<code>foo</code>, <code>foo</code>调用了<code>bar</code>, 而<code>bar</code>调用了<code>baz</code>, 那么<code>baz</code> 中的<code>panic</code>将强行从<code>baz</code>返回, 然后是<code>bar</code>, 然后是<code>foo</code>, 最后是<code>main</code>, 最终程序退出. 展开调用栈的线程会按照正常方式销毁堆栈上的所有值, 这样它们就有机会清理资源、报告错误等. 这种机制使得即使发生<code>panic</code>, 系统仍有机会优雅地退出.</p>
+<p>当某个线程发生<code>panic</code>并展开调用栈时, 其他线程不会受到影响, 会继续运行. 只有当(并且仅当)运行<code>main</code>的线程退出时, 整个程序才会终止. 也就是说, <code>panic</code>通常只影响发生<code>panic</code>的线程.</p>
+<p>这意味着栈展开(unwinding)是一把双刃剑; 程序可能会在某些组件失败的情况下继续运行, 从而引发各种奇怪的行为. 举个例子, 一个线程在更新<code>Mutex</code>中的状态到一半时发生了<code>panic</code>. 接下来任意获得该<code>Mutex</code>的线程都必须准备好处理这一个"部分更新、不一致"的状态. 因此, 一些同步原语(如<code>Mutex</code>)会记住它们上次访问时是否发生过<code>panic</code>, 并在之后有线程尝试访问时将这个信息传达出去. 如果某个线程遇到了这样的状态, 它通常也会发生<code>panic</code>, 这将导致一连串的<code>panic</code>, 最终导致整个程序终止. 但这通常比在损坏的状态下继续运行要好!</p>
+<p>支持栈展开(<code>unwinding</code>)所需的"账日管理"(bookkeeping)并不是免费的, 通常还需要编译器和目标平台的特别支持. 例如, 许多嵌入式平台根本无法高效地进行栈展开操作. 因此, <code>Rust</code>支持另一种<code>panic</code>模式: <code>abort</code>, 它确保当<code>panic</code>发生时, 整个程序立即退出. 在这种模式下, 没有任何线程能够进行清理操作. 这看起来很严重, 而且确实如此, 但它确保了程序永远不会在"半工作"状态下运行, 而且同时也能立即暴露错误.</p>
+<blockquote>
+<p>警告
+<code>panic</code> 设置是全局性的--如果你把它设置为<code>abort</code>, 你所有的依赖也会被编译成<code>abort</code>.</p>
+</blockquote>
+<p>你可能已经注意到, 当一个线程<code>panic</code>时, 它往往会打印一个回溯: 及导致<code>panic</code>发生的函数调用轨迹. 这也是一种栈展开(unwinding)的形式, 尽管它与我们之前讨论的<code>panic</code>行为中的栈展开是两个不同的机制. 你可以通过给<code>rustc</code>传递<code>-Cforce-unwind-tables</code>即使在<code>panic=abort</code> 情况下也可以获取回溯信息, 这样会让<code>rustc</code>在生成代码时包含必要的栈信息, 从而支持栈回溯, 即便程序仍然会在<code>panic</code>时直接终止.</p>
+<blockquote>
+<p>配置文件覆盖(PROFILE OVERRIDES)</p>
+<p>你可以使用配置覆盖(profile overrides)机制, 为特定的依赖关系或特定的<code>profile</code>设置<code>profile</code>选项. 例如, 清单5-8显示了如何使用 <code>[profile.&lt;profile-name&gt;.package.&lt;crate-name&gt;]</code> 语法, 在调试模式下为<code>serde crate</code>启用积极的优化, 为所有其他<code>crate</code>启用适度的优化.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[profile.dev.package.serde]
+opt-level = 3
+[profile.dev.package."*"]
+opt-level = 2
+
+// 清单 5-8: 覆盖特定依赖关系或特定模式的配置文件选项
+<span class="boring">}</span></code></pre></pre>
+<p>如果某些依赖在调试模式下运行非常慢, 比如解压缩或视频编码, 而你可能需要对其进行优化, 以便你的测试套件不至于花上几天时间来完成, 那么这种优化覆盖机制就非常有用. 你也可以在<code>~/.cargo/config</code>的<code>Cargo</code>配置文件中使用 <code>[profile.dev]</code> (或类似)部分来指定全局配置文件的默认值.</p>
+<p>当你为一个特定的依赖关系设置优化参数时, 请记住, 这些参数只适用于作为该<code>crate</code>的一部分被编译的代码; 例如, 如果本例中的<code>serde</code>有一个通用的方法或类型被你的<code>crate</code>中使用, 该方法或类型的代码将在你的<code>crate</code>中被单态化和优化, 此时生效的是你自己<code>crate</code>的构建配置, 而不是<code>serde</code>的构建配置覆盖项.</p>
+</blockquote>
+<h2 id="条件编译"><a class="header" href="#条件编译">条件编译</a></h2>
+<p>你写的大多数<code>Rust</code>代码都是通用的--无论运行在哪种CPU或操作系统上, 它们的行为都是一致的. 但有时你必须做一些特殊处理, 让代码能在Windows、ARM芯片等平台上正常运行, 或者在针对特定平台的应用二进制接口(ABI)进行编译时也需如此. 或者你想在某个CPU指令可用时, 编写该函数的优化版本, 或者在持续集成(CI)环境中禁用某些缓慢但无关紧要的初始化代码. 为了应对这些情况, <code>Rust</code>提供了条件编译机制, 即只有在编译环境的某些条件为真时, 才会编译一个特定的代码段.</p>
+<p>我们用<code>cfg</code>关键字来表示有条件的编译, 你在本章前面的"在你的<code>crate</code>中使用<code>features</code>"中已经见过. 它通常以<code>#[cfg(condition)]</code>属性的形式出现, 意思是: 只有在<code>condition</code>为真时, 才会编译紧随其后的代码项. <code>Rust</code>还提供了<code>#[cfg_attr(condition, attribute)]</code>, 如果<code>condition</code>成立, 则编译为 <code>#[attribute]</code>, 否则什么也不做. 你也可以使用<code>cfg!(condition)</code>宏将<code>cfg</code>条件作为布尔表达式求值.</p>
+<p>每个<code>cfg</code> 构造都接受一个由选项组成的条件, 比如<code>feature = "some-feature"</code>, 还可以使用组合器<code>all</code>、<code>any</code>和<code>not</code>, 它们的行为与你所期望的类似. 选项要么是简单的名字, 比如<code>unix</code>, 要么是键/值对, 比如<code>feature = "some-feature"</code>, 后者在<code>features</code>条件中常见.</p>
+<p>你可以依据很多有趣的选项来控制代码是否被编译. 下面我们将按使用频率从高到低一一介绍这些选项:</p>
+<h3 id="feature选项"><a class="header" href="#feature选项">Feature选项</a></h3>
+<p>你已经看过这些示例了. <code>Feature</code>选项的形式是<code>feature = "name-of-feature"</code>, 如果指定的特性被启用, 该条件就会被视为为真. 你可以通过组合器在一个条件中检查多个<code>feature</code>. 例如, <code>any(feature = "f1", feature = "f2")</code>表示只要功能<code>f1</code>或<code>f2</code>中有一个被启用, 该条件就为真。</p>
+<h3 id="操作系统选项"><a class="header" href="#操作系统选项">操作系统选项</a></h3>
+<p>这些使用键值对语法, 键为<code>target_os</code>, 值为<code>windows</code>、<code>macos</code>和<code>linux</code>. 你也可以用<code>target_family</code>指定一个操作系统系列, 它的值是<code>windows</code>或<code>unix</code>. 这些都很常见, 以至于有了简写形式, 因此你可以直接使用<code>cfg(windows)</code>和<code>cfg(unix)</code>. 例如, 如果你想让一个特定的代码段只在<code>macOS</code>和<code>Windows</code>上编译, 你可以这样写: <code>#[cfg(any(windows, target_os = "macos"))]</code>.</p>
+<h3 id="上下文选项"><a class="header" href="#上下文选项">上下文选项</a></h3>
+<p>这些选项可以让你根据特定的编译上下文来调整代码. 其中最常见的是<code>test</code>选项, 只有当<code>crate</code>使用测试配置文件, 编译时才为true. 请记住, <code>test</code>仅对当前正在测试的<code>crate</code>生效, 而不包括它的任何依赖项. 这也意味着, 在运行集成测试时, <code>test</code>不会在你的<code>crate</code>中被设置; 是那些集成测试文件在使用测试配置文件编译, 而你的实际<code>crate</code>按正常方式编译(也就是没有设置<code>test</code>). 这同样适用于<code>doc</code>和<code>doctest</code>选项, 它们仅在生成文档或编译文档中的测试代码(<code>doctest</code>)时才被设置. 还有<code>debug_assertions</code>选项, 它在调试模式(debug mode)下默认被启用.</p>
+<h3 id="tool-选项"><a class="header" href="#tool-选项">Tool 选项</a></h3>
+<p>一些工具, 比如<code>clippy</code>和<code>Miri</code>, 会设置自定义选项(稍后会详细介绍), 你可以借助这些选项在工具运行时自定义编译行为. 通常, 这些选项是以相关的工具命名的. 例如, 如果你希望某个计算密集型的测试在<code>Miri</code>下不运行, 你可以给它一个属性<code>#[cfg_attr(miri, ignore)]</code>.</p>
+<h3 id="架构选项"><a class="header" href="#架构选项">架构选项</a></h3>
+<p>这些选项允许你根据编译器所针对的CPU指令集来进行编译. 你可以用<code>target_arch</code>来指定一个特定的架构, 它的值是<code>x86</code>、<code>mips</code>和<code>arch64</code>, 或者你可以用<code>target_feature</code>来指定一个特定的平台特性, 它的值是<code>avx</code>或<code>sse2</code>. 对于非常低层的代码, 你可能还会发现<code>target_endian</code>和<code>target_pointer_width</code>选项很有用.</p>
+<h3 id="编译器选项"><a class="header" href="#编译器选项">编译器选项</a></h3>
+<p>这些选项允许你根据所编译的平台ABI调整代码, 并且可以通过<code>target_env</code>的值(如<code>gnu</code>、<code>msvc</code>和<code>musl</code>)获得. 由于历史原因, 这个值通常是空的, 尤其是在<code>GNU</code>平台上. 通常只有在你需要直接与环境ABI交互时才会用到这个选项, 例如当使用<code>#[link]</code>与ABI特定的符号名链接时.</p>
+<p>虽然<code>cfg</code>条件通常是用来自定义代码的, 但有些也可以用来自定义依赖关系. 例如, 依赖关系<code>winrt</code>通常只在Windows上有意义, 而<code>nix crate</code>可能只在基于Unix的平台上有用. 清单5-9给出了一个如何使用<code>cfg</code>条件的例子.</p>
+<pre><pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[target.'cfg(windows)'.dependencies]
+winrt = "0.7"
+[target.'cfg(unix)'.dependencies]
+nix = "0.17"
+
+// 清单 5-9: 条件性依赖
+<span class="boring">}</span></code></pre></pre>
+<p>在这里, 我们指定只有在<code>cfg(windows)</code>(在Windows上)条件下<code>winrt</code>版本0.7才会被视为依赖项, 而只有在<code>cfg(unix)</code>(在Linux、macOS和其他基于Unix的平台上)条件下<code>nix</code>版本0.17才会被视为依赖. 需要注意的一点是, <code>[dependencies]</code>部分是在构建过程的早期就被评估, 此时只有某些<code>cfg</code>选项可用. 特别是, <code>feature</code>和上下文选项在这个时候还不能用, 因此无法使用此语法根据<code>feature</code>和上下文拉取依赖项. 然而, 你可以使用仅依赖于目标或架构的任何<code>cfg</code>, 以及由调用<code>rustc</code>的工具显式设置的任何选项(如<code>cfg(miri)</code>).</p>
+<blockquote>
+<p>注意: 在我们讨论依赖性规范的时候, 我强烈建议你的CI基础设施, 使用<code>cargo-deny</code>和<code>cargo-audit</code>等工具对你的依赖性进行基本审计. 这些工具可以检测到以下情况: 你间接依赖某个依赖项的多个主版本, 你依赖了已经无人维护或有已知安全漏洞的<code>crate</code>, 或者你使用了可能不希望采用的许可证, 使用此类工具是一种自动化地提升代码质量的绝佳方式.</p>
+</blockquote>
+<p>添加自定义条件编译选项也非常简单. 你只需要确保当<code>rustc</code>编译你的<code>crate</code>时, 传递了<code>--cfg=myoption</code>参数即可. 最简单的方法是将你的<code>--cfg</code>添加到<code>RUSTFLAGS</code>环境变量中. 这在CI中很有用, 你可能想根据你的测试套件是在CI上还是在开发机器上运行来定制测试行为: 在你的CI设置中把<code>--cfg=ci</code>添加到 <code>RUSTFLAGS</code>, 然后在你的代码中使用<code>cfg(ci)</code>和 <code>cfg(not(ci))</code>. 这样设置的选项也可以在<code>Cargo.toml</code>的依赖关系中使用.</p>
+<h2 id="版本控制versioning"><a class="header" href="#版本控制versioning">版本控制(Versioning)</a></h2>
+<p>所有的<code>Rust</code>的<code>crates</code>都是有版本的, 并应遵循<code>Cargo</code>对语义化版本控制的实现方式. 语义化版本控制定义了不同类型的变更需要如何对应版本增长, 以及哪些版本之间是兼容的, 以何种方式兼容. <code>RFC 1105</code>标准本身非常值得一读(并不晦涩难懂), 但总结起来, 它将更改分为三类: 破坏性更改, 需要增加主版本号; 功能新增, 需要增加次版本号; 以及BUG修复, 只需要增加补丁版本. <code>RFC 1105</code>很好地概述了什么是<code>Rust</code>中的破坏性更改进行了清晰的界定, 本书其他部分也涉及了一些相关内容.</p>
+<p>这里我不会详细讲解各种变更类型的具体语义. 我想强调的是, 在<code>Rust</code>生态系统中, 版本号出现的一些不那么直观的情况, 这些情况在你给自己的<code>crate</code>决定版本号时需要牢记在心.</p>
+<h3 id="最小支持的rust版本"><a class="header" href="#最小支持的rust版本">最小支持的<code>Rust</code>版本</a></h3>
+<p>第一个<code>Rust</code>特有的问题是最小支持的<code>Rust</code>版本(<code>MSRV</code>). 关于项目在<code>MSRV</code>和版本控制方面应遵循什么策略, <code>Rust</code>社区内部有很多争议, 而且没有真正"完美"的答案. 问题的核心在于, 一些<code>Rust</code>用户只能使用旧版本的编译器, 通常是在企业环境中, 他们往往没有升级的选择权. 如果我们持续使用新稳定下来的API, 这些用户将无法编译我们的<code>crates</code>, 从而被迫"掉队".</p>
+<p><code>crate</code>作者可以使用两种技术, 来让处于这种情况的用户的生活稍微轻松一些. 第一种是建立一个<code>MSRV</code>策略, 承诺<code>crate</code>的新版本始终能够与过去X个月的任一稳定版本一起编译. 具体的时间跨度因项目而异, 但通常是6或12个月. 鉴于<code>Rust</code>每六周发布一个稳定版本, 这相当于支持最近的4或8个稳定版本. 项目中引入的任何新代码都必须能用<code>MSRV</code>编译器成功编译(通常由CI检查), 否则就需要推迟合并, 直到<code>MSRV</code>策略允许其合并为止. 这有时确实会很麻烦, 因为这意味着这些<code>crates</code>无法利用语言中最新和最强大的特性, 但这确实能给你的用户带来更多便利.</p>
+<p>第二个做法是: 确保在<code>MSRV</code>发生变化时, 增加你的<code>crate</code>的次要版本号. 因此, 如果你发布了<code>crate</code>的2.7.0版本, 并将你的MSRV从<code>Rust 1.44</code>提升到<code>Rust 1.45</code>, 那么一个受限于<code>Rust 1.44</code>的项目就可以通过使用依赖版本规范<code>version = "2, &lt;2.7"</code>来继续使用你旧版本的<code>crate</code>, 这样该项目就能继续正常工作, 直到它有机会升级到<code>Rust 1.45</code>上. 重要的是, 你要增加次版本号, 而不仅仅是补丁版本号, 这样, 如果有必要, 你仍然可以为旧的<code>MSRV</code>版本发布新的补丁版本, 以修复关键的安全问题.</p>
+<p>有些项目对<code>MSRV</code>(最低支持的<code>Rust</code>版本)的支持非常严肃, 以至于他们把<code>MSRV</code>的变化是视为破坏性的变更, 并相应的提升主版本号. 这意味着下游项目必须主动选择接收<code>MSRV</code>变化, 而不是默认接受然后再想办法"退出", 但这也意味着那些 对<code>MSRV</code>没有严格要求的用户, 如果不升级依赖, 就无法获得未来的bug修复, 这可能需要他们也发布一个破坏性的变化. 正如我所说, 没有一种方案是完全没有缺点的.</p>
+<p>在当前的<code>Rust</code>生态系统中, 强制执行<code>MSRV</code>是一项挑战. 只有少部分<code>crate</code>提供了<code>MSRV</code>保证, 即使你的依赖项做到了, 你也需要不断监控它们何时提升了自己的<code>MSRV</code>. 一旦发生这种情况, 你就必须发布你自己的<code>crate</code>的新版本, 用之前提到的方式来限制依赖的版本范围, 以确保你的<code>MSRV</code>不会因此间接发生变化. 这反过来可能迫使你放弃一些依赖库的安全性或性能更新, 因为你必须继续使用旧版本, 直到你的<code>MSRV</code>策略允许升级为止. 而且这个决定还会传导到依赖你<code>crate</code>的下游项目. 社区已经提出将<code>MSRV</code>检查机制直接集成到<code>Cargo</code>中, 但截至目前, 还没有稳定的、可用的实现.</p>
+<h3 id="最小的依赖版本"><a class="header" href="#最小的依赖版本">最小的依赖版本</a></h3>
+<p>当你第一次添加依赖时, 通常很难判断应该为该依赖指定什么样的版本号. 程序员通常会选择最新的版本, 或者只选择当前的主版本号, 但很可能这两种选择都是不合适的. 我所说的"错误"并不是指你的<code>crate</code>不能编译, 而是说这种选择在未来可能会给使用你<code>crate</code>的用户带来麻烦. 我们来看一下, 这两种做法各自存在什么问题.</p>
+<p>首先, 考虑这样一种情况: 你添加了<code>hugs = "1.7.3"</code>的依赖, 这是当前最新发布的版本. 现在, 假设有另一个开发者依赖了你的<code>crate</code>, 但他们也依赖于另一个<code>crate foo</code>, 而<code>foo</code>本身也依赖于<code>hugs</code>. 再进一步设想, <code>foo</code>的作者非常严格的遵循<code>MSRV</code>策略, 因此他们的依赖<code>hugs = "1, &lt;1.6"</code>. 这时你就会遇到问题了. <code>Cargo</code>在处理依赖时, 看到你的声明的是<code>hugs = "1.7.3"</code>时, 它只考虑<code>&gt;=1.7</code>的版本. 但是它又发现<code>foo</code>对<code>hugs</code>的依赖要求<code>&lt;1.6</code>, 于是<code>Cargo</code>会放弃并报错, 并报告说没有哪个<code>hugs</code>版本可以同时满足所有依赖的需求.</p>
+<blockquote>
+<p>注意: 实际上, 有很多原因会导致某个<code>crate</code>明确不希望使用某个依赖的较新版本. 最常见的原因是为了执行<code>MSRV</code>策略, 另一个是满足企业审计要求(较新的版本将包含未被审计的代码), 还包括确保可重现构建(即始终使用精确列出的依赖版本).</p>
+</blockquote>
+<p>这就很不幸了, 因为你的<code>crate</code>可能实际上在<code>hugs 1.5.6</code>中能正常编译. 甚至可能在任何1.X版本中都能正常工作. 但如果你使用的是某个最新的小版本号, 你就相当于告诉<code>Cargo</code>: 只考虑该小版本及其之后的版本. 那是不是说, 应该改用<code>hugs = "1"</code>来解决呢? 不, 这也不完全正确. 你的代码确实依赖于<code>hugs 1.6</code>中添加的东西, 因此虽然<code>1.6.2</code>没有问题, 但<code>1.5.6</code>就不行了. 如果你一直在一个能使用新版本<code>hugs</code>的环境中编译你的<code>crate</code>, 你可能完全不会注意到这个问题, 但如果依赖图中的某个<code>crate</code>指定<code>hugs = "1, &lt;1.5"</code>, 你的<code>crate</code>就无法编译了.</p>
+<p>正确的策略是列出包含你<code>crate</code>所依赖所有功能的最早版本, 并且在你不断为<code>crate</code>添加新代码时, 也要确保这个前提仍然成立. 但除了翻<code>changelog</code>或者靠试错法, 你怎么确定这个最小版本呢? 你最好的办法是使用<code>Cargo</code>的不稳定的功能<code>-Zminimal-versions</code>参数, 这个参数让<code>Cargo</code>使用所有依赖项的最小可接受版本, 而不是最大版本. 接着, 把你的所有依赖项都设置为只指定最新的主版本号, 尝试编译, 对那些无法编译通过的依赖项添加具体的小版本号, 重复这个过程, 直到所有依赖都能顺利编译, 你现在有了最低版本要求.</p>
+<p>值得注意的是, 就像<code>MSRV</code>一样, 最小的版本检查也面临着一个生态系统的采用纳的问题. 即使你已经正确设置了所有版本号约束, 你依赖的那些项目可能并没有这么做. 这导致<code>Cargo</code>的最小版本检查功能在实践中难以使用(这也是为什么它至今仍是不稳定功能的原因). 如果你依赖<code>foo</code>, 而<code>foo</code>依赖<code>bar</code>, 并指定<code>bar="1"</code>, 而实际上它需要<code>bar="1.4"</code>, 那么无论你怎么指定 <code>foo</code>, <code>Cargo</code>都会报告编译<code>foo</code>失败, 因为<code>-Zminimal-versions</code>标志会让<code>Cargo</code>总是选择最小可接受版本. 你可以通过在你的依赖列表中显式添加<code>bar</code>, 并指定正确的版本来解决这个问题, 但这种变通方式设置起来很麻烦, 维护起来也痛苦. 你可能不得不显式列出大量仅通过间接依赖引入的库, 而且你还得不断维护更新这些版本信息.</p>
+<blockquote>
+<p>注意: 目前有一个提义: 引入一个标志, 即对当前的<code>crate</code>倾向于使用最小的版本, 但对依赖项倾向于使用最大的版本, 这个方案似乎看起来非常有前景.</p>
+</blockquote>
+<h3 id="变更记录changelogs"><a class="header" href="#变更记录changelogs">变更记录(Changelogs)</a></h3>
+<p>除了最简单的<code>crate</code>, 我强烈建议你维护一份变更日志. 没有什么比看到某个依赖升级了主版本, 然后还得翻Git提交日志来搞清楚到底改了什么、你的代码要怎么改更让人沮丧的了. 我建议你不要只是把Git提交日志原封不动地塞进一个叫<code>changelog</code>的文件里, 而是手动维护一份变更日志. 这样写出来的<code>changelog</code>才更可能对用户真正有用.</p>
+<p>一个简单但很不错的<code>changelog</code>格式是<em>Keep a Changelog</em>上推荐的格式, 该格式记录在 <code>https://keepachangelog.com</code>.</p>
+<h3 id="未发布的版本"><a class="header" href="#未发布的版本">未发布的版本</a></h3>
+<p>即使依赖的来源是本地目录或Git仓库, <code>Rust</code>也会考虑它的版本号. 这意味着, 即使你还没有把<code>crate</code>发布到<code>crates.io</code>发布版本, 语义版本管理依然很重要; 在不同的版本之间, 你的<code>Cargo.toml</code>里的版本号是依然是有意义的. 语义化版本规范并没有规定在这种情况下该怎么做, 但我会提供一个还算不错、负担不大的工作流程供你参考.</p>
+<p>在你发布了一个版本后, 立即将<code>Cargo.toml</code>中的版本号更新为下一个补丁版本, 并加上类似后缀为<code>-alpha.1</code>. 如果你刚刚发布了<code>2.0.3</code>, 就把新版本定为<code>2.0.4-alpha.1</code>. 如果你发布的是一个<code>alpha</code>版本, 那就把<code>alpha</code>的编号递增, 比如从<code>2.0.4-alpha.1</code>到<code>2.0.4-alpha.2</code>.</p>
+<p>当两个版本发布之间对代码进行修改时, 要注意是否有新加功能或破坏性的变更. 如果发生了这样的更改, 并且对应的版本号自上次发布后还没有变动, 那么就应当更新版本号. 例如, 如果上一个正式发布的版本是<code>2.0.3</code>, 而当前的开发版本是<code>2.0.4-alpha.2</code>, 此时你进行了新增功能的修改, 那么就应该把新版本改为<code>2.1.0-alpha.1</code>, 如果你做了一个破坏性的修改, 就变成<code>3.0.0-alpha.1</code>. 如果相应的版本号已经增加过了, 那就只需要递增<code>alpha</code>的编号即可.</p>
+<p>当你发布正式版本时, 移除版本号中的后缀(除非你想发布的是预发布版本), 然后发布这个版本, 并从头开始新的迭代.</p>
+<p>这个流程之所以有效, 是因为它让两个常见的工作流程更加流畅. 首先, 想象一下, 一个开发者依赖于你的<code>crate</code>的主要版本2, 但他们需要一个目前只在Git中提供的功能. 然后你提交了一个破坏性的修改. 如果你没有同时增加主版本, 他们的代码就可能会以意想不到的方式突然出错--要么无法编译, 要么在运行时出现奇怪的问题. 但如果你按照本文介绍的流程操作, <code>Cargo</code>会在他们使用你的<code>crate</code>的时间发出提醒, 指出发生了破坏性变更, 这样他们就必须要么解决这个问题, 要么将依赖锁定到某个特定提交.</p>
+<p>接下来, 想象一位开发者需要使用他们刚刚为你的<code>crate</code>贡献的一个功能, 但这个功能尚未发布在任何一个正式版本中. 他们已经通过Git依赖的方式使用你的<code>crate</code>一段时间了, 所以他们项目中的其他开发者本地保存的仍是你<code>crate</code>仓库的旧版本. 如果你没有在Git中更新主版本号, 该开发者就无法向其它人传达他们的项目现在依赖了那个刚合并的新功能. 如果他们把变更推送到项目中, 其他开发者会发现项目不再能编译了, 因为<code>Cargo</code>会继续使用本地旧版本的仓库副本. 而如果该开发者可以为Git依赖更新次版本号, <code>Cargo</code>就会意识到旧的仓库副本已经过时.</p>
+<p>这个工作流程并不完美. 它无法很好地传达在两个版本发布之间发生的多个次版本或主版本变更, 并且你仍然需要花些精力来跟踪版本变化. 不过, 它确实解决了<code>Rust</code>开发者在使用Git依赖时最常遇到的两个问题, 而且即便你在发布版本之间做了多次这样的更改, 这个工作流程仍能帮助你避免许多问题.</p>
+<p>如果你不太在意发布版本中版本号变得不够小或连续, 你可以通过在每次变更时始终递增相应的版本号部分, 来改进上述建议的工作流程. 但要注意, 具体取决于你变更的频率, 这可能会让你的版本号变得非常大.</p>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>在本章中, 我们探讨了多种用于配置、组织和发布<code>crate</code>的机制, 这些机制既能让你自己受益, 也有助于他人使用你的<code>crate</code>. 我们还回顾了在使用<code>Cargo</code>的依赖和<code>features</code>时一些常见的坑, 希望你以后不会再被这些问题困扰. 在下一章中, 我们将转向测试主题, 深入探讨如何超越我们所熟知和喜爱的<code>Rust</code>的简单<code>#[test]</code>测试函数.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="chapter-04.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="chapter-07.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="chapter-04.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="chapter-07.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="editor.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
