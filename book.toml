@@ -1,7 +1,6 @@
 [book]
 authors = ['thinkgo']
 language = 'en'
-multilingual = false
 src = 'src'
 title = 'Rust For Rustaceans 阅读和翻译'
 [output.html]
