@@ -4,3 +4,4 @@
 - [第1章-基础](chapter-01.md)
 - [第2章-类型](chapter-02.md)
 - [第4章-错误处理](chapter-04.md)
+- [第12章-没有标准库的 Rust](chapter-12.md)
