@@ -1,0 +1,628 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第8章-异步编程 - Rust For Rustaceans 阅读和翻译</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom-8c8b6e29.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-4b5aa1f8.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-448f900e.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust For Rustaceans 阅读和翻译</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/thinkgos/Rust-For-Rustaceans" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="第八章-异步编程asynchronous-programming"><a class="header" href="#第八章-异步编程asynchronous-programming">第八章 异步编程(Asynchronous Programming)</a></h1>
+<p>异步编程, 顾名思义, 就是不同步的编程. 在高层次上, 异步操作是在后台执行的操作, 程序不会等待异步操作完成, 而是会立即继续下一行代码. 如果你还不熟悉异步编程, 这个定义可能不够充分, 因为它没有真正地解释异步编程是什么. 要真正理解异步编程模型以及它在<code>Rust</code>中的工作原理, 我们首先要了解异步编程的替代方案是什么. 也就是说, 在理解异步编程模型之前, 我们需要先理解同步编程模型. 这对于澄清概念和展示使用异步编程的利弊都很重要: 异步的解决方案并不总是正确的那个! 在这一章的开始, 我们将快速浏览异步编程作为一个概念的动机; 然后我们将深入探讨<code>Rust</code>中的异步在幕后究竟是如何工作的.</p>
+<h2 id="异步是怎么回事whats-the-deal-with-asynchrony"><a class="header" href="#异步是怎么回事whats-the-deal-with-asynchrony">异步是怎么回事?(What’s the Deal with Asynchrony?)</a></h2>
+<p>在我们深入了解同步和异步编程模型的细节之前, 首先需要快速了解一下你的计算机在运行程序时, 它实际上在做什么.</p>
+<p>计算机的速度很快. 非常快. 事实上, 它快到以至于大部分时间都花在“等待“事情发生. 除非你在解压文件, 编码音频或进行数据计算, 否则你的<code>CPU</code>有可能大部分时间都处于空闲状态, 等待各个操作完成. 它可能在等待一个网络数据包的到来, 等待鼠标的移动, 等待磁盘完成一些字节的写入, 甚至可能等待主内存的读取完成. 从<code>CPU</code>的角度来看, 大多数这样的事件之间都相隔了漫长的时光. 当事件发生时, <code>CPU</code>执行几条指令, 然后又回到等待状态. 看看你的<code>CPU</code>利用率–它很有可能处于较低水平的个位数, 而且它大部分时间都维持在这个水平.</p>
+<h3 id="同步接口synchronous-interfaces"><a class="header" href="#同步接口synchronous-interfaces">同步接口(Synchronous Interfaces)</a></h3>
+<p>同步接口允许你的程序(更准确地说, 是程序中的一个线程)一次只执行一个操作; 每个操作都要等待上一个同步操作完成后才能运行. 你在实际中看到的大多数接口都是同步的: 你调用它们, 它们去做一些操作, 在等操作完成后才会返回, 然后你的程序可以继续运行. 正如我们在本章后面将会看到的, 其原因是使一个操作异步化需要相当多的额外机制. 除非你确定需要异步带来的好处, 否则坚持使用同步模式需要更少的机制.</p>
+<p>同步接口隐藏了所有这些“等待“; 应用程序调用一个函数, 说“把这些字节写到这个文件“, 一段时间后, 该函数完成, 下一行代码执行. 在幕后, 真正发生的是操作系统排队向磁盘写操作, 然后让应用程序进入睡眠状态, 直到磁盘报告说它已经完成写入. 应用程序会认为函数执行了很长的时间, 但实际上它根本没有真正执行, 只是在等待.</p>
+<p>以这种方式顺序执行操作的接口, 也常被称为阻塞接口, 因为接口中的操作必须等待某个外部事件的发生才能继续执行, 在此之前会阻塞后续的执行. 无论你把这种接口称为同步还是阻塞, 其基本概念是一样的: 应用程序在当前操作完成之前, 是不会继续执行下一步操作. 操作在等待时, 应用程序也在等待.</p>
+<p>同步接口通常被认为是易于使用, 逻辑也很容易理解, 因为你的代码按顺序一行一行地执行. 但这种方式也意味着应用程序一次只能做一件事. 这意味着, 如果你想让你的程序等待用户输入或网络数据包, 你就没办法做到, 除非操作系统专门为此提供了这样的操作. 同样地, 即使你的应用程序在磁盘写文件期间本可以做其他有用的工作, 它也没有这个选项, 因为文件写入操作会阻塞程序的执行.</p>
+<h3 id="多线程multithreading"><a class="header" href="#多线程multithreading">多线程(Multithreading)</a></h3>
+<p>允许并发执行的最常见的解决方案是使用多线程. 在多线程程序中, 每个线程负责执行一个特定的, 独立的阻塞操作, 操作系统在线程之间进行多路复用, 因此, 只要任何线程可以取得进展, 就能继续执行. 如果一个线程阻塞了, 其他一些线程可能仍然可以运行, 因此应用程序可以继续进行有效的工作.</p>
+<p>通常情况下, 这些线程使用某种同步原语(比如锁或通道等)相互通信, 以便应用程序仍能协调它们的工作. 例如, 你可能有一个线程在等待用户输入, 另一个线程在等待网络数据包, 还有一个线程则等待上述任一线程通过一个三者共享的通道发送消息.</p>
+<p>多线程为你提供了并发性–可以同时执行多个独立操作的能力. 由运行应用程序的系统(这里指操作系统)在未被阻塞的线程中进行选择, 并决定接下来执行哪一个. 如果一个线程被阻塞了, 系统就可以选择另一个可以取得进展的线程来运行.</p>
+<p>多线程与阻塞接口相结合可以让你走得更远, 大量可投入生产的软件都是以这种方式构建的. 但这种方法也并非没有缺点的. 首先, 跟踪所有这些线程很快就会变得繁琐; 如果你必须为每个并发任务建立一个线程(包括像等待键盘输入这样的简单任务), 那么线程的数量就会迅速增加, 而跟踪这些线程如何交互, 通信和协调会带来更多额外复杂性.</p>
+<p>其次, 线程之间的切换随着线程数量的增加而变得更加昂贵. 每当一个线程停止运行, 另一个线程重新启动时, 都需要在操作系统调度器上做一次往返, 而这不是免费的. 在某些平台上, 创建新的线程也是一个相对较重的过程. 对有高性能需求的应用程序来说, 通常通过重用线程以及使用操作系统调用来减少这个开销, 这些调用允许你在多个相关操作上阻塞, 但最终你仍然面临着同样的问题: 阻塞接口要求你拥有与阻塞调用数量相同的线程.</p>
+<p>最后, 线程将并行性引入到你的程序中. 并发和并行的区别很微妙, 但很重要: 并发意味着任务的执行是交错进行的, 而并行意味着多个任务同时执行. 如果你有两个任务, 它们的执行用<code>ASCII</code>表示可能看起来像<code>_-_-_</code>(并发性)与<code>=====</code>(并行性). 多线程不一定意味着并行性, 即使你有很多线程, 你可能只有一个核心, 因此在任何时刻只能执行一个线程, 但这两者通常是相辅相成的. 你可以通过使用<code>Mutex</code>或其他同步原语, 使两个线程在执行时互斥, 但这也会引入额外的复杂性, 线程想要并行执行. 虽然并行通常是一件好事, 谁不希望自己的程序在更多的内核上运行得更快呢, 但这也意味着你的程序必须处理对共享数据结构的真正并发访问. 这意味着需要从<code>Rc</code>, <code>Cell</code>和<code>RefCell</code>转移到功能更强大但也更慢的<code>Arc</code>和<code>Mutex</code>. 虽然你可能想在并发程序中使用后一种类型以实现并行性, 但线程迫使你使用它们. 我们将在第10章中更详细讨论多线程.</p>
+<h3 id="异步接口asynchronous-interfaces"><a class="header" href="#异步接口asynchronous-interfaces">异步接口(Asynchronous Interfaces)</a></h3>
+<p>现在我们已经探索了同步接口, 接下来可以看看替代方案: 异步或非阻塞接口. 异步接口可能不会立即产生结果, 而是表明结果将在稍后的某个时间可用. 这让调用者有机会在此期间做其他事情, 而不必等待该操作完成之后才能继续执行. 在<code>Rust</code>的术语中, 异步接口是一个返回<code>Poll</code>的方法, 如清单 8-1 中所定义.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Poll&lt;T&gt; {
+    Ready(T),
+    Pending
+}
+
+// 清单 8-1: 异步的核心: "要么给你结果, 要么稍后再来"的类型
+<span class="boring">}</span></code></pre>
+<p><code>Poll</code>通常出现在函数的返回类型中, 这些函数的名字以 <code>poll</code> 开头–它们是表明自己可以在不阻塞的情况下尝试执行操作的方法. 我们将在本章稍后讨论它们是如何做到这一点的, 但一般来说, 它们会在正常阻塞之前尽可能多地执行操作, 然后返回. 最重要的是, 它们会记住上次离开的位置, 以便在以后可以取得更多进展时从该位置恢复执行.</p>
+<p>这些非阻塞函数可以让我们能够轻松地同时执行多个任务. 例如, 如果你想从网络或用户的键盘上读取数据, 无论哪一个先有事件, 你所要做的就是在一个循环中轮询这两者, 直到其中一个返回 <code>Poll::Ready</code>. 无需任何额外的线程或同步机制!</p>
+<p>这里的 <code>loop</code> 一词应该让你有点紧张. 你不希望你的程序在一秒钟内循环30亿次, 而距离下一次输入可能还有几分钟的时间. 在阻塞接口的世界里, 这不是一个问题, 因为操作系统只需将线程挂起, 等到相关事件发生时再将其唤醒, 但在这个勇敢的非阻塞新世界里, 我们如何避免在等待的过程中浪费 CPU 时间呢? 这就是本章剩余部分要讨论的内容.</p>
+<h3 id="标准化的轮询standardized-polling"><a class="header" href="#标准化的轮询standardized-polling">标准化的轮询(Standardized Polling)</a></h3>
+<p>为了达到每个库都能以非阻塞方式使用的世界, 我们可以让每个库的作者编写他们自己的轮询方法, 所有方法的名称, 签名和返回类型都略有不同, 但这很快就会变得臃肿不堪. 相反, 在<code>Rust</code>中, 轮询是通过<code>Future</code> trait标准化的. 清单 8-2 中显示了<code>Future</code>的简化版本(本章稍后我们将讨论真正的<code>Future</code>).</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait Future {
+    type Output;
+    fn poll(&amp;mut self) -&gt; Poll&lt;Self::Output&gt;;
+}
+
+// 清单 8-2: Future trait 的简化视图
+<span class="boring">}</span></code></pre>
+<p>实现<code>Future</code> trait的类型被称为<code>futures</code>, 它表示的值可能还未可用. 一个<code>Future</code>可以表示下一次网络数据包到来, 鼠标光标的下一次移动, 或者仅仅是某个时间点已经到期. 你可以把<code>Future&lt;Output = Foo&gt;</code>理解为“一个在未来会产生<code>Foo</code>的类型“. 像这样的类型在其他语言中经常被称为<code>promises</code>–它们承诺最终会产生指定的类型的值. 当一个<code>future</code>最终返回<code>Poll::Ready(T)</code>时, 我们说这个<code>future</code>解决(resolve)为一个 <code>T</code>.</p>
+<p>有了这个 trait, 我们可以把提供 <code>poll</code> 方法的模式泛化. 与使用<code>poll_recv</code>和<code>poll_keypress</code>这样的方法不同, 我们可以使用<code>recv</code>和<code>keypress</code>这样的方法, 它们都返回具有适当 <code>Output</code> 类型的<code>impl Future</code>. 这并不会改变你必须轮询它们的事实(我们稍后会处理这个问题), 但这确实意味着至少有一个标准化的接口来处理这些挂起的值, 而且我们不需要到处使用<code>poll_</code>前缀.</p>
+<blockquote>
+<p>注意: 一般来说, 在一个<code>Future</code>返回<code>Poll::Ready</code>后, 你不应该再次轮询. 如果你这样做了, 那么这个 future 就有权利 panic 了. 一个在返回 <code>Ready</code> 后可以安全轮询的 future, 有时被称为 fused future.</p>
+</blockquote>
+<h2 id="futures-的人体工学ergonomic-futures"><a class="header" href="#futures-的人体工学ergonomic-futures">Futures 的人体工学(Ergonomic Futures)</a></h2>
+<p>按照我之前所描述的那样, 编写一个实现<code>Future</code>的类型是相当麻烦的. 要理解原因, 首先看一下清单 8-3中相当简单的异步代码块, 它只是试图将消息从输入通道<code>rx</code>转发到输出通道<code>tx</code>.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>async fn forward&lt;T&gt;(rx: Receiver&lt;T&gt;, tx: Sender&lt;T&gt;) {
+    while let Some(t) = rx.next().await {
+        tx.send(t).await;
+    }
+}
+
+// 清单 8-3: 使用`async`和`await`实现一个通道转发的future
+<span class="boring">}</span></code></pre>
+<p>这段代码使用<code>async</code>和<code>await</code>语法编写的代码, 看起来非常类似于它的同步代码版本, 且易于阅读. 我们简单地在一个循环中发送我们收到的每一条消息, 直到没有更多的消息为止, 每一个<code>await</code>点都对应着一个同步变体可能阻塞的地方. 现在想象一下, 如果你换成手动实现<code>Future</code> trait来表达这段代码, 由于每次调用<code>poll</code>都是从函数的顶部开始的, 你需要打包必要的状态, 以便从代码最后让出的位置继续执行. 正如清单 8-4 所展示的, 结果是相当难看的.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Forward&lt;T&gt; { // (1)
+    WaitingForReceive(ReceiveFuture&lt;T&gt;, Option&lt;Sender&lt;T&gt;&gt;),
+    WaitingForSend(SendFuture&lt;T&gt;, Option&lt;Receiver&lt;T&gt;&gt;),
+}
+impl&lt;T&gt; Future for Forward&lt;T&gt; {
+    type Output = (); // (2)
+    fn poll(&amp;mut self) -&gt; Poll&lt;Self::Output&gt; {
+        match self { // (3)
+            Forward::WaitingForReceive(recv, tx) =&gt; {
+                if let Poll::Ready((rx, v)) = recv.poll() {
+                    if let Some(v) = v {
+                        let tx = tx.take().unwrap(); // (4)
+                        *self = Forward::WaitingForSend(tx.send(v), Some(rx)); // (5)
+                        // Try to make progress on sending.
+                        // 尝试在发送上取得进展.
+                        return self.poll(); // (6)
+                    } else {
+                        // No more items.
+                        // 没有更多项了.
+                        Poll::Ready(())
+                    }
+                } else {
+                    Poll::Pending
+                }
+            }
+            Forward::WaitingForSend(send, rx) =&gt; {
+                if let Poll::Ready(tx) = send.poll() {
+                    let rx = rx.take().unwrap();
+                    *self = Forward::WaitingForReceive(rx.receive(), Some(tx));
+                    // Try to make progress on receiving.
+                    // 尝试在接收上取得进展.
+                    return self.poll();
+                } else {
+                    Poll::Pending
+                }
+            }
+        }
+    }
+}
+
+// 清单 8-4: 手动实现通道转发的 future
+<span class="boring">}</span></code></pre>
+<p>在<code>Rust</code>中, 你已经很少需要再写这样的代码, 但它让我们深入了解底层的工作原理, 所以让我们一起仔细看一下它. 首先, 我们将我们的<code>future</code>类型定义为枚举(1), 用它来跟踪我们当前正在等待的东西. 当我们返回<code>Poll::Pending</code>时, 对<code>poll</code>的下一次调用将从函数的顶部重新开始. 我们需要一些方法来了解我们之前正在做什么, 以便知道该继续哪个操作了. 此外, 我们需要根据正在进行的操作跟踪不同的信息: 如果我们在等待接收操作完成, 我们需要保留那个<code>ReceiveFuture</code>(其定义在本例中没有显示), 以便下次被轮询时可以再次轮询它, <code>SendFuture</code>也是如此. 这里的 <code>Option</code> 可能也会让你觉得很奇怪; 我们稍后再谈.</p>
+<p>当我们为<code>Forward</code>实现<code>Future</code>时, 我们将其输出类型声明为<code>()</code>, 因为这个<code>Future</code>实际上并不返回任何内容. 相反, 当它完成了从输入通道到输出通道的所有转发后, <code>future</code>就会解决(resolve)(没有结果). 在一个更完整的例子中, 我们的转发类型的<code>Output</code>可能是一个<code>Result</code>, 这样它就可以将<code>receive()</code>和<code>send()</code>的错误向上传递到调用栈, 并传递给那个轮询转发完成情况的函数. 但是这段代码已经够复杂了, 所以我们改天再讨论这个问题.</p>
+<p>当<code>Forward</code>被轮询时, 它需要恢复到它最后离开的位置继续执行, 我们通过匹配当前在<code>self</code>(3)中持有的枚举变体来找到这个位置. 无论我们进入哪个分支, 第一步都是轮询阻塞当前进展的<code>future</code>; 如果我们尝试接收, 则轮询<code>ReceiveFuture</code>, 如果我们试图发送, 则轮询<code>SendFuture</code>. 如果对<code>Poll</code>的调用返回<code>Poll::Pending</code>, 那么我们就不能取得任何进展, 并且我们自己也返回<code>Poll::Pending</code>. 但是, 如果当前的<code>future</code>有进展了, 我们就有工作要做了!</p>
+<p>当内部<code>futures</code>之一有进展时, 我们需要通过切换存储在<code>self</code>中的枚举变体来更新当前的操作是什么. 为了做到这一点, 我们必须从<code>self</code>中移出, 调用<code>Receiver::receive</code>或<code>Sender::send</code>, 但我们不能这样做, 因为我们只有<code>&amp;mut self</code>. 因此, 我们把要移动的状态存储在一个<code>Option</code>中, 然后用<code>Option::take</code>(4)移出. 这样做很傻, 因为我们将要覆盖<code>self</code>(5), 因此<code>Option</code>将始终是<code>Some</code>, 但有时需要一些技巧来使借用检查器高兴.</p>
+<p>最后, 如果我们确实取得了进展, 我们会再次轮询<code>self</code>(6), 这样, 如果我们可以立即在待处理的发送或接收上取得进展, 我们就会这样做. 这对于实现真正的<code>Future</code> trait时的正确性来说是必要的, 我们稍后再谈, 但现在可以把它看作是一种优化.</p>
+<p>我们只是手写了一个状态机: 一种具有多种可能状态并能根据特定事件在状态之间移动的类型. 这只是一个相当简单的状态机. 试想一下, 对于更复杂的用例, 如果还有额外的中间步骤, 你还需要编写这样的代码!</p>
+<p>除了编写笨重的状态机之外, 我们还必须知道<code>Sender::send</code>和<code>Receiver::receive</code>所返回的<code>future</code>的类型, 这样我们才能将它们存储在我们的类型中. 如果这些方法返回的是<code>impl Future</code>, 我们就无法写出变体(variant)的类型. <code>send</code>和<code>receive</code>方法还必须拥有发送者和接收者的所有权; 如果它们不这样做, 它们返回的<code>future</code>的生命周期就会与<code>self</code>的借用绑定, 而<code>self</code>的借用将在我们从轮询返回时结束. 但这是行不通的, 因为我们正试图将这些<code>future</code>存储在 <code>self</code> 中.</p>
+<blockquote>
+<p>注意: 你可能已经注意到<code>Receiver</code>看起来很像异步版本的<code>Iterator</code>. 其他人也注意到了这一点, 标准库正在着手添加一个 trait, 用于那些能够有意义地实现 <code>poll_next</code> 的类型. 下一步, 这些异步迭代器(通常被称为 stream)最终可能会得到一流的语言支持, 比如直接在其上循环的能力.</p>
+</blockquote>
+<p>归根结底, 这段代码很难写, 难读, 难改. 例如, 如果我们想添加错误处理, 代码的复杂性将大大增加. 幸运的是, 有一个更好的方法!</p>
+<h3 id="asyncawait"><a class="header" href="#asyncawait"><code>async/await</code></a></h3>
+<p><code>Rust 1.39</code>提供了<code>async</code>关键字和密切相关的<code>await</code>后缀操作符, 我们在清单 8-3的原始示例中使用了它们. 它们共同为编写像清单 8-5中的异步状态机提供了更方便的机制. 具体来说, 它们让你以一种方式编写代码, 使得代码看起来不像一个状态机!</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>async fn forward&lt;T&gt;(rx: Receiver&lt;T&gt;, tx: Sender&lt;T&gt;) {
+    while let Some(t) = rx.next().await {
+        tx.send(t).await;
+    }
+}
+
+// 清单 8-5: 使用 async 和 await 实现一个通道转发的 future, 与清单 8-3 重复
+<span class="boring">}</span></code></pre>
+<p>如果你对<code>async</code>和<code>await</code>没有太多的经验, 清单 8-4和清单 8-5之间的差异可能会让你了解为什么<code>Rust</code>社区对它们的到来如此兴奋. 但由于这是一本中级书, 让我们再深入探讨一下, 了解为什么这一小段代码能够替代冗长的手工实现. 为此, 我们首先需要讨论生成器–实现<code>async</code>和<code>await</code>的机制.</p>
+<h4 id="生成器generators"><a class="header" href="#生成器generators">生成器(Generators)</a></h4>
+<p>简而言之, 生成器就是一段代码, 包含一些额外的编译器生成的部分, 使其能够在执行过程中停下来(yield), 并在稍后从上次停下的位置继续执行. 以清单 8-3 中的 <code>forward</code> 函数为例. 试想一下, 当它调用发送时, 通道已经满了, 这个函数不能取得任何进展, 但它也不能阻塞(毕竟这是非阻塞代码), 所以它需要返回. 现在假设通道最终清空, 我们想继续发送. 如果我们再次从顶部调用<code>forward</code>, 它将再次调用<code>next</code>, 我们之前试图发送的项就会丢失, 这样就不好了. 相反, 我们可以将<code>forward</code>变成一个生成器.</p>
+<p>每当 <code>forward</code> 生成器无法取得进展时, 它需要将其当前状态存储在某个地方, 以便执行最终恢复时, 它能够从正确的位置以正确的状态继续执行. 生成器通过编译器生成的相关数据结构保存状态, 该结构包含生成器在给定时间点的所有状态. 然后该数据结构上的一个方法(也是生成的)允许生成器从存储在<code>&amp;mut self</code>中的当前状态恢复, 并在生成器再次无法取得进展时更新状态.</p>
+<p>这种“返回但允许我稍后恢复“的操作被称为<code>yielding</code>, 实际上就是在返回的同时保留了一些额外的状态. 当我们以后想恢复对 <code>forward</code> 的调用时, 我们会调用生成器的已知入口点(<code>resume</code>方法, 这是异步生成器的轮询), 生成器检查存储在<code>self</code>中先前存储的状态以决定下一步该做什么. 这与我们在清单 8-4 中手动做的事情完全一样! 换句话说, 清单 8-5 中的代码松散地脱糖为清单 8-6 中的假设代码.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>generator fn forward&lt;T&gt;(rx: Receiver&lt;T&gt;, tx: Sender&lt;T&gt;) {
+    loop {
+        let mut f = rx.next();
+        let r = if let Poll::Ready(r) = f.poll() { r } else { yield };
+        if let Some(t) = r {
+            let mut f = tx.send(t);
+            let _ = if let Poll::Ready(r) = f.poll() { r } else { yield };
+        } else { break Poll::Ready(()); }
+    }
+}
+
+// 清单 8-6: 将 async/await 解构为一个生成器
+<span class="boring">}</span></code></pre>
+<p>在撰写本文时, 生成器还不能在<code>Rust</code>中使用–它们仅在编译器内部用于实现<code>async/await</code>–但未来这种情况会改变. 生成器在很多情况下都能非常有用, 因为编写这样的代码不需要手动携带一个 <code>struct</code>, 或者实现一个能逐个计算出如何产生元素的 <code>impl Iterator</code>.</p>
+<p>如果你仔细看一下清单 8-5 和清单 8-6, 尤其当你知道每个<code>await</code>或<code>yield</code>实际上是一次从函数返回的操作时, 你可能会觉得有点魔幻. 毕竟, 在函数中有多个局部变量, 而且我们很难理解在恢复执行时这些变量如何还原的. 这就是编译器生成的生成器发挥作用的地方. 编译器会自动地插入代码, 在运行时将这些变量保存到生成器关联的数据结构中, 并从中读取, 而不是依赖传统的调用栈. 因此, 如果你声明, 写入或读取某个局部变量<code>a</code>, 你实际上是在操作类似于<code>self.a</code>的东西. 问题就这样解决了! 这整个机制确实相当神奇.</p>
+<p>手动<code>Forward</code>实现和<code>async/await</code>版本之间有一个微妙但重要的区别是, 后者可以在<code>yield</code>点之间持有引用. 这使得清单 8-5中的<code>Receiver::next</code> 和<code>Sender::send</code>等函数可以使用<code>&amp;mut self</code>, 而不是清单 8-4中的<code>self</code>. 如果我们试图在手动状态机的实现中为这些方法使用<code>&amp;mut self</code>接收器, 借用检查器将没有办法强制执行存储在<code>Forward</code>中的<code>Receiver</code>在<code>Receiver::next</code>被调用及其返回的<code>future</code>解决(resolve)之间不会被再次引用, 因此它将拒绝编译该代码. 只有将<code>Receiver</code>移到<code>future</code>中, 我们才能让编译器相信<code>Receiver</code>在其他方面是不可访问的. 与此同时, 有了<code>async/await</code>, 借用检查器可以在编译器将其转为状态机之前对代码进行检查, 并验证<code>rx</code>在<code>await</code>返回前确实不会被再次访问, 也就是直到<code>Future</code>被丢弃之后它才可被再次访问.</p>
+<blockquote>
+<p>生成器的大小</p>
+<p>用来支持生成器状态的数据结构必须能够容纳任何一个 <code>yield</code> 点处所有需要保存的组合状态. 如果你的 <code>async fn</code> 包含, 比如说, 一个 <code>[u8; 8192]</code>, 这 8KiB 必须存储在生成器本体中. 即使你的 <code>async fn</code> 只包含一些很小的局部变量, 它也必须包含它所等待的任何 <code>future</code>, 因为它需要在稍后调用<code>poll</code>时能够轮询这些<code>future</code>.</p>
+<p>这种嵌套意味着生成器, 以及基于<code>async</code>函数和代码块的 <code>future</code>, 可能变得相当庞大, 而在你的代码中却没有任何可见的迹象表明其大小增加. 这反过来又会影响程序的运行性能, 因为这些巨大的生成器可能需要在函数调用之间以及在数据结构中复制, 这等同于大量的内存拷贝操作. 事实上, 当你看到性能分析报告中 <code>memcpy</code> 函数消耗了大量时间时, 通常就可以判断是基于生成器的 <code>futures</code> 体积过大, 进而影响了程序性能!</p>
+<p>然而, 找到这些庞大的 <code>future</code> 并不容易, 往往需要手动识别那些很长或结构复杂的<code>async</code>函数调用链. 也许将来 Clippy 会在这方面提供帮助, 但目前而言, 你得靠自己. 当你确实发现一个特别庞大的 <code>future</code> 时, 你有两个选择: 你可以尝试减少<code>async</code>函数所需的局部状态, 或者你可以使用<code>Box::pin</code>把 <code>future</code> 移到堆上, 这样移动 <code>future</code> 只需要移动它的指针. 后者是迄今为止最简单的方法, 但它也引入了一个额外的内存分配和一个指针间接访问. 通常最可行的做法是: 把有性能问题的 <code>future</code> 放在堆上, 测量你的性能, 然后用你的性能基准来进一步调整.</p>
+</blockquote>
+<h3 id="pin-和-unpin"><a class="header" href="#pin-和-unpin"><code>Pin</code> 和 <code>Unpin</code></a></h3>
+<p>我们还没有完全完成. 虽然生成器很巧妙, 但正如我之前描述的那样, 这种技术也带来了一个挑战. 特别是, 如果生成器中的代码(或者等价地, <code>async</code> 块)获取了对局部变量的引用, 会发生什么并不明确. 在清单 8-5 的代码中, 如果下一条消息没有立即就绪, <code>rx.next()</code> 返回的 <code>future</code> 必须持有对 <code>rx</code> 的引用, 这样它就知道在生成器下一次恢复时应该在哪里再次尝试. 当生成器 <code>yield</code> 时, 这个 <code>future</code> 以及它包含的引用都会被存入生成器内部. 但是, 如果生成器被移动, 现在会发生什么呢? 具体来说, 请看清单 8-7 中的代码, 它调用了 <code>forward</code>.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>async fn try_forward&lt;T&gt;(rx: Receiver&lt;T&gt;, tx: Sender&lt;T&gt;) -&gt; Option&lt;impl Future&gt; {
+    let mut f = forward(rx, tx);
+    if f.poll().is_pending() { Some(f) } else { None }
+}
+
+// 清单 8-7: 在轮询后移动一个 future
+<span class="boring">}</span></code></pre>
+<p><code>try_forward</code> 函数只进行一次轮询 <code>forward</code>, 在不阻塞的前提下尽可能多地转发消息. 如果接收器还有可能继续产生更多的消息(也就是说, 如果它返回 <code>Poll::Pending</code> 而不是 <code>Poll::Ready(None)</code>), 那么这些消息的转发将被延迟, 方法是将转发 <code>future</code> 返回给调用者, 调用者可以选择在它认为合适的时候再次轮询.</p>
+<p>让我们用目前掌握的对<code>async</code>和<code>await</code>的知识, 来分析一下这里发生了什么. 当我们轮询<code>forward</code>生成器时, 它会执行 <code>while</code> 循环若干次, 如果接收方结束了, 最终会返回 <code>Poll::Ready(())</code>, 否则, 它将返回 <code>Poll::Pending</code>. 如果它返回 <code>Poll::Pending</code>, 说明生成器包含一个从 <code>rx.next()</code> 或 <code>tx.send(t)</code> 返回的 <code>future</code>. 这些 <code>future</code> 都包含对最初提供给 <code>forward</code> 的参数之一的引用(分别是 <code>rx</code> 和 <code>tx</code>), 这些参数也必须存储在生成器中. 但是当 <code>try_forward</code> 返回给调用者时, 生成器的字段也会移动. 因此, <code>rx</code> 和 <code>tx</code> 不再位于原来的内存地址, 而之前缓存的 <code>future</code> 中的引用也不再指向正确的位置了.</p>
+<p>我们遇到的问题是一个自引用的数据结构的情况: 这个结构中既包含了数据, 又包含了指向这些数据的引用. 在生成器中, 这种自引用结构很容易构建出来, 如果不能支持这种结构, 将会严重影响人体工学(ergonomics), 因为这意味着你将无法在 <code>yield</code> 点上持有引用. <code>Rust</code> 中一个(非常巧妙的)解决方案, 是使用 <code>Pin</code> 类型和 <code>Unpin</code> trait 来支持这种自引用结构. 简而言之, <code>Pin</code> 是一个包装(wrapper)类型, 它能阻止内部的数据被安全地移动, 而 <code>Unpin</code> 是一个标记 trait, 它表示实现的类型可以安全地从 <code>Pin</code> 中移除.</p>
+<h4 id="pin"><a class="header" href="#pin"><code>Pin</code></a></h4>
+<p>这里有很多细节值得探讨, 所以让我们从 <code>Pin</code> 包装器的一个具体使用开始. 清单 8-2 给了你一个简化版本的<code>Future</code> trait, 但现在我们准备剥开其中一部份简化的面纱. 清单 8-8 显示了<code>Future</code> trait在某种程度上更接近其最终形式.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait Future {
+    type Output;
+    fn poll(self: Pin&lt;&amp;mut Self&gt;) -&gt; Poll&lt;Self::Output&gt;;
+}
+
+// 清单 8-8: 一个不那么简化的关于`Future` trait 的视图, 其中包括 `Pin`
+<span class="boring">}</span></code></pre>
+<p>特别是, 这个定义要求你在 <code>Pin&lt;&amp;mut Self&gt;</code> 上调用 <code>poll</code>. 一旦你将一个值包装在 <code>Pin</code> 后面, 这就构成了一个契约, 这个值将永远不会被移动. 这意味着你可以在内部自由地构建自引用结构, 正如你在生成器中期望的那样.</p>
+<blockquote>
+<p>注意: 虽然<code>Future</code>使用了<code>Pin</code>, 但<code>Pin</code>并不仅限于<code>Future</code> trait–你可以将 <code>Pin</code> 用于任何自引用的数据结构.</p>
+</blockquote>
+<p>但是, 你要如何让一个<code>Pin</code>调用<code>poll</code>? 而<code>Pin</code>又是如何确保包含的值不会移动? 为了了解这个魔法是如何运作的, 让我们看看 <code>std::pin::Pin</code> 的定义和它的一些关键方法, 这些内容展示在清单 8-9 中.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Pin&lt;P&gt; { pointer: P }
+impl&lt;P&gt; Pin&lt;P&gt; where P: Deref {
+    pub unsafe fn new_unchecked(pointer: P) -&gt; Self;
+}
+impl&lt;'a, T&gt; Pin&lt;&amp;'a mut T&gt; {
+    pub unsafe fn get_unchecked_mut(self) -&gt; &amp;'a mut T;
+}
+impl&lt;P&gt; Deref for Pin&lt;P&gt; where P: Deref {
+    type Target = P::Target;
+    fn deref(&amp;self) -&gt; &amp;Self::Target;
+}
+
+// 清单 8-9: std::pin::Pin 和它的关键方法
+<span class="boring">}</span></code></pre>
+<p>这里有很多东西需要解读, 我们要把清单 8-9 中的定义复习几遍, 才能让所有的部分都有意义, 所以请耐心等待.</p>
+<p>首先, 你会注意到, <code>Pin</code> 持有一个指针类型. 也就是说, 它不是直接持有某个 <code>T</code>, 而是持有一个通过 <code>Deref</code> 解引用到 <code>T</code> 的类型 <code>P</code>. 这意味着你不是拥有一个 <code>Pin&lt;MyType&gt;</code>, 而是拥有一个 <code>Pin&lt;Box&lt;MyType&gt;&gt;</code> 或者 <code>Pin&lt;Rc&lt;MyType&gt;&gt;</code> 或者 <code>Pin&lt;&amp;mut MyType&gt;</code>. 这样设计的原因很简单–Pin 的主要目标是确保一旦你把一个 <code>T</code> 放在 <code>Pin</code> 后面, 这个 <code>T</code> 就不会移动, 因为这样做可能会使存储在 <code>T</code> 中的自引用失效. 如果<code>Pin</code>只是直接持有<code>T</code>, 那么仅仅移动<code>Pin</code>就足以破坏这一不变性! 在本节的其余部分, 我将把 <code>P</code> 称为指针类型, <code>T</code> 称为目标类型.</p>
+<p>接下来, 注意到 <code>Pin</code> 的构造函数 <code>new_unchecked</code> 是不安全的. 这是因为编译器没有办法实际检查指针类型是否确实承诺了被指向的(目标)类型不会再移动. 例如, 以栈中的变量 <code>foo</code> 为例. 如果 <code>Pin</code> 的构造函数是安全的, 我们可以做 <code>Pin::new(&amp;mut foo)</code>, 调用一个需要 <code>Pin&lt;&amp;mut Self&gt;</code> 的方法(从而假设 <code>Self</code> 不会再移动), 然后放弃 <code>Pin</code>. 在这一点上, 我们可以随心所欲地修改 <code>foo</code>, 因为它不再是借来的了–包括移动它! 然后我们可以再次钉住它, 并调用同样的方法, 而该方法不会察觉它第一次构建的任何自引用指针现在都已失效.</p>
+<blockquote>
+<p>Pin 构造函数的安全性</p>
+<p><code>Pin</code> 的构造函数不安全的另一个原因是, 它的安全性取决于本身是安全的 trait 的实现. 例如, <code>Pin&lt;P&gt;</code>实现 <code>get_unchecked_mut</code> 的方式是使用 <code>DerefMut::deref_mut</code> 对 <code>P</code> 的实现. 虽然对 <code>get_unchecked_mut</code> 的调用是不安全的, 但 <code>impl DerefMut for P</code> 却不是. 然而它收到了一个 <code>&amp;mut self</code>, 因此可以自由地(并且没有不安全的代码)移动 T. 因此, 对 <code>Pin::new_unchecked</code> 的安全要求不仅是指针类型不会让目标类型再次被移动(就像在 <code>Pin&lt;&amp;mut T&gt;</code>的例子中), 而且它的 <code>Deref</code>, <code>DerefMut</code> 和 <code>Drop</code> 实现也不会将指向的值移动到它们所接收的 <code>&amp;mut self</code> 后面.</p>
+</blockquote>
+<p>然后我们进入 <code>get_unchecked_mut</code> 方法, 它给你一个 <code>Pin</code> 指针类型背后的 <code>T</code> 的可变引用. 这个方法也是不安全的, 因为一旦我们给出了一个 <code>&amp;mut T</code>, 调用者就必须保证不会用这个 <code>&amp;mut T</code> 来移动这个 <code>T</code> 或以其他方式使其内存失效, 以免任何自引用被失效. 如果这个方法不是不安全的, 调用者可以调用一个接收 <code>Pin&lt;&amp;mut Self&gt;</code> 的方法, 然后在两个 <code>Pin&lt;&amp;mut _&gt;</code> 上调用 <code>get_unchecked_mut</code> 的安全变体, 然后使用 <code>mem::swap</code> 来交换 <code>Pin</code> 后面的值. 如果我们再在任何一个 <code>Pin</code> 上调用一个接收 <code>Pin&lt;&amp;mut Self&gt;</code> 的方法, 它关于 <code>Self</code> 没有移动的假设就会被违反, 它所存储的任何内部引用都会失效.</p>
+<p>也许令人惊讶的是, <code>Pin&lt;P&gt;</code> 总是实现 <code>Deref&lt;Target = T&gt;</code>, 而这是完全安全的. 原因是 <code>&amp;T</code> 并不能让你在不写其他不安全代码的情况下移动 <code>T</code>(例如 <code>UnsafeCell</code>, 我们将在第9章讨论). 这是一个很好的例子, 说明为什么不安全块的范围会超出它所包含的代码. 如果你在应用程序的某个部分写了一些代码, 使用 <code>UnsafeCell</code>(不安全地)替换了一个<code>&amp;</code>后面的 <code>T</code>, 那么这个<code>&amp;T</code> 最初可能来自一个 <code>Pin&lt;&amp;mut T&gt;</code>, 你现在已经违反了 <code>Pin</code> 后面的 <code>T</code> 可能永远不会移动的不变性, 即使你不安全地替换 <code>&amp;T</code> 的地方甚至没有提到 <code>Pin</code>!</p>
+<blockquote>
+<p>注意: 如果你在阅读本章时浏览了 <code>Pin</code> 文档, 你可能已经注意到 <code>Pin::set</code>, 它接收一个<code>&amp;mut self</code> 和一个<code>&lt;P as Deref&gt;::Target</code>, 并安全地改变 <code>Pin</code> 后面的值. 这是有可能的, 因为 <code>set</code> 并不返回之前被钉住的值–它只是把它丢在原地, 并把新的值存储在那里. 因此, 它并不违反 pinning 不变性: 旧的值在被钉住之后, 从未在 <code>Pin</code> 之外被访问过.</p>
+</blockquote>
+<h4 id="unpin-安全-pinning-的关键unpin-the-key-to-safe-pinning"><a class="header" href="#unpin-安全-pinning-的关键unpin-the-key-to-safe-pinning">Unpin: 安全 pinning 的关键(Unpin: The Key to Safe Pinning)</a></h4>
+<p>在这一点上, 你可能会问: 鉴于获取一个可变的引用是不安全的, 为什么不直接让 <code>Pin</code> 持有一个 <code>T</code>? 也就是说, 与其要求通过指针类型进行间接, 不如为 <code>get_unchecked_mut</code> 制定契约, 即只有在你没有移动 <code>Pin</code> 的情况下才可以安全调用它. 这个问题的答案就在于指针设计中对 <code>Pin</code> 的安全使用. 回想一下, 我们首先需要 <code>Pin</code> 的全部原因是, 我们可以拥有可能包含对自身引用的目标类型(比如生成器), 并给它们的方法一个保证, 即目标类型没有移动, 因此内部的自引用仍然有效. <code>Pin</code> 让我们使用类型系统来执行这一保证, 这很好. 但不幸的是, 就目前的设计而言, <code>Pin</code> 使用起来非常笨重. 这是因为它总是需要不安全的代码, 即使你正在处理一个不包含任何自引用的目标类型, 因此并不关心它是否被移动.</p>
+<p>这就是标记 trait <code>Unpin</code> 发挥作用的地方. 一个类型的 <code>Unpin</code> 实现简单地断言, 当被用作目标类型时, 该类型可以安全地从 <code>Pin</code> 中移动出来. 也就是说, 该类型承诺, 当被用作目标类型时, 它将永远不会使用任何关于参照物不再移动的 <code>Pin</code> 的保证, 因此这些保证可能被破坏. <code>Unpin</code> 是一个自动 trait, 就像 <code>Send</code> 和 <code>Sync</code> 一样, 所以对于任何只包含 <code>Unpin</code> 成员的类型, 编译器都会自动实现. 只有那些明确选择退出(opt out)<code>Unpin</code> 的类型(比如生成器)以及包含这些类型的类型才是 <code>!Unpin</code>.</p>
+<p>对于 <code>Unpin</code> 的目标类型, 我们可以提供一个更简单的安全接口给 <code>Pin</code>, 如清单 8-10 所示.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl&lt;P&gt; Pin&lt;P&gt; where P: Deref, P::Target: Unpin {
+    pub fn new(pointer: P) -&gt; Self;
+}
+impl&lt;P&gt; DerefMut for Pin&lt;P&gt; where P: DerefMut, P::Target: Unpin {
+    fn deref_mut(&amp;mut self) -&gt; &amp;mut Self::Target;
+}
+
+// 清单 8-10: 对 Unpin 目标类型的安全 API
+<span class="boring">}</span></code></pre>
+<p>为了理解清单 8-10 中的安全 API, 请思考清单 8-9 中不安全方法的安全要求: 函数 <code>Pin::new_unchecked</code> 是不安全的, 因为调用者必须保证参照物不能被移动到 <code>Pin</code> 之外, 而且指针类型的 <code>Deref</code>, <code>DerefMut</code> 和 <code>Drop</code> 的实现不会通过它们接收的参照物移动参照物. 这些要求是为了确保一旦我们给一个 <code>T</code> 发出一个 <code>Pin</code>, 我们就不会再移动这个 <code>T</code>. 但是如果这个 <code>T</code> 是 <code>Unpin</code>, 它已经声明它不关心它是否被移动, 即使它之前被钉住了, 所以如果调用者不满足这些要求也没关系!</p>
+<p>类似地, <code>get_unchecked_mut</code> 是不安全的, 因为调用者必须保证它不会将 <code>T</code> 从 <code>&amp;mut T</code> 中移出–但是在<code>T: Unpin</code>中, <code>T</code>已经声明它在被钉住后也可以被移动, 所以这个安全要求不再重要了. 这意味着对于 <code>Pin&lt;P&gt;</code>, <code>P::Target: Unpin</code>, 我们可以简单地提供这两个方法的安全变体(<code>DerefMut</code> 是 <code>get_unchecked_mut</code> 的安全版本). 事实上, 我们甚至可以提供一个 <code>Pin::into_inner</code>, 如果目标类型是 <code>Unpin</code>, 它可以简单地返回拥有的 <code>P</code>, 因为 <code>Pin</code> 本质上是不相关的.</p>
+<h4 id="获取-pin-的方法ways-of-obtaining-a-pin"><a class="header" href="#获取-pin-的方法ways-of-obtaining-a-pin">获取 Pin 的方法(Ways of Obtaining a Pin)</a></h4>
+<p>有了对 <code>Pin</code> 和 <code>Unpin</code> 的新理解, 我们现在可以在使用清单 8-8 中要求 <code>Pin&lt;&amp;mut Self&gt;</code> 的新<code>Future</code>定义上取得进展. 第一步是构建所需的类型.  如果<code>Future</code>的类型是 <code>Unpin</code>, 这一步就很容易了, 我们只需使用 <code>Pin::new(&amp;mut future)</code>. 如果它不是 <code>Unpin</code>, 我们可以通过两种主要方式之一钉住 future: 钉住堆或钉住栈.</p>
+<p>让我们从钉在堆里开始. <code>Pin</code> 的主要契约是, 一旦某个东西被钉住, 它就不能移动. Pinning API 负责为 <code>Pin</code> 上的所有方法和 trait 遵守这一契约, 所以任何构造 <code>Pin</code> 的函数的主要作用是确保如果 <code>Pin</code> 本身移动, 被引用的值也不会移动. 确保这一点的最简单的方法是将参照物放在堆上, 然后在 <code>Pin</code> 中放置一个指向参照物的指针. 然后你可以随心所欲地移动 <code>Pin</code>, 但目标将保持在原来的位置. 这就是 <code>Box::pin</code>(安全)方法背后的原理, 它接收一个 <code>T</code> 并返回一个 <code>Pin&lt;Box&lt;T&gt;&gt;</code>. 它没有任何魔力; 它只是断言 <code>Box</code> 遵循 <code>Pin</code> 的构造函数, <code>Deref</code> 和 <code>Drop</code> 契约.</p>
+<blockquote>
+<p>Box 的 Unpin</p>
+<p>当我们在讨论 <code>Box</code> 的时候, 看看 <code>Box</code> 的 <code>Unpin</code> 的实现吧. <code>Box</code> 类型无条件地对任何 <code>T</code> 实现了 <code>Unpin</code>, 即使该 <code>T</code> 不是 <code>Unpin</code>. 这可能会让你感到奇怪, 因为前面说过, <code>Unpin</code> 是一个自动trait, 通常只有在一个类型的所有成员都是 <code>Unpin</code> 的情况下才会为该类型实现. Box 是一个例外, 因为它可以提供一个安全的 <code>Pin</code> 构造函数: 如果你移动一个 <code>Box&lt;T&gt;</code>, 你不会移动 <code>T</code>.  换句话说, 无条件的实现断言你可以将一个 <code>Box&lt;T&gt;</code> 移出 <code>Pin</code>, 即使 <code>T</code> 不能被移出 Pin.  然而请注意, 这并不能使你将一个是 <code>!Unpin</code> 的 <code>T</code> 移出 <code>Pin&lt;Box&lt;T&gt;&gt;</code>.</p>
+</blockquote>
+<p>另一个选项, 即钉在栈上, 就比较麻烦了, 在写这篇文章的时候需要一点不安全的代码. 我们必须确保被钉住的值在带有<code>&amp;mut</code> 的 <code>Pin</code> 被丢弃后不能被访问. 如清单 8-11 中的宏所示, 我们通过遮蔽(shadowing)该值来实现这一目标, 或者通过使用提供该宏的某个 crate 来实现. 有一天, 它甚至可能被纳入标准库中.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>macro_rules! pin_mut {
+    ($var:ident) =&gt; {
+        let mut $var = $var;
+        let mut $var = unsafe { Pin::new_unchecked(&amp;mut $var) };
+    }
+}
+
+// 清单 8-11: 用于在栈上钉住的宏
+<span class="boring">}</span></code></pre>
+<p>通过获取要钉在栈上的变量名称, 该宏确保调用者已经在栈的某个地方得到了它想要钉的值. <code>$var</code> 的遮蔽确保了调用者不能放弃 <code>Pin</code> 并继续使用未被钉住的值(这将违反任何 <code>!Unpin</code> 目标类型的 Pin 契约). 通过移动存储在<code>$var</code> 中的值, 该宏还确保调用者不能在不放弃原始变量的情况下放弃绑定宏声明的<code>$var</code>. 具体来说, 如果没有这一行, 调用者可以写(注意额外的范围):</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let foo = /* */; { pin_mut!(foo); foo.poll() }; foo.mut_self_method();
+<span class="boring">}</span></code></pre>
+<p>在这里, 我们把 <code>foo</code> 的一个钉住的实例给了 <code>poll</code>, 但后来我们又对 <code>foo</code> 使用了一个没有 <code>Pin</code> 的 <code>&amp;mut</code>, 这违反了 Pin 契约. 另一方面, 有了额外的重新赋值, 这段代码也会把 <code>foo</code> 移到新的作用域中, 使它在作用域结束后无法使用.</p>
+<p>因此, 在栈上钉住需要不安全的代码, 与 <code>Box::pin</code> 不同, 但避免了 <code>Box</code> 引入的额外分配, 也可以在 <code>no_std</code> 环境下工作.</p>
+<h4 id="回到-futureback-to-the-future"><a class="header" href="#回到-futureback-to-the-future">回到 Future(Back to the Future)</a></h4>
+<p>我们现在有了钉住的 future, 而且我们知道这意味着什么. 但你可能已经注意到, 在你用<code>async</code>和<code>await</code>编写的大多数异步代码中, 这些重要的钉住东西都没有显示出来.  这是因为编译器把它隐藏起来了.</p>
+<p>回想一下我们讨论清单 8-5 的时候, 我告诉你 <code>&lt;expr&gt;.await</code> 脱糖会变成类似的东西:</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>loop { if let Poll::Ready(r) = expr.poll() { break r } else { yield } }
+<span class="boring">}</span></code></pre>
+<p>这是一个非常轻微的简化, 因为正如我们所看到的, 只有当你有一个 <code>Pin&lt;&amp;mut Self&gt;</code> 作为 future 的时候, 你才能调用 <code>Future::poll</code>.  脱糖实际上要复杂一些, 如清单 8-12 所示.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>match expr { // (1)
+    mut pinned =&gt; loop {
+    match unsafe { Pin::new_unchecked(&amp;mut pinned) }.poll() { // (2)
+            Poll::Ready(r) =&gt; break r,
+            Poll::Pending =&gt; yield,
+        }
+    }
+}
+
+// 清单 8-12: 对 `&lt;expr&gt;.await` 进行更准确的解读.
+<span class="boring">}</span></code></pre>
+<p>匹配 (1) 是一个巧妙的速记, 不仅可以确保扩展仍然是一个有效的表达式, 而且可以将表达式的结果移到一个变量中, 然后我们可以将其钉在栈上. 除此之外, 主要的新增内容是对 <code>Pin::new_unchecked</code> (2) 的调用. 这个调用是安全的, 因为对于包含异步块的轮询, 由于 <code>Future::poll</code> 的签名, 它必须已经被钉住了. 而这个异步块是被轮询过的, 以便我们能达到对 <code>Pin::new_unchecked</code> 的调用, 所以生成器的状态是被钉住的. 由于 <code>pinned</code> 存储在与异步块相对应的生成器中(必须如此才能正确恢复 <code>yield</code>), 我们知道 <code>pinned</code> 不会再移动. 此外, 除了通过 <code>Pin</code> 之外, 一旦我们进入循环, <code>pinned</code> 就不能被访问, 所以没有任何代码能够从 <code>pinned</code> 的值中移动出来. 因此, 我们满足了 <code>Pin::new_unchecked</code> 的所有安全要求, 并且代码是安全的.</p>
+<h2 id="进入睡眠going-to-sleep"><a class="header" href="#进入睡眠going-to-sleep">进入睡眠(Going to Sleep)</a></h2>
+<p>我们在 <code>Pin</code> 的问题上走得很深, 但现在我们从另一边出来了, 还有一个围绕着 future 的问题可能已经让你的大脑发痒了. 如果对 <code>Future::poll</code> 的调用返回 <code>Poll::Pending</code>, 你需要在以后的时间里再次调用 <code>poll</code>, 以检查你是否可以取得进展. 这个东西通常被称为执行器(executor). 你的执行器可以是一个简单的循环, 轮询所有你正在等待的 future, 直到它们都返回 <code>Poll::Ready</code>, 但这将消耗大量的<code>CPU</code>周期, 你可能会用在其他更有用的地方, 比如运行你的网页浏览器. 相反, 我们希望执行器做任何它能做的有用的工作, 然后进入睡眠状态. 它应该保持睡眠状态, 直到其中一个 future 能够取得进展, 然后才会醒来再做一轮(pass), 然后再去睡觉.</p>
+<h3 id="唤醒waking-up"><a class="header" href="#唤醒waking-up">唤醒(Waking Up)</a></h3>
+<p>决定何时回访一个给定的 future 的条件差别很大. 它可能是 “当一个网络包到达这个端口时”, “当鼠标光标移动时”, “当有人在这个通道上发送时”, “当<code>CPU</code>收到一个特定的中断时”, 甚至是 “在这么多时间过去后”. 在此基础上, 开发者可以编写自己的 future, 包裹多个其他 future, 因此, 他们可能有多个唤醒条件. 一些 future 甚至可以引入他们自己完全自定义的唤醒事件.</p>
+<p>为了适应这些众多的用例, <code>Rust</code>引入了 <code>Waker</code> 的概念: 一种向执行器发出“可以取得进展“信号的唤醒方式. <code>Waker</code> 是使整个 future 机制发挥作用的原因. 执行器构建了一个 <code>Waker</code>, 它与执行器用来进入睡眠状态的机制结合在一起, 并将 <code>Waker</code> 传递给它所轮询的任何 future. 怎么做? 通过 <code>Future::poll</code> 的额外参数, 到目前为止我还没有告诉你. 这一点很抱歉. 清单 8-13 给出了 Future 的最终和真正的定义–不再有谎言了!</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait Future {
+    type Output;
+    fn poll(self: Pin&lt;&amp;mut Self&gt;, cx: &amp;mut Context&lt;'_&gt;) -&gt; Poll&lt;Self::Output&gt;;
+}
+
+// 清单 8-13: 实际的 Future trait, 带 Context
+<span class="boring">}</span></code></pre>
+<p><code>&amp;mut Context</code> 包含 <code>Waker</code>. 参数是一个 <code>Context</code>, 而不是直接的 <code>Waker</code>, 所以如果认为有必要的话, 我们可以用额外的上下文来增强异步生态系统的 futures.</p>
+<p><code>Waker</code> 的主要方法是 <code>wake</code>(以及通过引用的变体 <code>wake_by_ref</code>), 它应该在 future 可以再次取得进展时被调用. <code>wake</code> 方法不需要任何参数, 其效果完全由构建 <code>Waker</code> 的执行器定义. 你看, <code>Waker</code>实际上对执行器是泛型的. 或者, 更准确地说, 不管是什么构造的 <code>Waker</code> 都可以决定 <code>Waker::wake</code> 被调用时, <code>Waker</code> 被克隆时, <code>Waker</code> 被放弃时, 会发生什么.  这一切都通过一个手动实现的 vtable 发生, 其功能类似于我们在第2章讨论的动态调度.</p>
+<p>构造一个 <code>Waker</code> 的过程有点复杂, 它的机制对于使用一个 <code>Waker</code> 来说并不是那么重要, 但是你可以在标准库中的 <code>RawWakerVTable</code> 类型中看到构建模块. 它有一个构造函数, 接收 <code>wake</code> 和 <code>wake_by_ref</code> 以及 <code>Clone</code> 和 <code>Drop</code> 的函数指针. <code>RawWakerVTable</code> 通常在一个执行器的所有 <code>Waker</code> 中共享, 它与一个原始指针捆绑在一起, 用于保存每个 <code>Waker</code> 实例的特定数据(比如它是为哪个 future 服务的), 并被转化为一个 <code>RawWaker</code>. 这又被传递给 <code>Waker::from_raw</code>, 产生一个安全的 <code>Waker</code>, 可以传递给 <code>Future::poll</code>.</p>
+<h3 id="履行轮询契约fulfilling-the-poll-contract"><a class="header" href="#履行轮询契约fulfilling-the-poll-contract">履行轮询契约(Fulfilling the Poll Contract)</a></h3>
+<p>到目前为止, 我们已经绕过了 future 对 <code>Waker</code> 的实际作用.  这个想法相当简单: 如果 <code>Future::poll</code> 返回 <code>Poll::Pending</code>, 那么 future 就有责任确保在 future 下次能够取得进展时, 有人会在所提供的 <code>Waker</code> 上调用 <code>wake</code>. 大多数 future 遵守(uphold)这一属性的方法是, 只有当其他一些 future 也返回 <code>Poll::Pending</code> 时, 才返回 <code>Poll::Pending</code>; 以这种方式, 它琐碎地履行了 <code>Poll</code> 的契约, 因为内部 future 必须遵循同样的契约. 但不可能一路都是乌龟. 在某些时候, 你会遇到一个不轮询其他 future 的 future, 而是做一些事情, 比如写到网络套接字或试图在一个通道上接收. 这些通常被称为叶子 future, 因为它们没有孩子. 一个叶子 future 没有内部 future, 而是直接代表一些可能还没有准备好返回结果的资源.</p>
+<blockquote>
+<p>注意: 轮询契约是清单 8-4 中的递归轮询调用 (6) 对于正确性来说是必要的原因.</p>
+</blockquote>
+<p>叶子 future 通常有两种形式: 一种是等待同一进程中的事件(如通道接收器), 另一种是等待进程外部的事件(如 TCP 数据包读取). 那些等待内部事件的都倾向于遵循相同的模式: 将唤醒你的代码存放在可以找到它的地方, 当它产生相关事件时, 让代码在 <code>Waker</code> 上调用 <code>wake</code>. 例如, 考虑一个需要在内存通道中等待消息的叶子 future. 它将其 <code>Waker</code> 存储在发送方和接收方共享的通道部分, 然后返回 <code>Poll::Pending</code>. 当一个发送者出现并向通道中注入消息时, 它注意到等待的接收者留在那里的 <code>Waker</code>, 并在从 <code>send</code> 返回之前调用 <code>Waker</code> 上的 <code>wake</code>. 现在接收方被唤醒了, 并且轮询契约得到了履行.</p>
+<p>处理外部事件的叶子 future 涉及的内容更多, 因为产生它们所等待的事件的代码对 future 或 waker 一无所知. 最常用的生成代码是操作系统内核, 它知道磁盘何时准备好或计时器何时到期, 但它也可能是一个 C 语言库, 当一个操作完成时调用一个回调到<code>Rust</code>或其他类似的外部实体. 像这样包裹外部资源的叶子 future 可以启动一个线程, 执行一个阻塞的系统调用(或等待 C 的回调), 然后使用内部唤醒机制, 但这将是一种浪费; 你会在每次操作必须等待时启动一个线程, 并留下许多一次性线程闲坐着等待事情.</p>
+<p>相反, 执行器倾向于提供叶子 future 的实现, 在幕后与执行器沟通, 安排与操作系统的适当互动. 具体如何安排取决于执行器和操作系统, 但大致上说, 执行器会跟踪所有它应该在下次睡眠时监听的事件源. 当叶子的 future 意识到它必须等待一个外部事件时, 它就会更新该执行器的状态(它知道这个状态, 因为它是由执行器 crate 提供的), 以包括该外部事件源和它的 <code>Waker</code>. 当执行器不能再取得进展时, 它就会收集各种待定的叶子 future 所等待的所有事件源, 并对操作系统进行一个大的阻塞调用, 告诉它在叶子 future 所等待的任何资源有新的事件时返回. 在 Linux 上, 这通常是通过 <code>epoll</code> 系统调用实现的; Windows, BSD, macOS 和几乎所有其他操作系统都提供类似的机制. 当该调用返回时, 执行器在所有与操作系统报告了事件的事件源相关的 waker 上调用 <code>wake</code>, 因此, 轮询契约得到了履行.</p>
+<blockquote>
+<p>注意: 反应器(reactor)是执行器的一部分, 叶子 future 用它来注册事件源, 当它没有更多有用的工作要做时, 执行器就会等待它. 将执行器和反应器分开是可能的, 但将它们捆绑在一起通常会提高性能, 因为两者可以更容易地共同优化.</p>
+</blockquote>
+<p>叶子 future 和执行器之间紧密结合的一个连锁反应是, 来自一个执行器 crate 的叶子 future 往往不能用于不同的执行器. 或者至少, 除非叶子 future 的执行器也在运行, 否则它们不能被使用. 当叶子 future 去存储它的 <code>Waker</code> 并注册它所等待的事件源时, 它所对应的执行器需要有该状态的设置并需要运行, 这样事件源才会被实际监控并最终被唤醒. 有一些方法可以解决这个问题, 比如让叶子 future 生成一个执行器, 如果一个执行器还没有运行的话, 但这并不总是可取的, 因为这意味着一个应用程序可以透明地最终有多个执行器同时运行, 这可能会降低性能, 并意味着你在调试时必须检查多个执行器的状态.</p>
+<p>希望支持多个执行器的库 crate 必须对其叶子资源泛型化. 例如, 一个库可以存储一个泛型的 <code>T: AsyncRead + AsyncWrite</code>, 而不是使用特定执行器的 <code>TcpStream</code> 或 <code>File</code> future 类型. 然而, 生态系统还没有确定这些 trait 到底应该是什么样子的, 以及哪些 trait 是需要的, 所以就目前而言, 要使代码在执行器上真正通用是相当困难的. 例如, 虽然 <code>AsyncRead</code> 和 <code>AsyncWrite</code> 在整个生态系统中是比较常见的(或者在必要时可以很容易地进行调整), 但目前没有任何 trait 用于在后台运行一个 future(spawning, 我们将在后面讨论)或用于表示一个计时器.</p>
+<h3 id="唤醒是用词不当waking-is-a-misnomer"><a class="header" href="#唤醒是用词不当waking-is-a-misnomer">唤醒是用词不当(Waking Is a Misnomer)</a></h3>
+<p>你可能已经意识到 <code>Waker::wake</code> 似乎不一定能唤醒任何东西. 例如, 对于外部事件(如上一节所述), 执行器已经被唤醒了, 而它在属于该执行器的 <code>Waker</code> 上调用唤醒, 这似乎很愚蠢. 实际情况是, <code>Waker::wake</code> 是一个错误的名称–实际上, 它是一个特定 future 可运行的信号.  也就是说, 它告诉执行器, 当它有机会时, 应该确保轮询这个特定的 future, 而不是再去睡觉, 因为这个 future 可以取得进展. 如果执行器目前正在睡觉, 这可能会唤醒它, 这样它就会去轮询那个 future, 但这更像是一种副作用, 而不是其主要目的.</p>
+<p>对于执行器来说, 知道哪些 future 是可运行的是很重要的, 原因有二. 首先, 它需要知道什么时候可以停止轮询一个 future 并进入睡眠状态; 仅仅轮询每个 future 直到它返回 <code>Poll::Pending</code> 是不够的, 因为轮询一个较晚的 future 可能会让一个较早的 future 取得进展. 考虑到这样的情况: 两个 future 在通道上来回传递消息给彼此. 当你轮询一个时, 另一个就准备好了, 反之亦然. 在这种情况下, 执行器不应该进入睡眠状态, 因为总是有更多的工作要做.</p>
+<p>第二, 知道哪些 future 是可运行的, 可以让执行器避免不必要地轮询 future. 如果一个执行器管理着数以千计的待定 future, 它不应该仅仅因为一个事件使其中一个 future 可运行而轮询所有的 future. 如果是这样, 执行异步代码确实会变得非常慢.</p>
+<h3 id="任务和子执行器tasks-and-subexecutors"><a class="header" href="#任务和子执行器tasks-and-subexecutors">任务和子执行器(Tasks and Subexecutors)</a></h3>
+<p>异步程序中的 future 形成了一棵树: 一个 future 可以包含任何数量的其他 future, 这些 future 又可以包含其他 future, 一直到与 waker 交互的叶子 future. 每棵树的根是你给执行器的主要 “运行” 函数的 future. 这些根 future 被称为任务, 它们是执行器和 future 树之间的唯一联系点. 执行器在任务上调用轮询, 从那时起, 每个包含的 future 的代码必须弄清楚哪些内部 future 需要轮询, 一直到相关叶子.</p>
+<p>执行器通常为他们轮询的每个任务构建一个单独的 <code>Waker</code>, 这样当 <code>wake</code> 被调用时, 它们就知道哪个任务是可运行的, 并能将其标记为可运行. 这就是 <code>RawWaker</code> 中的原始指针的作用–在共享各种 <code>Waker</code> 方法的代码时区分不同的任务.</p>
+<p>当执行器最终轮询一个任务时, 该任务从其实现的 <code>Future::poll</code> 的顶部开始运行, 并且必须从那里决定如何到达更深的 future, 现在可以取得进展. 由于每个 future 只知道它自己的字段, 而不知道整个树的情况, 这一切都通过调用轮询来发生, 每个轮询都要穿越树中的一条边.</p>
+<p>选择哪一个内部 future 进行轮询通常是显而易见的, 但并非总是如此. 在 <code>async/await</code> 的情况下, 要轮询的 future 是我们被阻塞的那个. 但是在一个等待几个 future 中的第一个取得进展的 future(通常称为选择), 或者等待一组 future 中的所有 future(通常称为连接), 有许多选择. 一个必须做出这种选择的 future 基本上是一个子执行器. 它可以轮询其内部的所有 future, 但这样做可能是相当浪费的. 相反, 这些子执行器在对任何内部 future 调用轮询之前, 通常用它们自己的 <code>Waker</code> 类型来包装它们在轮询的 <code>Context</code> 中收到的 <code>Waker</code>. 在包装代码中, 它们在对自己原始 <code>Waker</code> 调用 <code>wake</code> 之前, 在自己的状态中把刚刚轮询的 future 标记为可运行. 这样, 当执行器最终再次轮询子执行器的 future 时, 子执行器可以查阅自己的内部状态, 以找出哪些内部 future 导致了当前调用的轮询, 然后只轮询这些 future.</p>
+<blockquote>
+<p>异步代码中的阻塞</p>
+<p>对于从异步代码中调用同步代码, 你必须小心谨慎, 因为执行器线程在执行当前任务时所花费的任何时间都是它没有在运行其他任务时花费的时间. 如果一个任务长期占据当前线程而不回馈给执行器, 这可能发生在执行一个阻塞的系统调用(如 <code>std::sync::sleep</code>), 运行一个偶尔不回馈的子执行器, 或者运行在一个没有等待的紧密循环中, 那么当前执行器线程负责的其他任务就不能在这段时间运行. 通常情况下, 这表现为在某些任务可以取得进展时(比如客户端连接时)和它们实际执行时之间的长时间延迟.</p>
+<p>一些多线程执行器实现了工作窃取技术, 闲置的执行器线程从繁忙的执行器线程中窃取任务, 但这更像是一种缓解措施, 而不是一种解决方案. 最终, 你可能会出现这样的情况: 所有的执行器线程都被阻塞了, 因此在其中一个阻塞操作完成之前, 没有任务可以运行.</p>
+<p>一般来说, 在执行计算密集型操作或调用可能在异步上下文中阻塞的函数时, 应该非常小心. 这样的操作应该尽可能转换为异步操作, 或者在专用线程上执行, 然后使用支持异步的基元(primitive)进行通信, 如通道. 一些执行器还提供了一些机制, 用于指示异步代码的特定部分可能会阻塞, 或者用于在循环的上下文中自愿 yield, 否则可能不会 yield, 这可以构成解决方案的一部分. 一个好的经验法则是, 任何 future 都不应该能够运行超过 1 毫秒而不返回 <code>Poll::Pending</code>.</p>
+</blockquote>
+<h2 id="用-spawn-把这一切联系起来tying-it-all-together-with-spawn"><a class="header" href="#用-spawn-把这一切联系起来tying-it-all-together-with-spawn">用 spawn 把这一切联系起来(Tying It All Together with spawn)</a></h2>
+<p>在使用异步执行器时, 你可能会遇到一个产生 future 的操作. 我们现在可以探索这意味着什么了! 让我们通过举例的方式来进行. 首先, 考虑清单 8-14 中的简单服务器实现.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>async fn handle_client(socket: TcpStream) -&gt; Result&lt;()&gt; {
+    // Interact with the client over the given socket.
+    // 通过给定的 socket 与该客户端交互.
+}
+
+async fn server(socket: TcpListener) -&gt; Result&lt;()&gt; {
+    while let Some(stream) = socket.accept().await? {
+        handle_client(stream).await?;
+    }
+}
+
+// 清单 8-14: 按顺序处理连接
+<span class="boring">}</span></code></pre>
+<p>顶层的服务器函数本质上是一个大的 future, 它监听新的连接, 并在新的连接到来时做一些事情. 你把这个 future 交给执行器并说 “运行这个”, 由于你不希望你的程序立即退出, 你可能会让执行器在这个 future 上阻塞.  也就是说, 调用执行器来运行服务器 future 将不会返回, 直到服务器 future 解决, 这可能永远不会(另一个客户端可能稍后到达).</p>
+<p>现在, 每当一个新的客户端连接进来时, 清单 8-14 中的代码就会建立一个新的 future(通过调用 <code>handle_client</code>)来处理这个连接. 因为处理本身就是一个 future, 所以我们<code>await</code>它, 然后转到下一个客户端连接.</p>
+<p>这种方法的缺点是, 我们每次只处理一个连接, 没有并发性. 一旦服务器接受了一个连接, 就会调用 <code>handle_client</code> 函数, 由于我们在等待它, 所以我们不会再绕过这个循环, 直到 <code>handle_client</code> 的返回 future 解决(估计是在该客户离开后).</p>
+<p>我们可以在此基础上进行改进, 保留一组所有的客户 future, 让服务器接受新连接的循环也检查所有的客户 future, 看看是否有客户可以取得进展.  清单 8-15 显示了这可能是什么样子.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>async fn server(socket: TcpListener) -&gt; Result&lt;()&gt; {
+    let mut clients = Vec::new();
+    loop {
+        poll_client_futures(&amp;mut clients)?;
+        if let Some(stream) = socket.try_accept()? {
+            clients.push(handle_client(stream));
+        }
+    }
+}
+
+// 清单 8-15: 处理与手动执行器的连接
+<span class="boring">}</span></code></pre>
+<p>这至少可以同时处理许多连接, 但这是很复杂的. 它的效率也不高, 因为代码现在是忙循环, 在处理我们已有的连接和接受新的连接之间切换. 而且它每次都要检查每个连接, 因为它不知道哪些连接可以取得进展(如果有的话). 它也不能在任何时候 <code>await</code>, 因为这将阻止其他 future 取得进展. 你可以实现你自己的 wakers, 以确保代码只轮询可以取得进展的 future, 但最终这是在开发你自己的迷你执行器的路上.</p>
+<p>坚持只用一个服务器任务的另一个缺点是, 服务器最终是单线程的, 因为它内部包含了所有客户端连接的 future. 只有一个任务, 为了对其进行轮询, 代码必须持有对该任务的 future 的独占引用(<code>poll</code> 取得 <code>Pin&lt;&amp;mut Self&gt;</code>), 而在同一时间只有一个线程可以持有.</p>
+<p>解决办法是让每个客户的 future 成为自己的任务, 让执行器在所有任务之间进行复用. 你猜对了, 你是通过生成 future 来做的. 执行器将继续在服务器的 future 任务上进行阻塞, 但如果它不能在该 future 任务上取得进展, 它将使用其执行机制在幕后同时在其他任务上取得进展. 最重要的是, 如果执行器是多线程的, 而你的客户端 future 是 Send 的, 它可以并行地运行它们, 因为它可以同时持有独立任务的 <code>&amp;mut</code> 引用. 清单 8-16 给出了一个例子, 说明这可能是什么样子.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>async fn server(socket: TcpListener) -&gt; Result&lt;()&gt; {
+    while let Some(stream) = socket.accept().await? {
+    // Spawn a new task with the Future that represents this client.
+    // The current task will continue to just poll for more connections
+    // and will run concurrently (and possibly in parallel) with handle_client.
+    // 用表示该客户端的 Future 生成一个新任务.
+    // 当前任务将继续只轮询更多的连接,
+    // 并与 handle_client 并发(并可能并行)运行.
+    spawn(handle_client(stream));
+}
+
+// 清单 8-16: 生成 future 以创建更多可以并发轮询的任务
+<span class="boring">}</span></code></pre>
+<p>当你 <code>spawn</code> 一个 future, 从而使其成为一个任务, 这有点像 <code>spawn</code> 一个线程. future 继续在后台运行, 并与交给执行器的任何其他任务同时复用. 然而, 与生成的线程不同, 生成的任务仍然依赖于被执行器轮询. 如果执行器停止运行, 无论是因为你放弃它, 还是因为你的代码不再运行执行器的代码, 那些生成的任务将停止进展. 在服务器的例子中, 想象一下, 如果主服务器的 future 由于某种原因解决了, 会发生什么. 由于执行器已将控制权交还给你的代码, 它不能继续做, 嗯, 任何事情. 多线程执行器通常会产生后台线程, 即使执行器将控制权交还给用户的代码, 也会继续轮询任务, 但并不是所有的执行器都会这样做, 所以在你依赖这种行为之前, 请检查你的执行器.</p>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>在本章中, 我们看了一下<code>Rust</code>中可用的异步结构的幕后. 我们看到了编译器是如何实现生成器和自引用类型的, 以及为什么这项工作对于支持我们现在所知道的 <code>async/await</code> 是必要的.  我们还探讨了 future 是如何执行的, 以及当任何特定时刻只有部分任务可以取得进展时, wakers 是如何允许执行器在任务之间进行复用的. 在下一章中, 我们将解决可能是<code>Rust</code>中最深层和讨论最多的领域: 不安全代码. 深吸一口气, 然后翻开这一页.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="chapter-07.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="chapter-09.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="chapter-07.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="chapter-09.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace-2a3cd908.js"></script>
+        <script src="mode-rust-2c9d5c9a.js"></script>
+        <script src="editor-16ca416c.js"></script>
+        <script src="theme-dawn-4493f9c8.js"></script>
+        <script src="theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

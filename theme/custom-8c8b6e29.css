@@ -1,0 +1,19 @@
+/* 默认(手机/平板):占满可用宽度 */
+:root {
+    --content-max-width: 100%;
+}
+
+/* 笔记本 / 小桌面 */
+@media (min-width: 1100px) {
+    :root { --content-max-width: 95%; }
+}
+
+/* 标准桌面显示器 */
+@media (min-width: 1500px) {
+    :root { --content-max-width: 95%; }
+}
+
+/* 2K / 4K / 超宽屏 */
+@media (min-width: 2000px) {
+    :root { --content-max-width: 85%; }
+}

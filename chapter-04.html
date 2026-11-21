@@ -1,0 +1,340 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第4章-错误处理 - Rust For Rustaceans 阅读和翻译</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom-8c8b6e29.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-4b5aa1f8.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-448f900e.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust For Rustaceans 阅读和翻译</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/thinkgos/Rust-For-Rustaceans" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="第四章-错误处理"><a class="header" href="#第四章-错误处理">第四章 错误处理</a></h1>
+<p>除了最简单的程序外, 你会有一些可能失败的方法. 在本章中, 我们将探讨表述, 处理和传播这些失败的不同方法, 以及它们各自的优缺点. 我们将从不同的错误表述方式开始, 包括枚举和擦除, 然后研究一些需要特殊表述技术的错误情况. 接下来, 我们将探讨处理错误的各种方式, 以及错误处理机制在未来的发展趋势.</p>
+<p>值得注意的是, <code>Rust</code>中错误处理的最佳实践仍然是一个活跃的话题, 在撰写本文的时候, <code>Rust</code>生态系统还没有确定一种统一的处理方法. 因此, 本章将重点讨论底层原理和技术手段, 而不是推荐特定的<code>crate</code>或<code>patterns</code>.</p>
+<h2 id="表述错误"><a class="header" href="#表述错误">表述错误</a></h2>
+<p>在编写可能失败的代码时, 最重要的问题是用户将如何与这些错误交互. 用户是否需要确切地知道发生了什么错误, 以及错误的细节, 还是只需要记录错误发生了, 然后继续执行? 要了解这一点, 我们需要研究错误的性质是否影响到调用者在收到错误后的行为. 这将决定我们该如何表述不同的错误类型.</p>
+<p>表述错误有两种主要的方式: 枚举和擦除. 也就是说, 你可以让你的错误类型枚举可能的错误情况, 以便调用者能够区分它们, 或者你也可以只向调用者提供一个单一的, 不透明的错误. 让我们依次讨论这两种方式.</p>
+<h3 id="枚举"><a class="header" href="#枚举">枚举</a></h3>
+<p>在这个示例中, 我们将使用一个库函数, 将字节从某个输入流复制到某个输出流中, 与<code>std::io::copy</code>的行为很相似. 用户会提供两个流, 一个用于读, 一个用于写, 然后你将字节从一个流复制到另一个流. 在这个过程中, 任何一个流都有可能出现错误, 这时复制必须停止, 并向用户返回错误. 在这种情况下, 用户很可能希望知道是输入流还是输出流出现了问题. 例如, 在一个web服务中, 如果在向客户端传输文件的过程中, 输入流发生了错误, 可能是因为磁盘被弹出, 而如果输出流发生错误, 那有可能是客户端断开了连接. 后者可能是服务器可以忽略的错误, 因为对新连接的复制仍然可以完成, 而前者可能需要关闭整个服务器.</p>
+<p>在这个例子中, 我们需要枚举错误. 用户需要能够区分不同的错误情况, 以便做出恰当的响应, 所以我们使用一个名为<code>CopyError</code>的枚举类型, 每个变体代表一个错误的根本原因, 就像清单 4-1中那样.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum CopyError {
+    In(std::io::Error),
+    Out(std::io::Error),
+}
+
+// 清单 4-1: 枚举错误类型
+<span class="boring">}</span></code></pre>
+<p>每个变体还包括实际遇到的错误, 以便向调用者提供尽可能多的出错信息.</p>
+<p>当你创建自定义错误类型时, 需要采取一些步骤, 使该错误类型能够很好地融入<code>Rust</code>的生态系统中. 首先, 你的错误类型应该实现<code>std::error::Error</code> trait, 它为调用者提供了内省错误类型的常用方法. 其中主要的方法是<code>Error::source</code>, 它提供了一种机制来查找错误的根本原因. 最常用于打印错误回溯信息, 显示错误从根源一路传播的过程. 对于我们的<code>CopyError</code>类型, <code>source</code>的实现非常简单: 我们在<code>self</code>上进行匹配并提取并返回内部的<code>std::io::Error</code>.</p>
+<p>其中, 你的类型应该同时实现<code>Display</code>和<code>Debug</code>, 以便调用者可以有意义地打印错误信息. 如果你实现了<code>Error</code> trait, 这是必须的. 一般来说, <code>Display</code>的实现应提供出错原因的一行描述, 并能很容易地嵌入到其他错误消息中. 显示的格式应使用小写字母, 并且末尾不加标点符号, 以便自然嵌入到其他更大的错误报告中. <code>Debug</code>应该提供更详细的错误描述, 包括可能有助于追踪错误原因的附加信息, 如端口号, 请求ID, 文件路径等, 通常使用<code>#[derive(Debug)]</code>就足以满足这些要求.</p>
+<blockquote>
+<p>注意: 在旧版本的<code>Rust</code>代码中, 你可能会看到对<code>Error::description</code>方法的引用, 但该方法已被弃用, 改用<code>Display</code>.</p>
+</blockquote>
+<p>第三, 如果可能的话, 你的类型应该同时实现<code>Send</code>和<code>Sync</code>, 这样用户才能跨线程共享错误. 如果你的错误类型不是线程安全的, 你会发现几乎无法在多线程环境中使用你的<code>crate</code>. 实现<code>Send</code>和<code>Sync</code>的错误类型也更容易与非常常见的<code>std::io::Error</code>错误类型配合使用, 后者能够包装实现<code>Error</code>,<code>Send</code>和<code>Sync</code>的错误. 当然, 并不是所有的错误类型都合理地实现<code>Send</code>和<code>Sync</code>, 比如它们可能依赖于特定的线程本地资源, 这种情况下不支持也是可以接受的. 毕竟你很可能不会跨线程发送这些错误. 不过, 在错误中使用<code>Rc&lt;String&gt;</code>和<code>RefCell&lt;bool&gt;</code>类型之前, 还是要注意这一点.</p>
+<p>最后, 如果可能的话, 你的错误类型应该是<code>'static</code>的. 这样做最直接的好处是, 它使调用者更容易地在调用堆栈中向上传播你的错误, 而不会遇到生命周期的问题. 此外, 它还使你的错误类型更容易与类型擦除的错误类型一起使用, 我们很快就会看到这一点.</p>
+<h3 id="不透明的错误"><a class="header" href="#不透明的错误">不透明的错误</a></h3>
+<p>现在让我们考虑另一个例子: 一个图像解码库. 你将一堆字节传给这个库进行解码, 它就会为你提供各种图像处理方法. 如果解码失败, 用户需要知道如何解决问题, 因此必须了解其原因. 但是, 原因是图像标头中的大小字段无效, 还是压缩算法未能解压某个块, 这很重要吗? 也许不重要, 即使应用程序知道确切的原因, 也无法从这两种情况下进行有意义的恢复. 在这样的情况下, 作为库的作者, 你可能更希望提供一种单一的, 不透明的错误类型. 这也会使你的库更容易使用, 因为整个库中只使用一个错误类型. 这个错误类型应该实现<code>Send</code>,<code>Debug</code>,<code>Display</code>和<code>Error</code>(在合适的情况下也包括<code>source</code>方法), 除此之外, 调用者无需了解更多的细节. 你可以在库内部表述更细致的错误状态, 但没有必要将这些暴露给使用者. 这样做只会不必要地增加你的<code>API</code>的体积和复杂性.</p>
+<p>不透明的错误类型到底应该是什么, 主要取决于你. 它可以是一个具有所有私有字段的类型, 只对外公开有限的方法来显示和检查错误, 也可能是一个严重类型擦除的错误类型, 如<code>Box&lt;dyn Error + Send + Sync + 'static&gt;</code>, 它只表明这是一个错误, 除此之外不会向使用者透露任何信息, 也通常不允许用户进行深入查看. 决定错误类型透明的程度, 主要取决于这个错误除了描述之外是否还有值得用户了解的内容. 如果使用<code>Box&lt;dyn Error&gt;</code>, 用户别无选择, 只能把你的错误向上传播. 如果该错误确实没有任何有价值的信息提供给用户(例如, 如果它只是一个动态的错误信息, 或者是来自你程序深处的某些完全无关的错误之一), 这样做也许没什么问题. 但如果这个错误有一些有意义的细节, 例如行号或状态代码, 你可能会想通过一个具体但不透明的类型来暴露它.</p>
+<blockquote>
+<p>注意: 一般来说, 社区的共识是错误应该是罕见的, 因此不应该增加太多“正常路径“的成本. 因此, 错误通常被放置在一个指针类型的后面, 比如<code>Box</code>或<code>Arc</code>. 这样一来, 错误就不太可能增加所包含的整个<code>Result</code>类型的大小.</p>
+</blockquote>
+<p>使用类型擦除的错误的一个好处是, 它可以让你轻松地将不同来源的错误合并, 而无需引入额外的错误类型. 也就是说, 类型擦除的错误通常可以很好地组合, 并允许你表达一个开放式的错误集. 如果你编写了一个返回类型为<code>Box&lt;dyn Error + ...&gt;</code>的函数, 那么你可以在该函数内部对各种各样的不同错误类型使用<code>?</code>, 它们都会被转化为那个共同的错误类型.</p>
+<p><code>Box&lt;dyn Error + Send + Sync + 'static&gt;</code>上的<code>'static</code>约束在类型擦除的背景下值得多花一点时间来研究. 我在上一节中提到, 它可以让调用者传播错误, 而不用担心失败的方法的生命周期约束, 但它有一个更大的目的: 提供向下转型的访问. 向下转型是指将一种类型的项转换为一种更具体的类型的过程. 这是少数几个<code>Rust</code>在运行时能让你访问类型信息的情况之一; 它是动态语言经常提供的更通用的类型反射的一个有限案例. 在错误的上下文中, 当<code>dyn Error</code>原本是一个具体的底层错误类型时, 向下转换允许用户将该错误转为该类型. 例如, 如果用户收到的错误是类型为<code>std::io::ErrorKind::WouldBlock</code>的<code>std::io::Error</code>, 用户可能想采取一个特定的操作, 但在其他情况下他们不会采取相同的操作. 如果用户得到一个<code>dyn Error</code>, 他们可以使用<code>Error::downcast_ref</code>来尝试将这个错误向下转换到<code>std::io::Error</code>. <code>downcast_ref</code>方法返回一个<code>Option</code>, 它告诉用户向下转换是否成功. 这里有一个关键的观察点: <code>downcast_ref</code>只有在参数是<code>'static</code>时才起作用. 如果我们返回一个不透明的, 非<code>'static</code>的<code>Error</code>, 我们就剥夺了用户进行这种错误检查的能力, 如果他们愿意的话.</p>
+<p>在生态系统中, 对于库的类型擦除的错误(或者更广泛地说, 它的类型擦除类型)是否属于公共且稳定的<code>API</code>的一部分, 这里存在一些争议. 也就是说, 如果你的库中的方法<code>foo</code>将<code>lib::MyError</code>作为<code>Box&lt;dyn Error&gt;</code>返回, 将<code>foo</code>改为返回不同的错误类型是否是一种破坏性的变更? 类型签名并没有改变, 但是用户可能写了一些代码, 认为他们可以使用向下转型来把这个错误转回<code>lib::MyError</code>. 我对此事的看法是, 你选择返回<code>Box&lt;dyn Error&gt;</code>(而不是<code>lib::MyError</code>)是有原因的, 除非有明确的文档说明, 否则这并不能保证向下转换有什么特别之处.</p>
+<blockquote>
+<p>注意: 虽然<code>Box&lt;dyn Error + ...&gt;</code>是一个有吸引力的类型擦除的错误类型, 但与直觉相反, 它本身并没有实现<code>Error</code>. 因此, 在库中请考虑添加自己的<code>BoxError</code>类型, 来实现<code>Error</code>以进行类型擦除.</p>
+</blockquote>
+<p>你可能想知道<code>Error::downcast_ref</code>是如何做到安全的. 也就是说, 它如何知道提供的<code>dyn Error</code>参数是否确实属于给定的类型<code>T</code>? 标准库中甚至有一个名为<code>Any</code>的<code>trait</code>, 它是为任何类型实现的, 也可以为<code>dyn Any</code>实现<code>downcast_ref</code>, 这怎么能行? 答案在于编译器支持的类型<code>std::any::TypeId</code>, 它允许你为任何类型获得一个唯一的标识符. <code>Error</code> trait有一个隐藏的提供方法, 叫做<code>type_id</code>, 它的默认实现是返回<code>TypeId::of::&lt;Self&gt;()</code>. 类似地, <code>Any</code>有一个对<code>T</code>的<code>impl Any</code>的通用实现, 在该实现中, 其<code>type_id</code>返回相同的内容. 在这些<code>impl</code>块的上下文中, <code>Self</code>的具体类型是已知的, 所以这个<code>type_id</code>是真实类型的类型标识符. 这为<code>downcast_ref</code>提供了所需的所有信息. <code>downcast_ref</code>调用<code>self.type_id</code>, 它通过动态大小类型的<code>vtable</code>(见第2章)转发到底层类型的实现, 并将其与提供的向下转换类型的类型标识符进行比较. 如果它们匹配, 那么<code>dyn Error</code>或<code>dyn Any</code>背后的类型就真的是<code>T</code>, 并且从一个类型的引用转换到另一个类型的引用是安全的.</p>
+<h3 id="特殊错误案例"><a class="header" href="#特殊错误案例">特殊错误案例</a></h3>
+<p>有些函数是易错的, 但一旦失败也不能返回任何有意义的错误. 从概念上讲, 这些函数的返回类型是<code>Result&lt;T, ()&gt;</code>. 在一些代码库中, 你可能会看到它被表示为<code>Option&lt;T&gt;</code>. 虽然这两个函数的返回类型都是合法的选择, 但它们表达了不同的语义, 你通常应该避免将<code>Result&lt;T, ()&gt;</code>“简化“为<code>Option&lt;T&gt;</code>. <code>Err(())</code>表示一个操作失败了, 应该重试, 报告或以其他方式特殊处理. 另一方面, <code>None</code>只表达了函数没有任何内容要返回; 它通常不被认为是一个特殊情况或应该被处理的东西. 你可以在<code>Result</code>类型的<code>#[must_use]</code>注解中看到这一点–当你得到一个<code>Result</code>时, 语言认为处理这两种情况是很重要的, 而对于一个<code>Option</code>, 两种情况实际上都不需要处理.</p>
+<blockquote>
+<p>注意: 你还应该记住, <code>()</code>并没有实现<code>Error</code> trait. 这意味着它不能被类型擦除为<code>Box&lt;dyn Error&gt;</code>, 并且在用作<code>?</code>时可能会有点麻烦. 出于这个原因, 在这些情况下, 定义你自己的单元结构类型, 为其实现<code>Error</code>, 并将其作为错误, 而不是<code>()</code>.</p>
+</blockquote>
+<p>有些函数, 比如那些启动持续运行的服务器循环的函数, 只返回错误; 除非发生错误, 否则它们永远运行. 其他函数永远不会出错, 但仍然需要返回<code>Result</code>, 例如, 为了匹配<code>trait</code>签名. 对于这样的函数, <code>Rust</code>提供了<code>never</code>类型, 用<code>!</code>的语法编写. <code>never</code>类型表示一个永远无法生成的值. 你不能自己构造这个类型的实例, 唯一的方法是进入一个无限循环或<code>panic</code>, 或者通过其他编译器知道永远不会返回的特殊操作. 对于<code>Result</code>, 当你有一个你知道<code>Ok</code>或<code>Err</code>永远不会被使用的变体时, 你可以把它设置为<code>!</code>类型. 如果你写了一个返回<code>Result&lt;T, !&gt;</code>的函数, 你将永远无法返回<code>Err</code>, 因为唯一的返回方式是进入永远不会返回的代码. 因为编译器知道任何带有<code>!</code>的变体都不会被产生, 它还可以在此基础上优化你的代码, 比如不生成<code>Result&lt;T, !&gt;</code>上<code>unwrap</code>的<code>panic</code>代码. 而当你进行模式匹配时, 编译器知道任何包含<code>!</code>的变体甚至不需要被列出. 挺酷的!</p>
+<p>最后一个奇怪的错误情况是错误类型<code>std::thread::Result</code>. 这里是它的定义.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>type Result&lt;T&gt; = Result&lt;T, Box&lt;dyn Any + Send + 'static&gt;&gt;;
+<span class="boring">}</span></code></pre>
+<p>错误类型是类型擦除的, 但它并没有像我们之前看到的那样被擦除为<code>dyn Error</code>. 取而代之的是<code>dyn Any</code>, 它只保证错误是某种类型, 仅此而已… 这几乎没有什么保证. 出现这种奇怪的错误类型的原因是<code>std::thread::Result</code>的错误变体只有在<code>panic</code>时才会产生; 具体来说, 如果你试图加入一个已经<code>panic</code>的线程. 在这种情况下, 加入的线程除了忽略错误或使用<code>unwrap</code>使自己<code>panic</code>外, 还能做什么呢? 从本质上讲, 错误类型是“一个panic“, 其值是传递给<code>panic!</code>的任何参数, 它确实可以是任何类型(尽管它通常是一个格式化的字符串).</p>
+<h2 id="传播错误"><a class="header" href="#传播错误">传播错误</a></h2>
+<p><code>Rust</code>的<code>?</code>操作符是<code>unwrap</code>或提前返回的简写, 用于轻松处理错误. 但它还有一些其他的技巧值得了解. 首先, <code>?</code>通过<code>From</code> trait执行类型转换. 在一个返回<code>Result&lt;T, E&gt;</code>的函数中, 你可以在任何<code>Result&lt;T, X&gt;</code>上使用<code>?</code>, 其中<code>E: From&lt;X&gt;</code>. 这就是通过<code>Box&lt;dyn Error&gt;</code>擦除错误的特性; 你可以在任何地方使用<code>?</code>而不用担心特定的错误类型, 而且通常会“正常工作“.</p>
+<blockquote>
+<p><code>FROM</code> 和 <code>INTO</code></p>
+<p>标准库有许多转换 trait, 但其中两个核心 trait是<code>From</code>和<code>Into</code>. 你可能会觉得有两个很奇怪: 如果我们有<code>From</code>, 为什么还需要<code>Into</code>, 反之亦然? 有几个原因, 但让我们从历史原因开始: 在<code>Rust</code>的早期, 由于第2章中讨论的一致性规则, 不可能只有一个. 或者, 更确切地说, 曾经的一致性规则是什么.</p>
+<p>假设你想在你的<code>crate</code>中定义的某个本地类型和标准库中的某个类型之间实现双向转换. 你可以很容易地写<code>impl&lt;T&gt; From&lt;Vec&lt;T&gt;&gt; for MyType&lt;T&gt;</code>和<code>impl&lt;T&gt; Into&lt;Vec&lt;T&gt;&gt; for MyType&lt;T&gt;</code>, 但是如果你只有<code>From</code>或<code>Into</code>, 你必须写<code>impl&lt;T&gt; From&lt;MyType&lt;T&gt;&gt; for Vec&lt;T&gt;</code> 或 <code>impl&lt;T&gt; Into&lt;MyType&lt;T&gt;&gt; for Vec&lt;T&gt;</code>. 然而, 编译器曾经拒绝了这些实现! 只有从<code>Rust</code>1.41.0开始, 当覆盖类型的例外被添加到一致性规则中时, 它们才合法. 在那之前, 有必要同时拥有这两个 trait. 由于很多<code>Rust</code>代码是在<code>Rust</code>1.41.0之前写的, 所以现在这两个 trait都不能被删除.</p>
+<p>然而, 除了这一历史事实之外, 即使我们今天可以从头开始, 也有很好的人体工程学理由来拥有这两个 trait. 在不同的情况下, 使用其中一个或另一个通常会容易得多. 例如, 如果你正在写一个方法, 该方法接收一个可以变成<code>Foo</code>的类型, 你是想写<code>fn(impl Into&lt;Foo&gt;)</code> 还是 <code>fn&lt;T&gt;(T) where Foo: From&lt;T&gt;</code>? 反过来说, 要把一个字符串变成一个语法标识符, 你是愿意写 <code>Ident::from("foo")</code> 还是 <code>&lt;_ as Into&lt;Ident&gt;&gt;::into("foo")</code>? 这两个 trait都有其用途, 我们最好同时拥有它们.</p>
+<p>鉴于我们确实有这两种东西, 你可能想知道今天应该在代码中使用哪一个. 答案是非常简单的: 实现<code>From</code>, 并在约束中使用<code>Into</code>. 原因是<code>Into</code>对任何实现了<code>From</code>的<code>T</code>都有一个通用实现, 所以不管一个类型是明确地实现了<code>From</code>还是<code>Into</code>, 它都实现了<code>Into</code>!</p>
+<p>当然, 正如简单的事情一样, 故事并没有就此结束. 因为当<code>Into</code>被用作绑定时, 编译器经常要“通过“通用实现, 所以推断一个类型是否实现了<code>Into</code>比推断它是否实现了<code>From</code>更复杂. 而且在某些情况下, 编译器还没有聪明到可以解决这个难题. 由于这个原因, 在编写本文时, <code>?</code>操作符使用<code>From</code>, 而不是<code>Into</code>. 大多数时候, 这并没有什么区别, 因为大多数类型都实现了<code>From</code>, 但这也意味着旧库中实现<code>Into</code>的错误类型可能无法与<code>?</code>一起工作. 随着编译器越来越聪明, <code>?</code>可能会被“升级“为使用<code>Into</code>, 到那时这个问题就会消失, 但这也是我们目前所面临的情况.</p>
+</blockquote>
+<p>第二个需要注意的方面是, <code>?</code>这个操作符实际上只是一个暂定名为<code>Try</code>的 trait的语法糖. 在写这篇文章的时候, <code>Try</code> trait还没有稳定下来, 但是当你读到这篇文章的时候, 它或者类似的东西很可能已经被确定下来. 由于细节还没有全部弄清楚, 我将只给你一个<code>Try</code>工作原理的大纲, 而不是完整的方法签名. 在其核心部分, <code>Try</code>定义了一个封装类型, 其状态要么是进一步计算是有用的(快乐路径), 要么是无用的. 你们中的一些人会正确地想到单子(<code>monads</code>), 尽管我们不会在这里探讨这种联系. 例如, 在<code>Result&lt;T, E&gt;</code>的情况下, 如果你有一个<code>Ok(t)</code>, 你可以通过解开<code>t</code>来继续在快乐的路径上运行. 另一方面, 如果你有一个<code>Err(e)</code>, 你想立即停止执行并产生错误值, 因为你没有<code>t</code>, 所以不可能进一步计算.</p>
+<p><code>Try</code>的有趣之处是, 它不仅适用于<code>Result</code>类型, 还适用于更多的类型. 例如, <code>Option&lt;T&gt;</code>遵循同样的模式–如果你有一个<code>Some(t)</code>, 你可以在快乐路径上继续下去, 而如果你有一个<code>None</code>, 就会产生<code>None</code>而不是继续. 这种模式延伸到了更复杂的类型, 比如<code>Poll&lt;Result&lt;T, E&gt;&gt;</code>, 它的快乐路径类型是<code>Poll&lt;T&gt;</code>, 这使得<code>?</code>适用的情况远比你想象的多. 当<code>Try</code>稳定下来后, 我们可能会看到<code>?</code>开始与各种类型一起工作, 使我们的快乐路径代码更漂亮.</p>
+<p><code>?</code>操作符已经可以在易错函数,<code>doctests</code>和<code>fn main</code>中使用了. 不过, 为了充分发挥它的潜力, 我们还需要一种方法来对这种错误进行范围处理. 例如, 考虑清单 4-2中的函数.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn do_the_thing() -&gt; Result&lt;(), Error&gt; {
+    let thing = Thing::setup()?;
+    // .. code that uses thing and ? ..
+    thing.cleanup();
+    Ok(())
+}
+
+// 清单 4-2: 使用`?`运算符的多步骤易错函数
+<span class="boring">}</span></code></pre>
+<p>这并不完全符合预期. 在<code>setup</code>和<code>cleanup</code>之间的任何<code>?</code>都会导致整个函数的提前返回, 从而跳过<code>cleanup</code>的代码! 这就是<code>try</code>块要解决的问题. 一个<code>try</code>块的行为就像一个单次迭代的循环, 其中<code>?</code>使用<code>break</code>而不是<code>return</code>, 并且该块的最后表达式有一个隐含的<code>break</code>. 我们现在可以修改清单 4-2中的代码, 使其总是执行清理, 如清单 4-3所示:</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn do_the_thing() -&gt; Result&lt;(), Error&gt; {
+    let thing = Thing::setup()?;
+    let r = try {
+    // .. code that uses thing and ? ..
+    };
+    thing.cleanup();
+    r
+}
+
+// 清单 4-3: 一个多步骤的易错函数, 总是自己清理
+<span class="boring">}</span></code></pre>
+<p>在写这篇文章时, <code>try</code>代码块也不稳定, 但对其有用性有足够的共识, 它们很可能会以类似于这里描述的形式出现.</p>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>本章介绍了在<code>Rust</code>中构造错误类型的两种主要方法: 枚举和擦除. 我们研究了在何时使用哪一种方式, 以及它们各自的优缺点. 我们还了解了<code>?</code>操作符背后的一些机制, 并考虑了<code>?</code>如何在未来变得更加实用. 在下一章中, 我们将从代码中抽身出来, 看看你是如何组织一个<code>Rust</code>项目的. 我们将研究特性标志, 依赖管理和版本管理, 以及如何使用工作区和子包管理更复杂的<code>crate</code>. 下一页见!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="chapter-03.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="chapter-05.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="chapter-03.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="chapter-05.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace-2a3cd908.js"></script>
+        <script src="mode-rust-2c9d5c9a.js"></script>
+        <script src="editor-16ca416c.js"></script>
+        <script src="theme-dawn-4493f9c8.js"></script>
+        <script src="theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

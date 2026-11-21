@@ -1,0 +1,513 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>第6章-测试 - Rust For Rustaceans 阅读和翻译</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-e96d0476.css">
+        <link rel="stylesheet" href="css/chrome-d279d366.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="theme/custom-8c8b6e29.css">
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-4b5aa1f8.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-448f900e.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Rust For Rustaceans 阅读和翻译</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+                        <a href="https://github.com/thinkgos/Rust-For-Rustaceans" title="Git repository" aria-label="Git repository">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="第六章-测试"><a class="header" href="#第六章-测试">第六章 测试</a></h1>
+<p>在这一章中, 我们将研究如何扩展 <code>Rust</code> 的测试能力, 以及在测试中加入哪些其他类型的测试. <code>Rust</code> 有许多内置的测试设施, 在<code>The Rust Programming Language</code>中都有详细介绍, 主要由 <code>#[test]</code> 属性和 <code>tests/</code> 目录构成. 然而, 随着代码库的发展和测试需求的增加, 你可能需要超越仅仅把<code>#[test]</code>标记到单个函数上的做法.</p>
+<p>本章主要分为两部分. 第一部分包括 <code>Rust</code> 测试机制, 如标准测试工具(harness)和条件测试代码. 第二部分介绍了评估 <code>Rust</code> 代码正确性的其他方法, 如基准测试, linting和模糊测试.</p>
+<h2 id="rust-测试机制"><a class="header" href="#rust-测试机制"><code>Rust</code> 测试机制</a></h2>
+<p>要理解 <code>Rust</code> 提供的各种测试机制, 你必须首先理解 <code>Rust</code> 是如何构建和运行测试的. 当你运行 <code>cargo test --lib</code> 时, Cargo 所做的唯一特别的事情就是把 <code>--test</code> 标志传递给 rustc. 这个标志告诉 rustc 产生一个测试二进制文件, 运行所有的单元测试, 而不是仅仅编译 <code>crate</code> 的库或二进制文件. 在幕后, <code>--test</code> 有两个主要作用. 首先, 它使 <code>cfg(test)</code> 成为可能, 这样你就可以有条件地包含测试代码(关于这一点, 稍后再谈). 其次, 它使编译器生成一个测试工具: 一个精心生成的主函数, 当你的程序运行时, 会调用程序中的每个 <code>#[test]</code> 函数.</p>
+<h3 id="测试工具the-test-harness"><a class="header" href="#测试工具the-test-harness">测试工具(The Test Harness)</a></h3>
+<p>编译器通过过程宏与一点魔法的混合来生成测试工具(harness)主函数, 我们将在第7章中更深入地讨论这个问题, 并轻轻地撒上一些魔法. 基本上, 测试工具将每个由 <code>#[test]</code> 注释的函数转化为测试描述符–这就是过程宏的部分. 然后, 它将每个描述符的路径暴露给生成的主函数–这就是神奇的部分. 描述符包括的信息有: 测试的名称, 它所设置的任何附加选项(如 <code>#[should_panic]</code>), 等等. 在其核心部分, 测试工具在 <code>crate</code> 中迭代测试, 运行它们, 捕捉它们的结果, 并打印出结果. 因此, 它还包括解析命令行参数的逻辑(比如 <code>--test-threads=1</code>), 捕获测试输出, 并行运行列出的测试, 并收集测试结果.</p>
+<p>截至目前, <code>Rust</code> 的开发者正在努力使测试工具生成的魔法部分成为公开可用的 API, 这样开发者就可以建立自己的测试工具. 这项工作仍处于实验阶段, 但该提案与目前存在的模型相当吻合. 需要解决的部分魔法是如何确保<code>#[test]</code> 函数对生成的主函数可用, 即使它们在私有子模块中.</p>
+<p>集成测试(<code>tests/</code> 中的测试)遵循与单元测试相同的过程, 但有一个例外, 它们被编译为自己独立的<code>crate</code>, 这意味着它们只能访问主<code>crate</code>的公共接口, 并针对没有<code>#[cfg(test)]</code> 编译的主<code>crate</code>运行. 会为<code>tests/</code>中的每个文件生成一个测试工具. 不会为<code>tests/</code>下的子目录中的文件生成测试工具, 以允许你为你的测试共享子模块.</p>
+<blockquote>
+<p>注意: 如果你明确想要一个子目录下的文件的测试工具, 你可以通过将文件命名为 <code>main.rs</code> 来选择加入.</p>
+</blockquote>
+<p><code>Rust</code> 并不要求你使用默认的测试工具. 你可以选择不使用它, 而是通过在 <code>Cargo.toml</code> 中为特定的集成测试设置 <code>harness = false</code> 实现你自己的主方法, 代表测试运行器, 如清单 6-1 所示. 你定义的主方法将被调用来运行测试.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>[[test]]
+name = "custom"
+path = "tests/custom.rs"
+harness = false
+
+// 清单 6-1: 选择不使用标准测试工具
+<span class="boring">}</span></code></pre>
+<p>没有测试工具, <code>#[test]</code> 周围的魔法都不会发生. 相反, 你需要自己写一个主函数来运行你想执行的测试代码. 从本质上讲, 你在写一个普通的 <code>Rust</code> 二进制文件, 只是碰巧被 <code>cargo test</code> 所运行. 该二进制文件负责处理默认工具通常做的所有事情(如果你想支持它们的话), 比如命令行标志. <code>harness</code>属性是为每个集成测试单独设置的, 所以你可以有一个使用标准工具的测试文件和一个不使用的测试文件.</p>
+<blockquote>
+<p>默认测试工具的参数</p>
+<p>默认的测试工具支持一些命令行参数来配置测试的运行方式. 这些参数不是直接传给 <code>cargo test</code> 的, 而是传给 Cargo 在运行 <code>cargo test</code> 时为你编译和运行的测试二进制. 要访问这组标志, 请将 <code>--</code> 传给 <code>cargo test</code>, 然后是测试二进制文件的参数. 例如, 要查看测试二进制文件的帮助文本, 你可以运行 <code>cargo test -- --help</code>.</p>
+<p>通过这些命令行参数, 有许多方便的配置选项. <code>--nocapture</code> 标志禁用了运行 <code>Rust</code> 测试时通常发生的输出捕获. 如果你想实时观察测试的输出, 而不是在测试失败后一下子观察输出, 这很有用. 你可以使用<code>--test-threads</code> 选项来限制同时运行的测试数量, 如果你有一个测试挂起或出现 <code>segfaults</code>, 而你想通过连续运行测试来找出是哪一个, 这很有帮助. 还有一个<code>--skip</code> 选项用于跳过符合某种模式的测试, <code>--ignored</code> 用于运行通常会被忽略的测试(比如那些需要外部程序运行的测试), 以及<code>--list</code> 用于仅仅列出所有可用测试.</p>
+<p>请记住, 这些参数都是由默认的测试工具实现的, 所以如果你禁用它(用 <code>harness = false</code>), 你就必须在你的主函数中自己实现你需要的参数.</p>
+</blockquote>
+<p>没有工具的集成测试主要用于基准测试, 我们将在后面看到, 但当你想运行不符合标准的 “一个功能, 一个测试“模式的测试时, 它们也很有用. 例如, 你会经常看到无工具测试用于模糊器, 模型检查器和需要自定义全局设置的测试(如在 WebAssembly 下或与自定义目标一起工作时).</p>
+<h3 id="cfgtest"><a class="header" href="#cfgtest"><code>#[cfg(test)]</code></a></h3>
+<p>当 <code>Rust</code> 为测试而构建代码时, 它设置了编译器配置标志 <code>test</code>, 然后你可以用条件编译来使代码被编译出来, 除非它是专门被测试的. 从表面上看, 这似乎很奇怪: 难道你不想测试与生产中的代码完全相同的代码吗? 你想, 但在测试时专门提供代码可以让你在几个方面写出更好, 更彻底的测试.</p>
+<blockquote>
+<p>mock (MOCKING)</p>
+<p>在编写测试时, 你经常想严格控制你所测试的代码, 以及你的代码可能与之交互的任何其他类型. 例如, 如果你正在测试一个网络客户端, 你可能不想在一个真实的网络上运行你的单元测试, 而是想直接控制“网络“发射的字节和时间. 或者, 如果你在测试一个数据结构, 你希望你的测试使用的类型允许你控制每个方法在每次调用时返回什么. 你可能还想收集一些指标, 比如某个方法被调用的频率, 或者某个字节序列是否被发射出来.</p>
+<p>这些 “假的“类型和实现被称为mock, 它们是任何大型单元测试套件的一个关键特性. 虽然你经常可以手动完成这种控制所需的工作, 但如果有一个库为你处理大部分琐碎的细节, 那就更好了. 这就是自动化mock的作用. 一个mock库将有生成具有特定属性或签名的类型(包括函数)的设施, 以及在测试执行期间控制和检查这些生成的项目的机制.</p>
+<p><code>Rust</code> 中的 mock 通常是通过泛型发生的–只要你的程序, 数据结构, 框架或工具在你可能想要 mock 的东西上是泛型的(或接受一个 trait 对象), 你就可以使用 mock 库来生成符合要求的类型, 将那些泛型参数实例化. 然后, 通过用生成的mock类型实例化你的泛型结构来编写单元测试, 你就万事俱备了!</p>
+<p>在泛型不方便或不合适的情况下, 比如你想避免让你的类型的某一方面对用户来说是泛型的, 你可以把你想mock的状态和行为封装在一个专门的结构中. 然后你可以生成该结构及其方法的mock版本, 并根据 <code>cfg(test)</code> 或类似 <code>cfg(feature = "test_mock_foo")</code> 的测试专用特性, 使用条件编译来使用真实或mock的实现</p>
+<p>目前, 在 <code>Rust</code> 社区, 还没有一个单一的mock库, 甚至没有一个单一的mock方法, 成为唯一的答案. 据我所知, 最广泛, 最彻底的mock库是 <code>mockall</code> crate, 但它仍在积极开发中, 而且还有许多其他竞争者.</p>
+</blockquote>
+<h4 id="只测试-apitest-only-apis"><a class="header" href="#只测试-apitest-only-apis">只测试 API(Test-Only APIs)</a></h4>
+<p>首先, 只有测试的代码允许你向你的(单元)测试暴露额外的方法, 字段和类型, 这样测试不仅可以检查公共 API 的行为是否正确, 还可以检查内部状态是否正确. 例如, 考虑来自 <code>hashbrown</code> 的 <code>HashMap</code> 类型, 它是实现标准库 <code>HashMap</code> 的 <code>crate</code>. <code>HashMap</code> 类型实际上只是 <code>RawTable</code> 类型的一个封装, <code>RawTable</code> 实现了大部分的哈希表逻辑. 假设在对一个空<code>map</code>进行<code>HashMap::insert</code>操作后, 你想检查<code>map</code>中的一个桶是否为非空, 如清单 6-2 所示.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>#[test]
+fn insert_just_one() {
+    let mut m = HashMap::new();
+    m.insert(42, ());
+    let full = m.table.buckets.iter().filter(Bucket::is_full).count();
+    assert_eq!(full, 1);
+}
+
+// 清单 6-2: 一个访问不可访问的内部状态的测试,因此不能编译.
+<span class="boring">}</span></code></pre>
+<p>这段代码将不能按原样编译, 因为虽然测试代码可以访问 <code>HashMap</code> 的私有表字段, 但它不能访问 <code>RawTable</code> 的同样私有的桶字段, 因为<code>RawTable</code>位于不同的模块中. 我们可以通过使桶字段可见性 <code>pub(crate)</code> 来解决这个问题, 但我们真的不希望<code>HashMap</code>能够随意接触桶, 因为它可能意外地破坏 <code>RawTable</code> 的内部状态. 即使是将桶设为只读也会有问题, 因为<code>HashMap</code>中的新代码可能会开始依赖于 <code>RawTable</code> 的内部状态, 从而使未来的修改更加困难.</p>
+<p>解决办法是使用<code>#[cfg(test)]</code>. 我们可以给 <code>RawTable</code> 添加一个方法, 只允许在测试时访问 <code>buckets</code>, 如清单 6-3 所示, 从而避免为其余代码埋下隐患(footgun). 然后, 清单 6-2 中的代码可以被更新为调用 <code>buckets()</code> 而不是访问私有的 <code>buckets</code> 字段.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl RawTable {
+    #[cfg(test)]
+    pub(crate) fn buckets(&amp;self) -&gt; &amp;[Bucket] {
+        &amp;self.buckets
+    }
+}
+
+// 清单 6-3: 使用 `#[cfg(test)]` 来使内部状态在测试环境中可被访问.
+<span class="boring">}</span></code></pre>
+<h4 id="测试断言的记账"><a class="header" href="#测试断言的记账">测试断言的记账</a></h4>
+<p>拥有只在测试期间存在的代码的第二个好处是, 你可以增强程序以执行额外的运行时记账, 然后可以被测试检查. 例如, 设想你正在编写你自己的标准库中的 <code>BufWriter</code> 类型的版本. 当测试它时, 你想确保 <code>BufWriter</code> 不会不必要地发出系统调用. 最明显的方法是让 <code>BufWriter</code> 跟踪它在底层 <code>Write</code> 上调用了多少次写入. 然而, 在生产中, 这个信息并不重要, 而且保持跟踪会带来(边际的)性能和内存开销. 通过 <code>#[cfg(test)]</code>, 你可以让记账只在测试时发生, 如清单 6-4 中所示.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct BufWriter&lt;T&gt; {
+    #[cfg(test)]
+    write_through: usize,
+    // other fields...
+}
+
+impl&lt;T: Write&gt; Write for BufWriter&lt;T&gt; {
+    fn write(&amp;mut self, buf: &amp;[u8]) -&gt; Result&lt;usize&gt; {
+    // ...
+    if self.full() {
+        #[cfg(test)]
+        self.write_through += 1;
+        let n = self.inner.write(&amp;self.buffer[..])?;
+        // ...
+    }
+}
+
+// 清单 6-4: 使用`#[cfg(test)]`将记账限制在测试环境中.
+<span class="boring">}</span></code></pre>
+<p>请记住, <code>test</code> 只为被编译为测试的 <code>crate</code> 而设置. 对于单元测试, 这就是被测试的 <code>crate</code>, 正如你所期望的那样. 然而, 对于集成测试, 它是被编译为测试的集成测试二进制文件–你正在测试的 <code>crate</code> 只是被编译为一个库, 所以不会有测试设置.</p>
+<h3 id="文档测试"><a class="header" href="#文档测试">文档测试</a></h3>
+<p>文档注释中的<code>Rust</code>代码片段会自动作为测试用例运行. 由于 doctests 出现在你的 <code>crate</code> 的公共文档中, 并且用户可能会模仿它们所包含的内容, 所以它们被作为集成测试运行. 这意味着 doctests 不能访问私有字段和方法, 并且<code>test</code>不会在主<code>crate</code>的代码上设置. 每个测试都被编译为它自己的专用 <code>crate</code>, 并在隔离状态下运行, 就像用户把测试复制到他们自己的程序中一样.</p>
+<p>在幕后, 编译器对测试进行了一些预处理, 使其更加简洁. 最重要的是, 它自动在你的代码周围添加一个 <code>fn main</code>. 这使得测试只关注用户可能关心的重要部分, 比如实际使用你的库的类型和方法的部分, 而不包括不必要的模板.</p>
+<p>你可以通过在 doctest 中定义你自己的 <code>fn main</code> 来选择不使用这种自动包装. 你可能想这样做, 例如, 如果你想用 <code>#[tokio::main] async fn main</code> 这样的方法写一个异步 <code>main</code> 函数, 或者你想在 doctest 中添加额外的模块.</p>
+<p>要在你的测试中使用 <code>?</code> 操作符, 你通常不必使用自定义的主函数, 因为 <code>rustdoc</code> 包括一些启发式方法, 如果你的代码看起来像使用了 <code>?</code> (例如, 如果它以 <code>Ok(())</code> 结尾), 就将返回类型设置为 <code>Result&lt;(), impl Debug&gt;</code>. 如果类型推断让你对函数的错误类型感到困扰, 你可以通过改变 doctest 的最后一行来明确类型, 像这样: <code>Ok::&lt;(), T&gt;(())</code>来消除歧义.</p>
+<p>Doctests 有一些额外的功能, 当你为更复杂的接口编写文档时, 这些功能会很方便. 首先是隐藏个别行的能力. 如果你在测试的某一行前面加上 <code>#</code>, 那么当测试被编译和运行时, 该行就会被包括在内, 但它不会被包括在文档中生成的代码片段中. 这可以让你轻松地隐藏那些对当前例子不重要的细节, 例如为虚拟类型实现 trait 或生成值. 如果你想展示一连串的例子, 而不是每次都显示相同的引导代码, 这也很有用. 清单 6-5 给出了一个带有隐藏行的测试的例子.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// 通过 I/O 彻底地 frobnify 一个数字.
+///
+/// 在第一个例子中, 我们隐藏了值的生成.
+/// ```
+/// # let unfrobnified_number = 0;
+/// # let already_frobnified = 1;
+/// assert!(frobnify(unfrobnified_number).is_ok());
+/// assert!(frobnify(already_frobnified).is_err());
+/// ```
+///
+/// 这里有一个在多个类型上使用 ? 的例子,
+/// 因此需要声明具体的错误类型,
+/// 但我们不想用这一点来分散用户的注意力.
+/// 我们还隐藏了将函数引入作用域的 use.
+/// ```
+/// # use mylib::frobnify;
+/// frobnify("0".parse()?)?;
+/// # Ok::&lt;(), anyhow::Error&gt;(())
+/// ```
+///
+/// 你甚至可以完全替换一整块代码,
+/// 不过要 _极其_ 节制地使用这一点:
+/// ```
+/// # /*
+/// let i = ...;
+/// # */
+/// # let i = 42;
+/// frobnify(i)?;
+/// ```
+fn frobnify(i: usize) -&gt; std::io::Result&lt;()&gt; {
+
+// 清单 6-5: 用`#`隐藏测试中的行
+<span class="boring">}</span></code></pre>
+<blockquote>
+<p>注意: 小心使用这一功能; 如果用户复制粘贴了一个例子, 但由于你隐藏了必要的步骤而无法工作, 这可能会让他们感到沮丧.</p>
+</blockquote>
+<p>与<code>#[test]</code> 函数非常相似, doctests 也支持修改 doctest 运行方式的属性. 这些属性紧跟在用于表示代码块的三重反引号之后, 多个属性可以用逗号分隔.</p>
+<p>和测试函数一样, 你可以指定 <code>should_panic</code> 属性来表示某个测试中的代码在运行时应该panic, 或者指定<code>ignore</code>, 只有在用<code>--ignored</code>标志运行<code>cargo test</code>时才检查代码段. 你也可以使用 <code>no_run</code> 属性来表示一个给定的 doctest 应该编译但不应该运行.</p>
+<p>属性 <code>compile_fail</code> 告诉 rustdoc, 文档示例中的代码不应该被编译. 这向用户表明某种特定的使用是不可能的, 并作为一个有用的测试, 提醒你在你的库的相关方面发生变化时要更新文档. 你也可以使用这个属性来检查某些静态属性对你的类型是否成立. 清单 6-6 显示了一个例子, 说明你如何使用 <code>compile_fail</code> 来检查一个给定的类型没有实现<code>Send</code>, 这对于维护不安全代码的安全保证可能是必要的.</p>
+<pre><code class="language-compile_fail"># struct MyNonSendType(std::rc::Rc&lt;()&gt;);
+fn is_send&lt;T: Send&gt;() {}
+is_send::&lt;MyNonSendType&gt;();
+
+// 清单 6-6: 用 `compile_fail` 测试代码是否编译失败
+</code></pre>
+<p><code>compile_fail</code> 是一个相当粗糙的工具, 因为它没有给出代码不能编译的原因. 例如, 如果代码因为缺少分号而不能编译, <code>compile_fail</code> 测试会显得很成功. 出于这个原因, 你通常只想在确定测试确实按预期错误编译失败后再添加这个属性. 如果你需要对编译错误进行更精细的测试, 例如在开发宏时, 可以看看 <code>trybuild</code> crate.</p>
+<h2 id="其他测试工具"><a class="header" href="#其他测试工具">其他测试工具</a></h2>
+<p>测试有很多内容, 而不仅仅是运行测试函数, 看看它们是否产生了预期的结果. 对测试技术, 方法和工具的彻底调查超出了本书的范围, 但有一些关键的 <code>Rust</code> 特定部分, 在你扩展你的测试手段时你应该知道.</p>
+<h3 id="lintlinting"><a class="header" href="#lintlinting">Lint(Linting)</a></h3>
+<p>你可能不认为 linter 的检查是测试, 但在 <code>Rust</code> 中, 它们往往可以是测试. <code>Rust</code> 的 linter clippy 把它的一些 lints 归类为正确性 lints. 这些 lints 可以捕捉那些可以编译但几乎可以肯定是错误的代码模式. 一些例子是 <code>a = b; b = a</code>, 它不能交换 <code>a</code> 和 <code>b</code>; <code>std::mem::forget(t)</code>, 其中 <code>t</code> 是一个引用; 以及 <code>for x in y.next()</code>, 它将只迭代 <code>y</code> 中的第一个元素. 如果你还没有把 clippy 作为你 CI 管道的一部分来运行, 你可能应该这样做.</p>
+<p>Clippy 还附带了一些其他的lint, 虽然这些lint通常很有帮助, 但可能比你所希望的更有主见. 例如, <code>type_complexity</code> lint, 默认是打开的, 如果你在程序中使用一个特别复杂的类型, 比如 <code>Rc&lt;Vec&lt;Vec&lt;Box&lt;(u32, u32, u32, u32)&gt;&gt;&gt;&gt;</code>, 它会发出警告. 虽然该警告鼓励你写出更容易阅读的代码, 但你可能会发现它太过迂腐而没有广泛的用途. 如果你的代码的某些部分错误地触发了一个特定的警告, 或者你只是想允许它的一个特定实例, 你可以用 <code>#[allow(clippy::name_of_lint)]</code> 来选择不对那段代码进行警告.</p>
+<p><code>Rust</code> 编译器也以警告的形式提供了它自己的lint, 尽管这些lint通常更倾向于编写惯用代码而不是检查正确性. 相反, 编译器中的正确性lint被简单地视为错误(看看 <code>rustc -W help</code> 的列表).</p>
+<blockquote>
+<p>注意: 不是所有的编译器警告都是默认启用的. 那些默认禁用的警告通常还在完善中, 或者更多的是关于风格而不是内容. 一个很好的例子是“惯用<code>Rust</code> 2018版“警告, 你可以用 <code>#![warn(rust_2018_idioms)]</code> 启用它. 当这个lint被启用时, 编译器会告诉你你是否没有利用<code>Rust</code> 2018版带来的变化. 当你开始一个新项目时, 你可能想养成启用其他一些lint的习惯, 如 <code>missing_docs</code> 和 <code>missing_debug_implementations</code>, 它们分别警告你是否忘记记录<code>crate</code>中的任何公共项, 或为任何公共类型添加<code>Debug</code>实现.</p>
+</blockquote>
+<h3 id="测试生成test-generation"><a class="header" href="#测试生成test-generation">测试生成(Test Generation)</a></h3>
+<p>编写一个好的测试套件是一项艰巨的工作. 即使你做了这些工作, 你写的测试也只是测试你在写这些测试时考虑的特定行为集. 幸运的是, 你可以利用一些测试生成技术来开发更好和更彻底的测试. 这些工具为你生成输入, 供你用来检查你的应用程序的正确性. 存在许多这样的工具, 每一个都有自己的优势和劣势, 所以在这里我只介绍这些工具使用的主要策略: 模糊测试和属性测试.</p>
+<h4 id="模糊测试fuzzing"><a class="header" href="#模糊测试fuzzing">模糊测试(Fuzzing)</a></h4>
+<p>关于<code>fuzzing</code>的书已经写了好几本, 但在高层次上, 这个想法很简单: 给你的程序生成随机输入, 看看它是否崩溃. 如果程序崩溃了, 那就是一个错误. 例如, 如果你正在编写一个 URL 解析库, 你可以通过系统地生成随机字符串并将它们扔给解析函数, 直到它<code>panic</code>为止, 来对你的程序进行模糊测试. 如果天真地去做, 这将需要一段时间来产生结果: 如果模糊器从 a 开始, 然后是 b, 然后是 c, 以此类推, 它将需要很长时间来产生一个棘手的 URL, 如 <code>http://[:]</code>. 在实践中, 现代模糊器使用代码覆盖率指标来探索你的代码中的不同路径, 这让他们比真正随机选择的输入更快地达到更高的覆盖度.</p>
+<p>模糊器能很好地发现你的代码不能正确处理的奇怪角落情况. 它们不需要你做什么设置: 你只需将模糊器指向一个接受“可模糊“输入的函数, 然后它就开始了. 例如, 清单 6-7 显示了一个如何对 URL 解析器进行模糊测试的例子.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>libfuzzer_sys::fuzz_target!(|data: &amp;[u8]| {
+    if let Ok(s) = std::str::from_utf8(data) {
+        let _ = url::Url::parse(s);
+    }
+});
+
+// 清单 6-7: 用 libfuzzer 对一个 URL 解析器进行模糊处理
+<span class="boring">}</span></code></pre>
+<p>模糊器会生成半随机的输入传给闭包, 任何形成有效 UTF-8 字符串的输入都将被传递给解析器. 注意, 这里的代码并不检查解析是否成功, 而是寻找解析器因违反内部不变量而 panic 或崩溃的情况.</p>
+<p>模糊器一直在运行, 直到你终止它, 所以大多数模糊工具都有一个内置机制, 在探索了一定数量的测试用例后停止. 如果你的输入不是像哈希表那样的琐碎可模糊的类型, 你通常可以使用像 <code>arbitrary</code> 这样的 crate 来把模糊器产生的字节串变成更复杂的<code>Rust</code>类型. 这感觉就像魔法一样, 但在幕后, 它实际上是以一种非常简单的方式实现的. 这个<code>crate</code>定义了一个<code>Arbitrary</code> trait, 它有一个方法, 即 <code>arbitrary</code>, 可以从随机字节源构造实现类型. 像 <code>u32</code> 或 <code>bool</code> 这样的原始类型从输入中读取必要数量的字节来构造自己的有效实例, 而像 <code>HashMap</code> 或 <code>BTreeSet</code> 这样更复杂的类型从输入中产生一个数字来决定其长度, 然后在它们的内部类型上调用<code>Arbitrary</code>那么多次. 甚至还有一个属性, <code>#[derive(Arbitrary)]</code>, 它通过在每个包含的类型上调用 <code>Arbitrary</code> 来实现 <code>Arbitrary</code>! 要进一步探索模糊处理, 我建议从 <code>cargo-fuzz</code> 开始.</p>
+<h4 id="基于属性的测试property-based-testing"><a class="header" href="#基于属性的测试property-based-testing">基于属性的测试(Property-Based Testing)</a></h4>
+<p>有时你不仅要检查你的程序是否崩溃, 而且要检查它是否做了预期的事情. 你的加法函数没有<code>panic</code>, 这很好, 但如果它告诉你 <code>add(1, 4)</code> 的结果是 68, 它可能还是错的. 这就是基于属性的测试发挥作用的地方; 你描述了一些你的代码应该坚持的属性, 然后属性测试框架生成输入并检查这些属性是否确实成立.</p>
+<p>使用基于属性的测试的一个常见方法是, 首先写一个你想测试的代码的简单但天真的版本, 你相信它是正确的. 然后, 对于一个给定的输入, 你把这个输入同时给你想测试的代码和简化但天真的版本. 如果两个实现的结果或输出是相同的, 你的代码就是好的, 这就是你要找的正确性属性, 但如果不是, 你很可能发现了一个错误. 你也可以使用基于属性的测试来检查与正确性没有直接关系的属性, 比如一个实现所花的操作时间是否严格少于另一个. 共同的原则是, 你希望真实版本和测试版本之间的任何结果差异都是有信息量的, 并且是可操作的, 这样每一次失败都可以让你做出改进. 天真的实现可能是你试图替换或增强的标准库中的一个(如 <code>std::collections::VecDeque</code>), 也可能是你试图优化的算法的一个简单版本(如天真与优化的矩阵乘法).</p>
+<p>如果这种生成输入直到满足某些条件的方法听起来很像模糊测试, 那是因为它是–比我更聪明的人认为, 模糊测试“只是“基于属性的测试, 你要测试的属性是 “它不会崩溃”.</p>
+<p>基于属性的测试的一个缺点是, 它更依赖于所提供的输入描述. 模糊测试会不断尝试所有可能的输入, 而属性测试则倾向于由开发者的注释来指导, 如“0到64之间的数字“或“包含三个逗号的字符串“. 这使得属性测试能更快地达到模糊测试可能需要很长时间才能随机遇到的情况, 但它确实需要手工操作, 并可能错过重要但小众的错误输入. 然而, 随着模糊器和属性测试器越来越接近, 模糊器也开始获得这种基于约束的搜索能力.</p>
+<p>如果你对基于属性的测试生成感到好奇, 我建议从 <code>proptest</code> crate 开始.</p>
+<blockquote>
+<p>测试操作序列</p>
+<p>由于模糊器和属性测试器允许你生成任意的 <code>Rust</code> 类型, 你并不局限于测试 <code>crate</code> 中的单个函数调用. 例如, 如果你想测试某种类型的 <code>Foo</code> 在执行特定的操作序列时的行为是否正确, 你可以定义一个列举操作的枚举, 并使你的测试函数接受一个 <code>Vec&lt;Operation&gt;</code>. 然后你可以实例化一个 <code>Foo</code>, 并对该 <code>Foo</code> 一个接一个地执行每个操作. 大多数测试器都支持最小化输入, 所以如果发现有违反属性的输入, 它们甚至会搜索仍然违反属性的最小操作序列.</p>
+</blockquote>
+<h3 id="测试增强test-augmentation"><a class="header" href="#测试增强test-augmentation">测试增强(Test Augmentation)</a></h3>
+<p>比方说, 你有一个宏伟的测试套件, 而且你的代码通过了所有的测试. 这是很光荣的. 但是, 有一天, 其中一个通常可靠的测试莫名其妙地失败了, 或者因为段错误而崩溃了. 这类非确定性测试失败有两个常见的原因: 竞争条件, 只有当两个操作以特定的顺序发生在不同的线程上时, 你的测试才可能失败, 以及不安全代码中的未定义行为, 例如, 如果一些不安全的代码从未初始化的内存中读取一个特定的值.</p>
+<p>用普通的测试来捕捉这类错误可能很困难–通常你对线程调度, 内存布局和内容或其他随机的系统因素没有足够的底层控制来编写一个可靠的测试. 你可以在一个循环中多次运行每个测试, 但如果坏的情况足够罕见或不可能, 即使这样也可能抓不到错误. 幸运的是, 有一些工具可以帮助增强你的测试, 使捕捉这些类型的错误更加容易.</p>
+<p>其中第一个是惊人的工具 Miri, 它是 <code>Rust</code> 的mid-level intermediate representation(MIR)的解释器. MIR 是 <code>Rust</code> 的一个内部简化表示, 它可以帮助编译器找到优化和检查属性, 而不必考虑 <code>Rust</code> 本身的所有语法糖. 通过 Miri 运行你的测试就像运行 <code>cargo miri test</code> 一样简单. Miri 解释你的代码, 而不是像普通的二进制文件那样编译和运行, 这使得测试的运行速度慢了不少. 但作为回报, Miri 可以在你的每一行代码的执行过程中跟踪整个程序状态. 这使得 Miri 能够检测并报告你的程序是否表现出某些类型的未定义行为, 比如未初始化的内存读取, 在值被释放后的使用, 或者越界指针访问等. 与其让这些操作产生奇怪的程序行为, 有时可能只导致可观察到的测试失败(如崩溃), Miri 会在它们发生时发现它们, 并立即告诉你.</p>
+<p>例如, 考虑清单 6-8 中非常不健全的代码, 它创建了对一个值的两个独占引用.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut x = 42;
+let x: *mut i32 = &amp;mut x;
+let (x1, x2) = unsafe { (&amp;mut *x, &amp;mut *x) };
+println!("{} {}", x1, x2);
+
+// 清单 6-8: Miri检测到的极其不安全的代码是不正确的.
+<span class="boring">}</span></code></pre>
+<p>在写这篇文章的时候, 如果你通过 Miri 运行这段代码, 你会得到一个错误, 准确地指出了问题所在.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>error: Undefined Behavior: trying to reborrow for Unique at alloc1383, but parent
+tag &lt;2772&gt; does not have an appropriate item in the borrow stack
+--&gt; src/main.rs:4:6
+|
+4 | let (x1, x2) = unsafe { (&amp;mut *x, &amp;mut *x) };
+| ^^ trying to reborrow for Unique at alloc1383, but parent tag &lt;2772&gt; does
+not have an appropriate item in the borrow stack
+<span class="boring">}</span></code></pre>
+<blockquote>
+<p>注意: Miri 仍在开发中, 其错误信息并不总是最容易理解的. 这是一个正在积极解决的问题, 所以当你读到这篇文章时, 错误输出可能已经有了很大的改善!</p>
+</blockquote>
+<p>另一个值得关注的工具是 <code>Loom</code>, 这是一个聪明的库, 它试图确保你的测试会以并发操作的每一种相关交错方式运行. 在高水平上, Loom 跟踪所有的跨线程同步点, 并反复运行你的测试, 每次都会调整线程从这些同步点出发的顺序. 因此, 如果线程 A 和线程 B 都使用同一个 <code>Mutex</code>, <code>Loom</code> 会确保测试运行一次时, A 先使用, 另一次时 B 先使用. Loom 还跟踪原子访问, 内存顺序和对 <code>UnsafeCell</code> 的访问(我们将在第9章讨论), 并检查线程是否对它们进行了不适当的访问. 如果测试失败了, Loom 可以给你一个确切的说明, 指出哪些线程以什么顺序执行, 这样你就可以确定崩溃是如何发生的.</p>
+<h3 id="性能测试performance-testing"><a class="header" href="#性能测试performance-testing">性能测试(Performance Testing)</a></h3>
+<p>编写性能测试是很困难的, 因为通常很难准确地建立一个反映真实世界使用情况的工作负载模型. 但有这样的测试是很重要的; 如果你的代码突然运行慢了 100 倍, 那真的应该被认为是一个 bug, 但如果没有性能测试, 你可能不会发现这种回归. 如果你的代码运行速度快了 100 倍, 这也可能表明有什么地方不对劲. 这两种情况都是将自动化性能测试作为 CI 的一部分的很好的理由–如果性能在任何一个方向上发生剧烈变化, 你都应该知道.</p>
+<p>与功能测试不同, 性能测试没有一个共同的, 定义明确的输出. 一个功能测试要么成功, 要么失败, 而性能测试可能会给你一个吞吐量数字, 一个延迟曲线, 一个处理的样本数量, 或任何其他可能与相关应用程序有关的指标. 此外, 一个性能测试可能需要在一个循环中运行一个函数几十万次, 或者它可能需要跨多核机器的分布式网络运行几个小时. 由于这个原因, 我们很难谈论如何在一般意义上编写性能测试. 相反, 在本节中, 我们将探讨在 <code>Rust</code> 中编写性能测试时可能遇到的一些问题, 以及如何缓解这些问题. 有三个特别常见的陷阱经常被忽视, 即性能差异, 编译器优化和 I/O 开销. 让我们依次来探讨这些问题.</p>
+<h4 id="性能差异performance-variance"><a class="header" href="#性能差异performance-variance">性能差异(Performance Variance)</a></h4>
+<p>性能的变化有很多原因, 许多因素会影响一个特定的机器指令序列的运行速度. 有些是显而易见的, 比如 CPU 和内存的时钟速度, 或者机器的负载情况, 但许多因素则更为微妙. 例如, 你的内核版本可能会改变分页性能, 你的用户名的长度可能会改变内存的布局, 房间里的温度可能会导致 CPU 时钟下降. 最终, 你两次运行基准测试得到相同结果的可能性非常低. 事实上, 你可能会观察到明显的差异, 即使你使用的是相同的硬件. 或者, 从另一个角度来看, 你的代码可能变得更慢或更快, 但由于基准测试环境的不同, 这种影响可能是看不见的.</p>
+<p>没有完美的方法来消除性能结果中的所有方差, 除非你碰巧能够在高度多样化的机器群上反复运行基准测试. 即便如此, 重要的是尽量处理这种测量差异, 以便从基准给我们的嘈杂测量中提取信号. 在实践中, 我们对抗差异的最好的朋友是多次运行每个基准, 然后看一下测量值的分布, 而不是只看单一次的结果. <code>Rust</code> 有一些工具可以帮助我们做到这一点. 例如, 不要问“这个函数平均运行了多长时间?“像<code>hdrhistogram</code>这样的<code>crate</code>使我们能够查看“运行时间的哪个范围涵盖了我们观察到的95%的样本“这样的统计数据. 为了更加严格, 我们可以使用统计学中的零假设检验等技术来建立一些信心, 即测量的差异确实对应于真实的变化, 而不仅仅是噪音.</p>
+<p>关于统计假设检验的论述超出了本书的范围, 但幸运的是, 这些工作大部分已经由其他人完成. 例如, <code>criterion</code> crate 为你做了所有这些, 甚至更多. 你所要做的就是给它一个函数, 它可以调用这个函数来运行你的基准的一次迭代, 它将运行适当的次数, 以保证结果的可靠性. 然后, 它产生一个基准报告, 其中包括结果的总结, 对异常值的分析, 甚至还有随时间变化的趋势的图形表示. 当然, 它不能消除只是在特定的硬件配置上进行测试的影响, 但它至少能将跨执行的可测量的噪音进行分类.</p>
+<h4 id="编译器优化"><a class="header" href="#编译器优化">编译器优化</a></h4>
+<p>现在的编译器真的很聪明. 他们消除死代码, 在编译时计算复杂的表达式, 展开循环, 并执行其他黑暗的魔法来榨取我们代码中的每一滴性能. 通常这很好, 但是当我们试图测量某段代码的速度时, 编译器的聪明才智会给我们带来无效的结果. 例如, 以清单 6-9 中的 <code>Vec::push</code> 为基准的代码为例.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut vs = Vec::with_capacity(4);
+let start = std::time::Instant::now();
+for i in 0..4 {
+    vs.push(i);
+}
+println!("took {:?}", start.elapsed());
+
+// 清单 6-9: 一个快得可疑的性能基准测试.
+<span class="boring">}</span></code></pre>
+<p>如果你用 godbolt.org 或 cargo-asm 之类的软件看一下在发布模式下编译的这段代码的汇编输出, 你会立即注意到有些问题: 对 <code>Vec::with_capacity</code> 和 <code>Vec::push</code> 的调用, 乃至整个 <code>for</code> 循环, 都不见踪影. 它们已经被完全优化了. 编译器意识到, 代码中没有任何东西真正需要执行向量操作, 因此将它们作为死代码消除了. 当然, 编译器完全有权利这样做, 但对于基准测试来说, 这并不是特别有用. 为了避免基准测试中的这类优化, 标准库提供了 <code>std::hint::black_box</code>. 这个函数一直是很多人争论和困惑的话题, 在写这篇文章的时候还在等待稳定化, 但它非常有用, 值得在这里讨论一下. 在其核心部分, 它只是一个身份函数(一个接收 x 并返回 x 的函数), 告诉编译器假设函数的参数是以任意(合法)的方式使用的. 它并不阻止编译器对输入参数进行优化, 也不阻止编译器对返回值的使用方式进行优化. 相反, 它鼓励编译器实际计算函数的参数(假设它将被使用), 并将结果存储在 CPU 可以访问的地方, 这样 <code>black_box</code> 就可以带着计算值被调用. 编译器可以自由地, 比如说, 在编译时计算输入参数, 但它仍然应该把结果注入到程序中.</p>
+<p>这个函数满足了我们许多(虽然不是全部)基准测试需求. 例如, 我们可以对清单 6-9 进行注释, 使向量访问不再被优化掉, 如清单 6-10 所示.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut vs = Vec::with_capacity(4);
+let start = std::time::Instant::now();
+for i in 0..4 {
+    black_box(vs.as_ptr());
+    vs.push(i);
+    black_box(vs.as_ptr());
+}
+println!("took {:?}", start.elapsed());
+
+// 清单 6-10: 清单 6-9 的修正版本
+<span class="boring">}</span></code></pre>
+<p>我们已经告诉编译器, 假设在循环的每个迭代中, 在调用 <code>push</code> 之前和之后, 都以任意的方式使用 <code>vs</code>. 这迫使编译器按顺序执行每个 <code>push</code>, 而不合并或以其他方式优化连续的调用, 因为它必须假定在每次调用之间 <code>vs</code> 可能发生 “无法优化的任意事情”(这是 black_box 部分).</p>
+<p>注意, 我们使用了 <code>vs.as_ptr()</code> 而不是 <code>&amp;vs</code>, 这是因为有一个注意事项, 即编译器应该假定 <code>black_box</code> 可以对其参数进行任何合法操作. 通过共享引用修改<code>Vec</code>是不合法的, 所以如果我们使用 <code>black_box(&amp;vs)</code>, 编译器可能会注意到 <code>vs</code> 在循环的迭代之间不会改变, 并根据这一观察进行优化.</p>
+<h4 id="io-开销的测量io-overhead-measurement"><a class="header" href="#io-开销的测量io-overhead-measurement">I/O 开销的测量(I/O Overhead Measurement)</a></h4>
+<p>在编写基准时, 很容易意外地测量错误的东西. 例如, 我们经常想实时获得有关基准运行情况的信息. 为了做到这一点, 我们可能会编写清单 6-11 中那样的代码, 目的是测量 <code>my_function</code> 的运行速度.</p>
+<pre class="playground"><code class="language-rust edition2021"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let start = std::time::Instant::now();
+for i in 0..1_000_000 {
+    println!("iteration {}", i);
+    my_function();
+}
+println!("took {:?}", start.elapsed());
+
+// 清单 6-11: 我们在这里真正测量的是什么?
+<span class="boring">}</span></code></pre>
+<p>这看起来似乎达到了目的, 但实际上, 它并没有真正衡量 <code>my_function</code> 的速度. 相反, 这个循环很可能告诉我们打印一百万个数字需要多长时间. 循环主体中的 <code>println!</code> 在幕后做了很多工作: 它把一个二进制整数变成十进制数字以便打印, 锁定标准输出, 使用至少一个系统调用写出一串 UTF-8 代码点, 然后释放标准输出锁. 不仅如此, 如果你的终端打印出它收到的输入的速度很慢, 系统调用可能会阻塞. 那会消耗很多CPU周期! 而调用<code>my_function</code>的时间可能就相形见绌了.</p>
+<p>当你的基准使用随机数时也会发生类似的事情. 如果你在一个循环中运行 <code>my_function(rand::random())</code>, 你很可能主要是在测量生成一百万个随机数的时间. 对于获取当前时间, 读取配置文件或启动新线程, 情况也是一样的–相对而言, 这些事情都需要很长的时间, 最终可能掩盖了你真正想要测量的时间.</p>
+<p>幸运的是, 一旦你意识到这个特殊的问题, 往往很容易解决. 确保你的基准测试循环的主体除了你想测量的特定代码外几乎什么都不包含. 所有其他的代码应该在基准测试开始之前或者在基准测试的测量部分之外运行. 如果你在使用 <code>criterion</code>, 看看它提供的不同的计时循环–它们都是为了满足需要不同测量策略的基准测试情况而存在的!</p>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>在这一章中, 我们非常详细地探讨了 <code>Rust</code> 提供的内置测试功能. 我们还研究了一些在测试 <code>Rust</code> 代码时很有用的测试设施和技术. 这是本书中最后一章, 重点讨论<code>Rust</code>中级使用的更高层次方面. 从下一章的声明性和过程宏开始, 我们将更多地关注<code>Rust</code>代码. 下一页见!</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="chapter-05.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                            </a>
+
+                            <a rel="next prefetch" href="chapter-07.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="chapter-05.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
+                    </a>
+
+                    <a rel="next prefetch" href="chapter-07.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
+                    </a>
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace-2a3cd908.js"></script>
+        <script src="mode-rust-2c9d5c9a.js"></script>
+        <script src="editor-16ca416c.js"></script>
+        <script src="theme-dawn-4493f9c8.js"></script>
+        <script src="theme-tomorrow_night-9dbe62a9.js"></script>
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-09f2665d.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-609e4cb8.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
