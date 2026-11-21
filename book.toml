@@ -6,6 +6,7 @@ title = 'Rust For Rustaceans 阅读和翻译'
 [output.html]
 mathjax-support = true
 git-repository-url = 'https://github.com/thinkgos/Rust-For-Rustaceans'
+additional-css = ["theme/custom.css"]
 
 [output.html.playground]
 editable = true
